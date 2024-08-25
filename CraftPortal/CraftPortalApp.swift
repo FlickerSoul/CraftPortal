@@ -11,9 +11,8 @@ import SwiftUI
 @main
 struct CraftPortalApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
+        let schema = Schema(versionedSchema: LatestSchema.self)
+
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
@@ -23,9 +22,11 @@ struct CraftPortalApp: App {
         }
     }()
 
+    @StateObject var appState: AppState = .init()
+
     var body: some Scene {
         WindowGroup {
-            ContentView().frame(width: 960, height: 540)
+            ContentView().frame(width: 960, height: 540).environmentObject(appState)
         }
         .windowResizability(.contentSize)
         .modelContainer(sharedModelContainer)

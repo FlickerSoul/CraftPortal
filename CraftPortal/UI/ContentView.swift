@@ -8,23 +8,13 @@
 import SwiftData
 import SwiftUI
 
-enum WindowPanel {
-    case Main
-    case Account
-    case Settings
-    case GameSelection
-}
-
 struct ContentView: View {
-    @State private var displaying: WindowPanel = .Main
+    @State private var displaying: FunctionPanel = .Main
 
     var body: some View {
         GeometryReader { geometry in
             HStack {
                 sidebar
-
-                midDivider
-
                 detailPanel
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -39,7 +29,7 @@ struct ContentView: View {
 
     var sidebar: some View {
         GeometryReader { geometry in
-            SideBar()
+            Sidebar(updatePanel: updatePanel)
                 .frame(width: 260, height: geometry.size.height)
                 .background(
                     FrostGlassEffect(
@@ -48,17 +38,19 @@ struct ContentView: View {
         }
     }
 
-    var midDivider: some View {
-        Divider()
-    }
-
     var detailPanel: some View {
         MainPanel()
+    }
+
+    func updatePanel(_ panel: FunctionPanel) {
+        displaying = panel
     }
 }
 
 #Preview {
+    let state = AppState()
+
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
         .frame(width: 960, height: 540)
+        .environmentObject(state)
 }

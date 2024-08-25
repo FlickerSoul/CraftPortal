@@ -13,6 +13,7 @@
 		577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1E72C7B63090061257C /* CraftPortalTests.swift */; };
 		577CE1F22C7B63090061257C /* CraftPortalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1F12C7B63090061257C /* CraftPortalUITests.swift */; };
 		577CE1F42C7B63090061257C /* CraftPortalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */; };
+		57B94D242C7BEA69007EDEBD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B94D232C7BEA66007EDEBD /* AppState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,13 +44,14 @@
 		577CE1ED2C7B63090061257C /* CraftPortalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CraftPortalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		577CE1F12C7B63090061257C /* CraftPortalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITests.swift; sourceTree = "<group>"; };
 		577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		57B94D232C7BEA66007EDEBD /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Item.swift,
+				Schema.swift,
 			);
 			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
 		};
@@ -57,9 +59,16 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ContentView.swift,
-				WindowPanels/FrostGlassEffect.swift,
-				WindowPanels/MainPanel.swift,
-				WindowPanels/Sidebar.swift,
+				Utils/FrostGlassEffect.swift,
+				Utils/FunctionPanel.swift,
+				Utils/ImageSource.swift,
+				WindowPanels/Panels/MainPanel.swift,
+				WindowPanels/Sidebar/Sidebar.swift,
+				WindowPanels/Sidebar/SidebarAccounts.swift,
+				WindowPanels/Sidebar/SidebarGameSelection.swift,
+				WindowPanels/Sidebar/SidebarHome.swift,
+				WindowPanels/Sidebar/SidebarItemChip.swift,
+				WindowPanels/Sidebar/SidebarSettings.swift,
 			);
 			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
 		};
@@ -124,6 +133,7 @@
 				577CE1D92C7B63090061257C /* Assets.xcassets */,
 				577CE1DE2C7B63090061257C /* CraftPortal.entitlements */,
 				577CE1DB2C7B63090061257C /* Preview Content */,
+				57B94D232C7BEA66007EDEBD /* AppState.swift */,
 			);
 			path = CraftPortal;
 			sourceTree = "<group>";
@@ -284,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */,
+				57B94D242C7BEA69007EDEBD /* AppState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
