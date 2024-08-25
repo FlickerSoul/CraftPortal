@@ -1,0 +1,588 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
+		577CE1D62C7B63080061257C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D52C7B63080061257C /* ContentView.swift */; };
+		577CE1D82C7B63080061257C /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D72C7B63080061257C /* Item.swift */; };
+		577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1D92C7B63090061257C /* Assets.xcassets */; };
+		577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1DC2C7B63090061257C /* Preview Assets.xcassets */; };
+		577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1E72C7B63090061257C /* CraftPortalTests.swift */; };
+		577CE1F22C7B63090061257C /* CraftPortalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1F12C7B63090061257C /* CraftPortalUITests.swift */; };
+		577CE1F42C7B63090061257C /* CraftPortalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		577CE1E42C7B63090061257C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 577CE1C82C7B63080061257C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 577CE1CF2C7B63080061257C;
+			remoteInfo = CraftPortal;
+		};
+		577CE1EE2C7B63090061257C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 577CE1C82C7B63080061257C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 577CE1CF2C7B63080061257C;
+			remoteInfo = CraftPortal;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		577CE1D02C7B63080061257C /* CraftPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CraftPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		577CE1D32C7B63080061257C /* CraftPortalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalApp.swift; sourceTree = "<group>"; };
+		577CE1D52C7B63080061257C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		577CE1D72C7B63080061257C /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		577CE1D92C7B63090061257C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		577CE1DC2C7B63090061257C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		577CE1DE2C7B63090061257C /* CraftPortal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CraftPortal.entitlements; sourceTree = "<group>"; };
+		577CE1E32C7B63090061257C /* CraftPortalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CraftPortalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		577CE1E72C7B63090061257C /* CraftPortalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalTests.swift; sourceTree = "<group>"; };
+		577CE1ED2C7B63090061257C /* CraftPortalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CraftPortalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		577CE1F12C7B63090061257C /* CraftPortalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITests.swift; sourceTree = "<group>"; };
+		577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		577CE1CD2C7B63080061257C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		577CE1E02C7B63090061257C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		577CE1EA2C7B63090061257C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		577CE1C72C7B63080061257C = {
+			isa = PBXGroup;
+			children = (
+				577CE1D22C7B63080061257C /* CraftPortal */,
+				577CE1E62C7B63090061257C /* CraftPortalTests */,
+				577CE1F02C7B63090061257C /* CraftPortalUITests */,
+				577CE1D12C7B63080061257C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		577CE1D12C7B63080061257C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				577CE1D02C7B63080061257C /* CraftPortal.app */,
+				577CE1E32C7B63090061257C /* CraftPortalTests.xctest */,
+				577CE1ED2C7B63090061257C /* CraftPortalUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		577CE1D22C7B63080061257C /* CraftPortal */ = {
+			isa = PBXGroup;
+			children = (
+				577CE1D32C7B63080061257C /* CraftPortalApp.swift */,
+				577CE1D52C7B63080061257C /* ContentView.swift */,
+				577CE1D72C7B63080061257C /* Item.swift */,
+				577CE1D92C7B63090061257C /* Assets.xcassets */,
+				577CE1DE2C7B63090061257C /* CraftPortal.entitlements */,
+				577CE1DB2C7B63090061257C /* Preview Content */,
+			);
+			path = CraftPortal;
+			sourceTree = "<group>";
+		};
+		577CE1DB2C7B63090061257C /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				577CE1DC2C7B63090061257C /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		577CE1E62C7B63090061257C /* CraftPortalTests */ = {
+			isa = PBXGroup;
+			children = (
+				577CE1E72C7B63090061257C /* CraftPortalTests.swift */,
+			);
+			path = CraftPortalTests;
+			sourceTree = "<group>";
+		};
+		577CE1F02C7B63090061257C /* CraftPortalUITests */ = {
+			isa = PBXGroup;
+			children = (
+				577CE1F12C7B63090061257C /* CraftPortalUITests.swift */,
+				577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */,
+			);
+			path = CraftPortalUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		577CE1CF2C7B63080061257C /* CraftPortal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 577CE1F72C7B63090061257C /* Build configuration list for PBXNativeTarget "CraftPortal" */;
+			buildPhases = (
+				577CE1CC2C7B63080061257C /* Sources */,
+				577CE1CD2C7B63080061257C /* Frameworks */,
+				577CE1CE2C7B63080061257C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CraftPortal;
+			productName = CraftPortal;
+			productReference = 577CE1D02C7B63080061257C /* CraftPortal.app */;
+			productType = "com.apple.product-type.application";
+		};
+		577CE1E22C7B63090061257C /* CraftPortalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 577CE1FA2C7B63090061257C /* Build configuration list for PBXNativeTarget "CraftPortalTests" */;
+			buildPhases = (
+				577CE1DF2C7B63090061257C /* Sources */,
+				577CE1E02C7B63090061257C /* Frameworks */,
+				577CE1E12C7B63090061257C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				577CE1E52C7B63090061257C /* PBXTargetDependency */,
+			);
+			name = CraftPortalTests;
+			productName = CraftPortalTests;
+			productReference = 577CE1E32C7B63090061257C /* CraftPortalTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		577CE1EC2C7B63090061257C /* CraftPortalUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 577CE1FD2C7B63090061257C /* Build configuration list for PBXNativeTarget "CraftPortalUITests" */;
+			buildPhases = (
+				577CE1E92C7B63090061257C /* Sources */,
+				577CE1EA2C7B63090061257C /* Frameworks */,
+				577CE1EB2C7B63090061257C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				577CE1EF2C7B63090061257C /* PBXTargetDependency */,
+			);
+			name = CraftPortalUITests;
+			productName = CraftPortalUITests;
+			productReference = 577CE1ED2C7B63090061257C /* CraftPortalUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		577CE1C82C7B63080061257C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					577CE1CF2C7B63080061257C = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					577CE1E22C7B63090061257C = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 577CE1CF2C7B63080061257C;
+					};
+					577CE1EC2C7B63090061257C = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 577CE1CF2C7B63080061257C;
+					};
+				};
+			};
+			buildConfigurationList = 577CE1CB2C7B63080061257C /* Build configuration list for PBXProject "CraftPortal" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 577CE1C72C7B63080061257C;
+			productRefGroup = 577CE1D12C7B63080061257C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				577CE1CF2C7B63080061257C /* CraftPortal */,
+				577CE1E22C7B63090061257C /* CraftPortalTests */,
+				577CE1EC2C7B63090061257C /* CraftPortalUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		577CE1CE2C7B63080061257C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */,
+				577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		577CE1E12C7B63090061257C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		577CE1EB2C7B63090061257C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		577CE1CC2C7B63080061257C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				577CE1D62C7B63080061257C /* ContentView.swift in Sources */,
+				577CE1D82C7B63080061257C /* Item.swift in Sources */,
+				577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		577CE1DF2C7B63090061257C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		577CE1E92C7B63090061257C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				577CE1F22C7B63090061257C /* CraftPortalUITests.swift in Sources */,
+				577CE1F42C7B63090061257C /* CraftPortalUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		577CE1E52C7B63090061257C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
+			targetProxy = 577CE1E42C7B63090061257C /* PBXContainerItemProxy */;
+		};
+		577CE1EF2C7B63090061257C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
+			targetProxy = 577CE1EE2C7B63090061257C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		577CE1F52C7B63090061257C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		577CE1F62C7B63090061257C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		577CE1F82C7B63090061257C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CraftPortal/CraftPortal.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CraftPortal/Preview Content\"";
+				DEVELOPMENT_TEAM = 2U5P65L274;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = observer.universe.CraftPortal;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		577CE1F92C7B63090061257C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CraftPortal/CraftPortal.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"CraftPortal/Preview Content\"";
+				DEVELOPMENT_TEAM = 2U5P65L274;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = observer.universe.CraftPortal;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		577CE1FB2C7B63090061257C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2U5P65L274;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = observer.universe.CraftPortalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CraftPortal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CraftPortal";
+			};
+			name = Debug;
+		};
+		577CE1FC2C7B63090061257C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2U5P65L274;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = observer.universe.CraftPortalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CraftPortal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CraftPortal";
+			};
+			name = Release;
+		};
+		577CE1FE2C7B63090061257C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2U5P65L274;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = observer.universe.CraftPortalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = CraftPortal;
+			};
+			name = Debug;
+		};
+		577CE1FF2C7B63090061257C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2U5P65L274;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = observer.universe.CraftPortalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = CraftPortal;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		577CE1CB2C7B63080061257C /* Build configuration list for PBXProject "CraftPortal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				577CE1F52C7B63090061257C /* Debug */,
+				577CE1F62C7B63090061257C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		577CE1F72C7B63090061257C /* Build configuration list for PBXNativeTarget "CraftPortal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				577CE1F82C7B63090061257C /* Debug */,
+				577CE1F92C7B63090061257C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		577CE1FA2C7B63090061257C /* Build configuration list for PBXNativeTarget "CraftPortalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				577CE1FB2C7B63090061257C /* Debug */,
+				577CE1FC2C7B63090061257C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		577CE1FD2C7B63090061257C /* Build configuration list for PBXNativeTarget "CraftPortalUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				577CE1FE2C7B63090061257C /* Debug */,
+				577CE1FF2C7B63090061257C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 577CE1C82C7B63080061257C /* Project object */;
+}
