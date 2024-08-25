@@ -5,8 +5,8 @@
 //  Created by Larry Zeng on 8/25/24.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct CraftPortalApp: App {
@@ -25,8 +25,9 @@ struct CraftPortalApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().frame(width: 960, height: 540)
         }
+        .windowResizability(.contentSize)
         .modelContainer(sharedModelContainer)
     }
 }

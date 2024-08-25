@@ -3,13 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
-		577CE1D62C7B63080061257C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D52C7B63080061257C /* ContentView.swift */; };
-		577CE1D82C7B63080061257C /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D72C7B63080061257C /* Item.swift */; };
 		577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1D92C7B63090061257C /* Assets.xcassets */; };
 		577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1DC2C7B63090061257C /* Preview Assets.xcassets */; };
 		577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1E72C7B63090061257C /* CraftPortalTests.swift */; };
@@ -37,8 +35,6 @@
 /* Begin PBXFileReference section */
 		577CE1D02C7B63080061257C /* CraftPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CraftPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		577CE1D32C7B63080061257C /* CraftPortalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalApp.swift; sourceTree = "<group>"; };
-		577CE1D52C7B63080061257C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		577CE1D72C7B63080061257C /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		577CE1D92C7B63090061257C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		577CE1DC2C7B63090061257C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		577CE1DE2C7B63090061257C /* CraftPortal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CraftPortal.entitlements; sourceTree = "<group>"; };
@@ -48,6 +44,31 @@
 		577CE1F12C7B63090061257C /* CraftPortalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITests.swift; sourceTree = "<group>"; };
 		577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Item.swift,
+			);
+			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
+		};
+		577CE2062C7B67180061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentView.swift,
+				WindowPanels/FrostGlassEffect.swift,
+				WindowPanels/MainPanel.swift,
+				WindowPanels/Sidebar.swift,
+			);
+			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		577CE2022C7B63EF0061257C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
+		577CE2042C7B64290061257C /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2062C7B67180061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		577CE1CD2C7B63080061257C /* Frameworks */ = {
@@ -97,9 +118,9 @@
 		577CE1D22C7B63080061257C /* CraftPortal */ = {
 			isa = PBXGroup;
 			children = (
+				577CE2042C7B64290061257C /* UI */,
+				577CE2022C7B63EF0061257C /* Data */,
 				577CE1D32C7B63080061257C /* CraftPortalApp.swift */,
-				577CE1D52C7B63080061257C /* ContentView.swift */,
-				577CE1D72C7B63080061257C /* Item.swift */,
 				577CE1D92C7B63090061257C /* Assets.xcassets */,
 				577CE1DE2C7B63090061257C /* CraftPortal.entitlements */,
 				577CE1DB2C7B63090061257C /* Preview Content */,
@@ -262,8 +283,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				577CE1D62C7B63080061257C /* ContentView.swift in Sources */,
-				577CE1D82C7B63080061257C /* Item.swift in Sources */,
 				577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
