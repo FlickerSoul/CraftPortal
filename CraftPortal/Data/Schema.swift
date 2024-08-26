@@ -79,7 +79,7 @@ enum CraftPortalSchemaV1: VersionedSchema {
     static var versionIdentifier: Schema.Version = .init(1, 0, 0)
 
     static var models: [any PersistentModel.Type] {
-        [UserProfile.self, GameDirectory.self, GameProfile.self]
+        [PlayerProfile.self, GameDirectory.self, GameProfile.self]
     }
 }
 
@@ -87,22 +87,22 @@ enum CraftPortalSchemaV1: VersionedSchema {
 
 extension CraftPortalSchemaV1 {
     @Model
-    class UserProfile: Identifiable, Codable {
+    class PlayerProfile: Identifiable, Codable {
         @Attribute(.unique) var id: UUID
         @Attribute(.unique) var username: String
-        var accountType: UserAccountType
+        var playerType: UserAccountType
 
-        init(id: UUID, username: String, accountType: UserAccountType) {
+        init(id: UUID, username: String, playerType: UserAccountType) {
             self.id = id
             self.username = username
-            self.accountType = accountType
+            self.playerType = playerType
         }
 
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = try container.decode(UUID.self, forKey: .id)
             username = try container.decode(String.self, forKey: .username)
-            accountType = try container.decode(
+            playerType = try container.decode(
                 UserAccountType.self, forKey: .accountType
             )
         }
@@ -111,7 +111,7 @@ extension CraftPortalSchemaV1 {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(id, forKey: .id)
             try container.encode(username, forKey: .username)
-            try container.encode(accountType, forKey: .accountType)
+            try container.encode(playerType, forKey: .accountType)
         }
 
         enum CodingKeys: String, CodingKey {
@@ -257,6 +257,6 @@ extension CraftPortalSchemaV1 {
 }
 
 typealias LatestSchema = CraftPortalSchemaV1
-typealias UserProfile = LatestSchema.UserProfile
+typealias PlayerProfile = LatestSchema.PlayerProfile
 typealias GameDirectory = LatestSchema.GameDirectory
 typealias GameProfile = LatestSchema.GameProfile

@@ -8,7 +8,7 @@ import Foundation
 import SwiftData
 
 final class AppState: ObservableObject {
-    @Published var currentUserProfile: UserProfile?
+    @Published var currentUserProfile: PlayerProfile?
     @Published var currentGameDirectory: GameDirectory?
     var launchManager: LaunchManager
 
@@ -17,7 +17,7 @@ final class AppState: ObservableObject {
     }
 
     init(
-        currentUserProfile: UserProfile? = nil,
+        currentUserProfile: PlayerProfile? = nil,
         currentGameDirectory: GameDirectory? = nil
     ) {
         self.currentUserProfile = currentUserProfile
@@ -37,7 +37,7 @@ final class AppState: ObservableObject {
         // validate usre still exists
         if currentUserProfile != nil {
             let fetchedProfiles = try? context.fetch(
-                FetchDescriptor<UserProfile>(
+                FetchDescriptor<PlayerProfile>(
                     predicate: #Predicate { userProfile in
                         if let currentUserProfile = currentUserProfile {
                             return currentUserProfile.id == userProfile.id

@@ -119,7 +119,7 @@ class LaunchManager {
         return process
     }
 
-    func composeLaunchScript(player: UserProfile, profile: GameProfile) throws
+    func composeLaunchScript(player: PlayerProfile, profile: GameProfile) throws
         -> String
     {
         let gameDir = profile.gameDirectory
