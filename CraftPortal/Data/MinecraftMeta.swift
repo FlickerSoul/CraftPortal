@@ -48,24 +48,23 @@ struct MinecraftMetaComplexArgument: Codable {
     let value: [String]
 }
 
-struct MinecraftMetaRule: Codable {
-    let action: String
-    let features: MinecraftMetaFeatures?
-    let os: MinecraftMetaOS?
+enum MinecraftMetaRuleAction: String, Codable {
+    case allow
 }
 
-struct MinecraftMetaFeatures: Codable {
-    let isDemoUser: Bool?
-    let hasCustomResolution: Bool?
-    let hasQuickPlaysSupport: Bool?
-    let isQuickPlaySingleplayer: Bool?
-    let isQuickPlayMultiplayer: Bool?
-    let isQuickPlayRealms: Bool?
+struct MinecraftMetaRule: Codable {
+    let action: MinecraftMetaRuleAction
+    let features: [String: Bool?]?
+    let os: MinecraftMetaOS?
 }
 
 struct MinecraftMetaOS: Codable {
     let name: String
     let arch: String?
+
+    var isValidOS: Bool {
+        return name == "osx"
+    }
 }
 
 struct MinecraftMetaAssetIndex: Codable {
@@ -129,18 +128,18 @@ struct MinecraftMetaLoggingFile: Codable {
     let size: Int
 }
 
-struct MinecraftMetaPatch: Codable {
-    let id: String
-    let version: String
-    let priority: Int
-    let arguments: MinecraftMetaArguments
-    let mainClass: String
-    let assetIndex: MinecraftMetaAssetIndex?
-    let assets: String?
-    let complianceLevel: Int?
-    let javaVersion: MinecraftMetaJavaVersion?
-    let libraries: [MinecraftMetaLibrary]
-}
+// struct MinecraftMetaPatch: Codable {
+//    let id: String
+//    let version: String
+//    let priority: Int
+//    let arguments: MinecraftMetaArguments
+//    let mainClass: String
+//    let assetIndex: MinecraftMetaAssetIndex?
+//    let assets: String?
+//    let complianceLevel: Int?
+//    let javaVersion: MinecraftMetaJavaVersion?
+//    let libraries: [MinecraftMetaLibrary]
+// }
 
 struct MinecraftMeta: Codable {
     let id: String
@@ -158,5 +157,5 @@ struct MinecraftMeta: Codable {
     let releaseTime: String
     let minimumLauncherVersion: Int
     let root: Bool?
-    let patches: [MinecraftMetaPatch]?
+    // let patches: [MinecraftMetaPatch]?
 }

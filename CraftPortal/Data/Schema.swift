@@ -51,6 +51,14 @@ enum GameVersion: Codable, FullVersion {
             return "\(major).\(minor).\(patch)"
         }
     }
+
+    var versionType: String {
+        switch self {
+        case .Release: "release"
+        case .Snapshot: "snapshot"
+        case .Historical: "historical"
+        }
+    }
 }
 
 /// An enum representing the user profile type
@@ -110,6 +118,10 @@ extension CraftPortalSchemaV1 {
             case id
             case username
             case accountType
+        }
+
+        var userType: String {
+            return "msa"
         }
     }
 }

@@ -89,6 +89,7 @@
 		5720D9C72C7CE66100A64071 /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 		5720D9C82C7CE66500A64071 /* Downloader */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Downloader; sourceTree = "<group>"; };
 		5720DA252C7CFAF800A64071 /* assets */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = assets; sourceTree = "<group>"; };
+		5720DA2C2C7D460300A64071 /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		577CE2022C7B63EF0061257C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		577CE2042C7B64290061257C /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2062C7B67180061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
 		57B94D3C2C7CD959007EDEBD /* Launcher */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Launcher; sourceTree = "<group>"; };
@@ -143,6 +144,7 @@
 		577CE1D22C7B63080061257C /* CraftPortal */ = {
 			isa = PBXGroup;
 			children = (
+				5720DA2C2C7D460300A64071 /* Utils */,
 				5720D9C82C7CE66500A64071 /* Downloader */,
 				5720D9C72C7CE66100A64071 /* Auth */,
 				57B94D3C2C7CD959007EDEBD /* Launcher */,
@@ -203,6 +205,7 @@
 			fileSystemSynchronizedGroups = (
 				5720D9C72C7CE66100A64071 /* Auth */,
 				5720D9C82C7CE66500A64071 /* Downloader */,
+				5720DA2C2C7D460300A64071 /* Utils */,
 				57B94D3C2C7CD959007EDEBD /* Launcher */,
 			);
 			name = CraftPortal;

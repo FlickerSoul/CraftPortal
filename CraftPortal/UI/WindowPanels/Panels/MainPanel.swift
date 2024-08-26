@@ -24,14 +24,14 @@ struct MainPanel: View {
             HStack {
                 Spacer()
 
-                startButton
+                launchButton
             }
             .padding(32)
         }
     }
 
     @ViewBuilder
-    private var startButton: some View {
+    private var launchButton: some View {
         ZStack {
             if noGameSelected {
                 RoundedRectangle(cornerRadius: 16)
