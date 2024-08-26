@@ -6,8 +6,9 @@
 //
 
 enum FunctionPanel {
-    case Main
+    case Home
     case Accounts
-    case Settings
-    case GameSelection
+    case GlobalSettings
+    case GameSettings
+    case GameLibrary
 }

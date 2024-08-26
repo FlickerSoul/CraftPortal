@@ -26,7 +26,9 @@ struct CraftPortalApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView().frame(width: 960, height: 540).environmentObject(appState)
+            ContentView()
+                .frame(width: 960, height: 540)
+                .environmentObject(appState)
         }
         .windowResizability(.contentSize)
         .modelContainer(sharedModelContainer)

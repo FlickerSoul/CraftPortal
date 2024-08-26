@@ -40,7 +40,7 @@ struct SidebarAccounts: View {
 }
 
 #Preview {
-    let state = AppState()
-
-    SidebarAccounts().environmentObject(state).frame(width: 400)
+    SidebarAccounts()
+        .environmentObject(AppState())
+        .frame(width: 400)
 }

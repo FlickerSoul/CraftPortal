@@ -13,10 +13,27 @@ struct Sidebar: View {
     var body: some View {
         VStack {
             SidebarAccounts()
+                .onTapGesture {
+                    updatePanel(.Accounts)
+                }
 
             Spacer()
 
             SidebarHome()
+                .onTapGesture {
+                    updatePanel(.Home)
+                }
+            SidebarGameLibrary()
+                .onTapGesture {
+                    updatePanel(.GameLibrary)
+                }
+
+            Spacer()
+
+            SidebarSettings()
+                .onTapGesture {
+                    updatePanel(.GlobalSettings)
+                }
         }
     }
 }

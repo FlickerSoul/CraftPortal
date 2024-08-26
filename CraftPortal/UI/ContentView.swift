@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @State private var displaying: FunctionPanel = .Main
+    @State private var displaying: FunctionPanel = .Home
 
     var body: some View {
         GeometryReader { geometry in

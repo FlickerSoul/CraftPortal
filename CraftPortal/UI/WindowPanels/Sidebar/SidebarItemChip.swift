@@ -41,34 +41,46 @@ struct SidebarItemChip<Content: View>: View {
     @State private var isHovered: Bool = false
 
     var body: some View {
-        GeometryReader { geometry in
-            HStack {
-                DynamicImageView(imageSource: imageSource)
-                    .frame(width: 56, height: 56)
+        HStack {
+            DynamicImageView(imageSource: imageSource)
+                .frame(width: 36, height: 36)
 
-                Spacer()
+            Spacer()
 
-                content()
+            content()
+        }
+        .padding(.horizontal, 16)
+        .frame(width: .infinity, height: 48)
+        .padding(.vertical, 12)
+        .background(
+            isHovered ? Color.gray.opacity(0.2) : Color.gray.opacity(0.1)
+        )
+        .shadow(radius: isHovered ? 4 : 2)
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isHovered = hovering
             }
-            .padding(.horizontal, 16)
-            .frame(width: geometry.size.width, height: 48)
-            .padding(.vertical, 12)
-            .background(isHovered ? Color.gray.opacity(0.2) : Color.gray.opacity(0.1))
-            .shadow(radius: isHovered ? 4 : 2)
-            .onHover { hovering in
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isHovered = hovering
-                }
-                changeMouse(hovering)
-            }
+            changeMouse(hovering)
         }
     }
 
-    func changeMouse(_ isHovered: Bool) {
+    private func changeMouse(_ isHovered: Bool) {
         if isHovered {
             NSCursor.pointingHand.push()
         } else {
             NSCursor.pop()
         }
+    }
+}
+
+#Preview {
+    SidebarItemChip(imageSource: .asset(name: "NoAccountDefaultFace")) {
+        Text("no account")
+    }
+}
+
+#Preview {
+    SidebarItemChip(imageSource: .asset(name: "NoGameProfileDefaultIcon")) {
+        Text("no account")
     }
 }

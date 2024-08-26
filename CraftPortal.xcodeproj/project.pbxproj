@@ -14,6 +14,7 @@
 		577CE1F22C7B63090061257C /* CraftPortalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1F12C7B63090061257C /* CraftPortalUITests.swift */; };
 		577CE1F42C7B63090061257C /* CraftPortalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */; };
 		57B94D242C7BEA69007EDEBD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B94D232C7BEA66007EDEBD /* AppState.swift */; };
+		57B94D2F2C7CB251007EDEBD /* Path in Frameworks */ = {isa = PBXBuildFile; productRef = 57B94D2E2C7CB251007EDEBD /* Path */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +66,7 @@
 				WindowPanels/Panels/MainPanel.swift,
 				WindowPanels/Sidebar/Sidebar.swift,
 				WindowPanels/Sidebar/SidebarAccounts.swift,
-				WindowPanels/Sidebar/SidebarGameSelection.swift,
+				WindowPanels/Sidebar/SidebarGameLibrary.swift,
 				WindowPanels/Sidebar/SidebarHome.swift,
 				WindowPanels/Sidebar/SidebarItemChip.swift,
 				WindowPanels/Sidebar/SidebarSettings.swift,
@@ -84,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57B94D2F2C7CB251007EDEBD /* Path in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +253,9 @@
 				Base,
 			);
 			mainGroup = 577CE1C72C7B63080061257C;
+			packageReferences = (
+				57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */,
+			);
 			productRefGroup = 577CE1D12C7B63080061257C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -613,6 +618,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mxcl/Path.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		57B94D2E2C7CB251007EDEBD /* Path */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */;
+			productName = Path;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 577CE1C82C7B63080061257C /* Project object */;
 }

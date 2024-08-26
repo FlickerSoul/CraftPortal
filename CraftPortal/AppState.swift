@@ -9,12 +9,21 @@ import SwiftData
 
 final class AppState: ObservableObject {
     @Published var currentUserProfile: UserProfile?
+    @Published var currentGameDirectory: GameDirectory?
 
-    init(currentUserProfile: UserProfile? = nil) {
+    init(
+        currentUserProfile: UserProfile? = nil,
+        currentGameDirectory: GameDirectory? = nil
+    ) {
         self.currentUserProfile = currentUserProfile
+        self.currentGameDirectory = currentGameDirectory
     }
 
     func validateState(container: ModelContainer) {
+        validateUserProfile(container: container)
+    }
+
+    func validateUserProfile(container: ModelContainer) {
         let context = ModelContext(container)
 
         // validate usre still exists

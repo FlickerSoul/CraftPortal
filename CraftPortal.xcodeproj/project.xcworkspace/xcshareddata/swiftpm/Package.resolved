@@ -1,0 +1,15 @@
+{
+  "originHash" : "412499a27854d713723d21fed4e6ed678b266d33eead3174d8e214e3b7181abd",
+  "pins" : [
+    {
+      "identity" : "path.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mxcl/Path.swift.git",
+      "state" : {
+        "revision" : "8e355c28e9393c42e58b18c54cace2c42c98a616",
+        "version" : "1.4.1"
+      }
+    }
+  ],
+  "version" : 3
+}
