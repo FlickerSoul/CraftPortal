@@ -309,6 +309,6 @@ class LaunchManager {
     }
 
     var launcherVersion: String {
-        return "1.0.0"
+        return appState?.appVersion ?? "unknown"
     }
 }

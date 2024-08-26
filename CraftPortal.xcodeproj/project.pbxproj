@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5720DA242C7CFA4D00A64071 /* MinecraftMetaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA232C7CFA4500A64071 /* MinecraftMetaTests.swift */; };
 		5720DA2B2C7CFCFF00A64071 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA2A2C7CFCFC00A64071 /* Utils.swift */; };
+		5720DA312C7D494400A64071 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA302C7D493F00A64071 /* AppStateTests.swift */; };
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
 		577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1D92C7B63090061257C /* Assets.xcassets */; };
 		577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1DC2C7B63090061257C /* Preview Assets.xcassets */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		5720DA232C7CFA4500A64071 /* MinecraftMetaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinecraftMetaTests.swift; sourceTree = "<group>"; };
 		5720DA2A2C7CFCFC00A64071 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		5720DA302C7D493F00A64071 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		577CE1D02C7B63080061257C /* CraftPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CraftPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		577CE1D32C7B63080061257C /* CraftPortalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalApp.swift; sourceTree = "<group>"; };
 		577CE1D92C7B63090061257C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 		577CE1E62C7B63090061257C /* CraftPortalTests */ = {
 			isa = PBXGroup;
 			children = (
+				5720DA302C7D493F00A64071 /* AppStateTests.swift */,
 				5720DA2A2C7CFCFC00A64071 /* Utils.swift */,
 				5720DA252C7CFAF800A64071 /* assets */,
 				5720DA232C7CFA4500A64071 /* MinecraftMetaTests.swift */,
@@ -341,6 +344,7 @@
 				5720DA242C7CFA4D00A64071 /* MinecraftMetaTests.swift in Sources */,
 				577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */,
 				5720DA2B2C7CFCFF00A64071 /* Utils.swift in Sources */,
+				5720DA312C7D494400A64071 /* AppStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,13 @@ final class AppState: ObservableObject {
     @Published var currentGameDirectory: GameDirectory?
     var launchManager: LaunchManager
 
+    let appVersion = {
+        let version =
+            Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+        return "\(version ?? "Unknown") (\(build ?? "Unknown"))"
+    }()
+
     var currentGameProfile: GameProfile? {
         currentGameDirectory?.selectedGame
     }
