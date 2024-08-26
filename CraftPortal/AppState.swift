@@ -10,6 +10,11 @@ import SwiftData
 final class AppState: ObservableObject {
     @Published var currentUserProfile: UserProfile?
     @Published var currentGameDirectory: GameDirectory?
+    var launchManager: LaunchManager
+
+    var currentGameProfile: GameProfile? {
+        currentGameDirectory?.selectedGame
+    }
 
     init(
         currentUserProfile: UserProfile? = nil,
@@ -17,6 +22,9 @@ final class AppState: ObservableObject {
     ) {
         self.currentUserProfile = currentUserProfile
         self.currentGameDirectory = currentGameDirectory
+        launchManager = LaunchManager()
+
+        launchManager.setAppState(self)
     }
 
     func validateState(container: ModelContainer) {

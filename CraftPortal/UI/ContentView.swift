@@ -27,6 +27,7 @@ struct ContentView: View {
         }
     }
 
+    @ViewBuilder
     var sidebar: some View {
         GeometryReader { geometry in
             Sidebar(updatePanel: updatePanel)
@@ -38,8 +39,20 @@ struct ContentView: View {
         }
     }
 
+    @ViewBuilder
     var detailPanel: some View {
-        MainPanel()
+        switch displaying {
+        case .Home:
+            MainPanel(updatePanel: updatePanel)
+        case .Accounts:
+            AccountsPanel()
+        case .GlobalSettings:
+            GlobalSettingsPanel()
+        case .GameSettings:
+            GameSettingsPanel()
+        case .GameLibrary:
+            GameLibraryPanel()
+        }
     }
 
     func updatePanel(_ panel: FunctionPanel) {

@@ -8,6 +8,8 @@ import Foundation
 import Path
 import SwiftData
 
+// MARK: - AUX
+
 /// An enum represeting the mod loader used in the game
 enum ModLoader: Codable {
     case Forge(major: Int, minor: Int, patch: Int)
@@ -35,13 +37,17 @@ enum GameDirectoryType: Codable {
     case Profile
 }
 
+// MARK: - V1 Schema
+
 enum CraftPortalSchemaV1: VersionedSchema {
     static var versionIdentifier: Schema.Version = .init(1, 0, 0)
 
     static var models: [any PersistentModel.Type] {
-        [UserProfile.self]
+        [UserProfile.self, GameDirectory.self, GameProfile.self]
     }
 }
+
+// MARK: - UserProfile Model
 
 extension CraftPortalSchemaV1 {
     @Model
@@ -60,7 +66,9 @@ extension CraftPortalSchemaV1 {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = try container.decode(UUID.self, forKey: .id)
             username = try container.decode(String.self, forKey: .username)
-            accountType = try container.decode(UserAccountType.self, forKey: .accountType)
+            accountType = try container.decode(
+                UserAccountType.self, forKey: .accountType
+            )
         }
 
         func encode(to encoder: any Encoder) throws {
@@ -76,16 +84,25 @@ extension CraftPortalSchemaV1 {
             case accountType
         }
     }
+}
 
+// MARK: - GameDirectory
+
+extension CraftPortalSchemaV1 {
     @Model
     class GameDirectory: Identifiable, Codable {
         @Attribute(.unique) var id: UUID
-        @Relationship(deleteRule: .cascade, inverse: \GameProfile.gameDirectory) var gameProfiles: [GameProfile] = []
+        @Relationship(deleteRule: .cascade, inverse: \GameProfile.gameDirectory)
+        var gameProfiles: [GameProfile] = []
         var directory: Path
         var selectedGame: GameProfile?
         var directoryType: GameDirectoryType
 
-        init(id: UUID = UUID(), directory: Path, directoryType: GameDirectoryType) {
+        init(
+            id: UUID = UUID(),
+            directory: Path,
+            directoryType: GameDirectoryType
+        ) {
             self.id = id
             self.directory = directory
             self.directoryType = directoryType
@@ -95,8 +112,12 @@ extension CraftPortalSchemaV1 {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = try container.decode(UUID.self, forKey: .id)
             directory = try container.decode(Path.self, forKey: .directory)
-            selectedGame = try container.decodeIfPresent(GameProfile.self, forKey: .selectedGame)
-            directoryType = try container.decode(GameDirectoryType.self, forKey: .directoryType)
+            selectedGame = try container.decodeIfPresent(
+                GameProfile.self, forKey: .selectedGame
+            )
+            directoryType = try container.decode(
+                GameDirectoryType.self, forKey: .directoryType
+            )
         }
 
         func encode(to encoder: any Encoder) throws {
@@ -113,8 +134,28 @@ extension CraftPortalSchemaV1 {
             case selectedGame
             case directoryType
         }
-    }
 
+        func addAndSelectGame(_ game: GameProfile) {
+            let found = gameProfiles.filter { $0.id == game.id }.count > 0
+            if !found {
+                gameProfiles.append(game)
+            }
+            selectedGame = game
+        }
+
+        func selectGame(_ game: GameProfile) {
+            let found = gameProfiles.filter { $0.id == game.id }.count > 0
+
+            if found {
+                selectedGame = game
+            }
+        }
+    }
+}
+
+// MARK: - GameProfile
+
+extension CraftPortalSchemaV1 {
     @Model
     class GameProfile: Identifiable, Codable {
         @Attribute(.unique) var id: UUID
@@ -123,7 +164,13 @@ extension CraftPortalSchemaV1 {
         var modLoader: ModLoader?
         var gameDirectory: GameDirectory
 
-        init(id: UUID = UUID(), name: String, gameVersion: GameVersion, modLoader: ModLoader, gameDirectory: GameDirectory) {
+        init(
+            id: UUID = UUID(),
+            name: String,
+            gameVersion: GameVersion,
+            modLoader: ModLoader?,
+            gameDirectory: GameDirectory
+        ) {
             self.id = id
             self.name = name
             self.gameVersion = gameVersion
@@ -135,9 +182,15 @@ extension CraftPortalSchemaV1 {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = try container.decode(UUID.self, forKey: .id)
             name = try container.decode(String.self, forKey: .name)
-            gameVersion = try container.decode(GameVersion.self, forKey: .gameVersion)
-            modLoader = try container.decodeIfPresent(ModLoader.self, forKey: .modLoader)
-            gameDirectory = try container.decode(GameDirectory.self, forKey: .gameDirectory)
+            gameVersion = try container.decode(
+                GameVersion.self, forKey: .gameVersion
+            )
+            modLoader = try container.decodeIfPresent(
+                ModLoader.self, forKey: .modLoader
+            )
+            gameDirectory = try container.decode(
+                GameDirectory.self, forKey: .gameDirectory
+            )
         }
 
         func encode(to encoder: any Encoder) throws {

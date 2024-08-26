@@ -63,6 +63,11 @@
 				Utils/FrostGlassEffect.swift,
 				Utils/FunctionPanel.swift,
 				Utils/ImageSource.swift,
+				Utils/MouseUtil.swift,
+				WindowPanels/Panels/AccountsPanel.swift,
+				WindowPanels/Panels/GameLibraryPanel.swift,
+				WindowPanels/Panels/GameSettingsPanel.swift,
+				WindowPanels/Panels/GlobalSettingsPanel.swift,
 				WindowPanels/Panels/MainPanel.swift,
 				WindowPanels/Sidebar/Sidebar.swift,
 				WindowPanels/Sidebar/SidebarAccounts.swift,
@@ -78,6 +83,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		577CE2022C7B63EF0061257C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		577CE2042C7B64290061257C /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2062C7B67180061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
+		57B94D3C2C7CD959007EDEBD /* Launcher */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Launcher; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +135,7 @@
 		577CE1D22C7B63080061257C /* CraftPortal */ = {
 			isa = PBXGroup;
 			children = (
+				57B94D3C2C7CD959007EDEBD /* Launcher */,
 				577CE2042C7B64290061257C /* UI */,
 				577CE2022C7B63EF0061257C /* Data */,
 				577CE1D32C7B63080061257C /* CraftPortalApp.swift */,
@@ -179,6 +186,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				57B94D3C2C7CD959007EDEBD /* Launcher */,
 			);
 			name = CraftPortal;
 			productName = CraftPortal;

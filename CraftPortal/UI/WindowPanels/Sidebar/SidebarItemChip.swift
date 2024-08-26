@@ -36,18 +36,18 @@ struct DynamicImageView: View {
 
 struct SidebarItemChip<Content: View>: View {
     var imageSource: ImageSource
-    var content: () -> Content
+    @ViewBuilder var content: () -> Content
 
     @State private var isHovered: Bool = false
 
     var body: some View {
-        HStack {
+        HStack(spacing: 16) {
             DynamicImageView(imageSource: imageSource)
                 .frame(width: 36, height: 36)
 
-            Spacer()
-
             content()
+
+            Spacer()
         }
         .padding(.horizontal, 16)
         .frame(width: .infinity, height: 48)
@@ -60,15 +60,7 @@ struct SidebarItemChip<Content: View>: View {
             withAnimation(.easeInOut(duration: 0.2)) {
                 isHovered = hovering
             }
-            changeMouse(hovering)
-        }
-    }
-
-    private func changeMouse(_ isHovered: Bool) {
-        if isHovered {
-            NSCursor.pointingHand.push()
-        } else {
-            NSCursor.pop()
+            changeMouseHovering(hovering)
         }
     }
 }
