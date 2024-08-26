@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5720DA242C7CFA4D00A64071 /* MinecraftMetaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA232C7CFA4500A64071 /* MinecraftMetaTests.swift */; };
+		5720DA2B2C7CFCFF00A64071 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA2A2C7CFCFC00A64071 /* Utils.swift */; };
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
 		577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1D92C7B63090061257C /* Assets.xcassets */; };
 		577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1DC2C7B63090061257C /* Preview Assets.xcassets */; };
@@ -35,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5720DA232C7CFA4500A64071 /* MinecraftMetaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinecraftMetaTests.swift; sourceTree = "<group>"; };
+		5720DA2A2C7CFCFC00A64071 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		577CE1D02C7B63080061257C /* CraftPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CraftPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		577CE1D32C7B63080061257C /* CraftPortalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalApp.swift; sourceTree = "<group>"; };
 		577CE1D92C7B63090061257C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -52,6 +56,7 @@
 		577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				MinecraftMeta.swift,
 				Schema.swift,
 			);
 			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
@@ -81,6 +86,9 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		5720D9C72C7CE66100A64071 /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
+		5720D9C82C7CE66500A64071 /* Downloader */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Downloader; sourceTree = "<group>"; };
+		5720DA252C7CFAF800A64071 /* assets */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = assets; sourceTree = "<group>"; };
 		577CE2022C7B63EF0061257C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		577CE2042C7B64290061257C /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2062C7B67180061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
 		57B94D3C2C7CD959007EDEBD /* Launcher */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Launcher; sourceTree = "<group>"; };
@@ -135,6 +143,8 @@
 		577CE1D22C7B63080061257C /* CraftPortal */ = {
 			isa = PBXGroup;
 			children = (
+				5720D9C82C7CE66500A64071 /* Downloader */,
+				5720D9C72C7CE66100A64071 /* Auth */,
 				57B94D3C2C7CD959007EDEBD /* Launcher */,
 				577CE2042C7B64290061257C /* UI */,
 				577CE2022C7B63EF0061257C /* Data */,
@@ -158,6 +168,9 @@
 		577CE1E62C7B63090061257C /* CraftPortalTests */ = {
 			isa = PBXGroup;
 			children = (
+				5720DA2A2C7CFCFC00A64071 /* Utils.swift */,
+				5720DA252C7CFAF800A64071 /* assets */,
+				5720DA232C7CFA4500A64071 /* MinecraftMetaTests.swift */,
 				577CE1E72C7B63090061257C /* CraftPortalTests.swift */,
 			);
 			path = CraftPortalTests;
@@ -188,6 +201,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				5720D9C72C7CE66100A64071 /* Auth */,
+				5720D9C82C7CE66500A64071 /* Downloader */,
 				57B94D3C2C7CD959007EDEBD /* Launcher */,
 			);
 			name = CraftPortal;
@@ -207,6 +222,9 @@
 			);
 			dependencies = (
 				577CE1E52C7B63090061257C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5720DA252C7CFAF800A64071 /* assets */,
 			);
 			name = CraftPortalTests;
 			productName = CraftPortalTests;
@@ -317,7 +335,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5720DA242C7CFA4D00A64071 /* MinecraftMetaTests.swift in Sources */,
 				577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */,
+				5720DA2B2C7CFCFF00A64071 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

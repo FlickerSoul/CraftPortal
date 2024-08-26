@@ -10,19 +10,47 @@ import SwiftData
 
 // MARK: - AUX
 
+protocol FullVersion {
+    var fullVersion: String { get }
+}
+
 /// An enum represeting the mod loader used in the game
-enum ModLoader: Codable {
+enum ModLoader: Codable, FullVersion {
     case Forge(major: Int, minor: Int, patch: Int)
     case NeoForge(major: Int, minor: Int, patch: Int)
     case Fabric(major: Int, minor: Int, patch: Int)
     case Quilt(major: Int, minor: Int, patch: Int)
+
+    var fullVersion: String {
+        switch self {
+        case let .Forge(major, minor, patch):
+            return "forge-\(major).\(minor).\(patch)"
+        case let .NeoForge(major, minor, patch):
+            return "neoforge-\(major).\(minor).\(patch)"
+        case let .Fabric(major, minor, patch):
+            return "fabric-\(major).\(minor).\(patch)"
+        case let .Quilt(major, minor, patch):
+            return "quilt-\(major).\(minor).\(patch)"
+        }
+    }
 }
 
 /// An enum represeting the versions of the game
-enum GameVersion: Codable {
+enum GameVersion: Codable, FullVersion {
     case Release(major: Int, minor: Int, patch: Int)
     case Snapshot(version: String)
     case Historical(major: Int, minor: Int, patch: Int)
+
+    var fullVersion: String {
+        switch self {
+        case let .Release(major, minor, patch):
+            return "\(major).\(minor).\(patch)"
+        case let .Snapshot(version):
+            return version
+        case let .Historical(major, minor, patch):
+            return "\(major).\(minor).\(patch)"
+        }
+    }
 }
 
 /// An enum representing the user profile type
@@ -94,24 +122,24 @@ extension CraftPortalSchemaV1 {
         @Attribute(.unique) var id: UUID
         @Relationship(deleteRule: .cascade, inverse: \GameProfile.gameDirectory)
         var gameProfiles: [GameProfile] = []
-        var directory: Path
+        var path: Path
         var selectedGame: GameProfile?
         var directoryType: GameDirectoryType
 
         init(
             id: UUID = UUID(),
-            directory: Path,
+            path: Path,
             directoryType: GameDirectoryType
         ) {
             self.id = id
-            self.directory = directory
+            self.path = path
             self.directoryType = directoryType
         }
 
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = try container.decode(UUID.self, forKey: .id)
-            directory = try container.decode(Path.self, forKey: .directory)
+            path = try container.decode(Path.self, forKey: .directory)
             selectedGame = try container.decodeIfPresent(
                 GameProfile.self, forKey: .selectedGame
             )
@@ -123,7 +151,7 @@ extension CraftPortalSchemaV1 {
         func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(id, forKey: .id)
-            try container.encode(directory, forKey: .directory)
+            try container.encode(path, forKey: .directory)
             try container.encode(selectedGame, forKey: .selectedGame)
             try container.encode(directoryType, forKey: .directoryType)
         }
@@ -157,7 +185,7 @@ extension CraftPortalSchemaV1 {
 
 extension CraftPortalSchemaV1 {
     @Model
-    class GameProfile: Identifiable, Codable {
+    class GameProfile: Identifiable, Codable, FullVersion {
         @Attribute(.unique) var id: UUID
         @Attribute(.unique) var name: String
         var gameVersion: GameVersion
@@ -208,6 +236,10 @@ extension CraftPortalSchemaV1 {
             case gameVersion
             case modLoader
             case gameDirectory
+        }
+
+        var fullVersion: String {
+            return gameVersion.fullVersion + (modLoader?.fullVersion ?? "")
         }
     }
 }

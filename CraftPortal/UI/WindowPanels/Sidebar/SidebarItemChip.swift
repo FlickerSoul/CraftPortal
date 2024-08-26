@@ -50,7 +50,7 @@ struct SidebarItemChip<Content: View>: View {
             Spacer()
         }
         .padding(.horizontal, 16)
-        .frame(width: .infinity, height: 48)
+        .frame(height: 48)
         .padding(.vertical, 12)
         .background(
             isHovered ? Color.gray.opacity(0.2) : Color.gray.opacity(0.1)

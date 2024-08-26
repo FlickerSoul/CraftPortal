@@ -88,7 +88,7 @@ struct MainPanel: View {
                 AppState(
                     currentGameDirectory: {
                         let dir = GameDirectory(
-                            directory: Path("~/.minecraft")!,
+                            path: Path("~/Library/Application Support/minecraft/")!,
                             directoryType: .Mangled
                         )
                         let game = GameProfile(
