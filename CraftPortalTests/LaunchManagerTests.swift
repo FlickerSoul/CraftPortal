@@ -29,23 +29,225 @@ private let CP_MAPPING = [
 ]
 
 @Test(
-    "Test loading class paths",
+    "Test composing class paths",
     arguments: CP_MAPPING
 )
-func loadClassPathsTest(name: String, expectedCP: String, clientJar: String) throws {
-    let appState = AppState()
-
+func loadClassPathsTest(name: String, expectedCP: String, clientJar: String)
+    throws
+{
     let launchManager = LaunchManager()
-    launchManager.setAppState(appState)
 
-    let data = try AssetLoader.shared.loadAssetData(name: name)
+    let meta = try AssetLoader.shared.loadMinecraftMeta(name: name)
 
-    let meta = try JSONDecoder().decode(MinecraftMeta.self, from: data)
-
-    let loadedCP = launchManager.loadClassPaths(
+    let loadedCP = launchManager.composeClassPaths(
         from: meta, withLibBase: Path("/FakeDir/")!,
         withClientJar: Path(clientJar)!, features: [:]
     )
 
     #expect(loadedCP == expectedCP)
+}
+
+private let GAME_ARGUMENT_JSON = """
+    [
+      "--username",
+      "${auth_player_name}",
+      "--version",
+      "${version_name}",
+      "--gameDir",
+      "${game_directory}",
+      "--assetsDir",
+      "${assets_root}",
+      "--assetIndex",
+      "${assets_index_name}",
+      "--uuid",
+      "${auth_uuid}",
+      "--accessToken",
+      "${auth_access_token}",
+      "--clientId",
+      "${clientid}",
+      "--xuid",
+      "${auth_xuid}",
+      "--userType",
+      "${user_type}",
+      "--versionType",
+      "${version_type}",
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "is_demo_user": true
+            }
+          }
+        ],
+        "value": [
+          "--demo"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "has_custom_resolution": true
+            }
+          }
+        ],
+        "value": [
+          "--width",
+          "${resolution_width}",
+          "--height",
+          "${resolution_height}"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "has_quick_plays_support": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlayPath",
+          "${quickPlayPath}"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "is_quick_play_singleplayer": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlaySingleplayer",
+          "${quickPlaySingleplayer}"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "is_quick_play_multiplayer": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlayMultiplayer",
+          "${quickPlayMultiplayer}"
+        ]
+      },
+      {
+        "rules": [
+          {
+            "action": "allow",
+            "features": {
+              "is_quick_play_realms": true
+            }
+          }
+        ],
+        "value": [
+          "--quickPlayRealms",
+          "${quickPlayRealms}"
+        ]
+      }
+    ]
+""".trimmingCharacters(in: .whitespacesAndNewlines)
+
+private let ARG_MAPPING:
+    [(
+        LaunchArgValueCollection, LaunchFeatureCollection,
+        LaunchArgPatchCollection, String
+    )] = [
+        (
+            [
+                .authPlayerName: "player",
+                .versionName: "1.21",
+                .gameDirectory: "/FakeDir/",
+                .assetsRoot: "/AssetRoot/",
+                .assetsIndexName: "1",
+                .authUUID: "12345678901234567890123456789012",
+                .authAccessToken: "98765432109876543210987654321098",
+                .clientId: "client id",
+                .authXUID: "auth xuid",
+                .userType: "msa",
+                .versionType: "release",
+                .resolutionWidth: "1920",
+                .resolutionHeight: "1080",
+            ],
+            ["has_custom_resolution": true],
+            [],
+            "--username player --version 1.21 --gameDir /FakeDir/ --assetsDir /AssetRoot/ --assetIndex 1 --uuid 12345678901234567890123456789012 --accessToken 98765432109876543210987654321098 --clientId client id --xuid auth xuid --userType msa --versionType release --width 1920 --height 1080"
+        ),
+        (
+            [
+                .authPlayerName: "player",
+                .versionName: "1.21",
+                .gameDirectory: "/FakeDir/",
+                .assetsRoot: "/AssetRoot/",
+                .assetsIndexName: "1",
+                .authUUID: "12345678901234567890123456789012",
+                .authAccessToken: "98765432109876543210987654321098",
+                .clientId: "client id",
+                .authXUID: "auth xuid",
+                .userType: "msa",
+                .versionType: "release",
+                .resolutionWidth: "1920",
+                .resolutionHeight: "1080",
+            ],
+            ["has_custom_resolution": false],
+            [],
+            "--username player --version 1.21 --gameDir /FakeDir/ --assetsDir /AssetRoot/ --assetIndex 1 --uuid 12345678901234567890123456789012 --accessToken 98765432109876543210987654321098 --clientId client id --xuid auth xuid --userType msa --versionType release"
+        ),
+        (
+            [
+                .authPlayerName: "player",
+                .versionName: "1.21",
+                .gameDirectory: "/FakeDir/",
+                .assetsRoot: "/AssetRoot/",
+                .assetsIndexName: "1",
+                .authUUID: "12345678901234567890123456789012",
+                .authAccessToken: "98765432109876543210987654321098",
+                .clientId: "client id",
+                .authXUID: "auth xuid",
+                .userType: "msa",
+                .versionType: "release",
+                .resolutionWidth: "1920",
+                .resolutionHeight: "1080",
+            ],
+            [:],
+            [],
+            "--username player --version 1.21 --gameDir /FakeDir/ --assetsDir /AssetRoot/ --assetIndex 1 --uuid 12345678901234567890123456789012 --accessToken 98765432109876543210987654321098 --clientId client id --xuid auth xuid --userType msa --versionType release"
+        ),
+    ]
+
+@Test(
+    "Test composing game arugments",
+    arguments: ARG_MAPPING
+)
+func gameArgumentTest(
+    argValues: LaunchArgValueCollection,
+    features: LaunchFeatureCollection,
+    patches: LaunchArgPatchCollection,
+    expected: String
+) throws {
+    let launchManager = LaunchManager()
+    let game = try JSONDecoder().decode(
+        [MinecraftMetaArgumentElement].self,
+        from: GAME_ARGUMENT_JSON.data(using: .utf8)!
+    )
+
+    let actual = launchManager.composeArgs(
+        from: game,
+        argValues: argValues.plainArugments(),
+        features: features,
+        patches: patches
+    )
+
+    #expect(actual == expected)
 }

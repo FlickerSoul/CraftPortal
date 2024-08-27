@@ -34,7 +34,7 @@ typealias LaunchPlainArgValueCollection = [String: String]
 typealias LaunchFeatureCollection = [String: Bool?]
 typealias LaunchArgPatchCollection = [String]
 
-private extension LaunchArgValueCollection {
+extension LaunchArgValueCollection {
     func plainArugments() -> LaunchPlainArgValueCollection {
         return [String: String](
             uniqueKeysWithValues: map {
@@ -172,7 +172,7 @@ class LaunchManager {
             .nativesDirectory: nativesPath.string,
             .launcherName: launcherName,
             .launcherVersion: launcherVersion,
-            .classpath: loadClassPaths(
+            .classpath: composeClassPaths(
                 from: metaConfig, withLibBase: libraryPath,
                 withClientJar: clientJarPath,
                 features: launchFeatures
@@ -205,7 +205,7 @@ class LaunchManager {
         return try JSONDecoder().decode(MinecraftMeta.self, from: data)
     }
 
-    func loadClassPaths(
+    func composeClassPaths(
         from meta: MinecraftMeta,
         withLibBase libBase: Path,
         withClientJar clientJar: Path,

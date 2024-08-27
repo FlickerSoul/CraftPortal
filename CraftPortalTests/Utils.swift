@@ -27,5 +27,10 @@ class AssetLoader {
         return asset.data
     }
 
+    func loadMinecraftMeta(name: String) throws -> MinecraftMeta {
+        let data = try loadAssetData(name: name)
+        return try JSONDecoder().decode(MinecraftMeta.self, from: data)
+    }
+
     private init() {}
 }
