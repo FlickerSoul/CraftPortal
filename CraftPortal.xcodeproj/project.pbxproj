@@ -11,6 +11,7 @@
 		5720DA2B2C7CFCFF00A64071 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA2A2C7CFCFC00A64071 /* Utils.swift */; };
 		5720DA312C7D494400A64071 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA302C7D493F00A64071 /* AppStateTests.swift */; };
 		5720DA332C7D6DF400A64071 /* LaunchManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */; };
+		572406AD2C7D8D4500F4730F /* AsyncHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = 572406AC2C7D8D4500F4730F /* AsyncHTTPClient */; };
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
 		577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1D92C7B63090061257C /* Assets.xcassets */; };
 		577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1DC2C7B63090061257C /* Preview Assets.xcassets */; };
@@ -105,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				572406AD2C7D8D4500F4730F /* AsyncHTTPClient in Frameworks */,
 				57B94D2F2C7CB251007EDEBD /* Path in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -290,6 +292,7 @@
 			mainGroup = 577CE1C72C7B63080061257C;
 			packageReferences = (
 				57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */,
+				572406AB2C7D8D4500F4730F /* XCRemoteSwiftPackageReference "async-http-client" */,
 			);
 			productRefGroup = 577CE1D12C7B63080061257C /* Products */;
 			projectDirPath = "";
@@ -660,6 +663,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		572406AB2C7D8D4500F4730F /* XCRemoteSwiftPackageReference "async-http-client" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/swift-server/async-http-client";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.22.0;
+			};
+		};
 		57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mxcl/Path.swift.git";
@@ -671,6 +682,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		572406AC2C7D8D4500F4730F /* AsyncHTTPClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 572406AB2C7D8D4500F4730F /* XCRemoteSwiftPackageReference "async-http-client" */;
+			productName = AsyncHTTPClient;
+		};
 		57B94D2E2C7CB251007EDEBD /* Path */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */;
