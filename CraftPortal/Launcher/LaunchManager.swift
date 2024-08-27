@@ -268,16 +268,17 @@ class LaunchManager {
         argValues: LaunchPlainArgValueCollection
     ) {
         let trimmed = argument.trimmingCharacters(in: .whitespaces)
-        if trimmed.hasPrefix("${"), trimmed.hasSuffix("}") {
-            let start = trimmed.index(
-                trimmed.startIndex, offsetBy: 2
-            )
-            let end = trimmed.index(trimmed.endIndex, offsetBy: -1)
+        if let start = trimmed.firstIndex(of: "$"), let end = trimmed.firstIndex(of: "}"), start < end, trimmed[trimmed.index(start, offsetBy: 1)] == "{" {
+            let keyStart = trimmed.index(start, offsetBy: 2)
+            let key = String(trimmed[keyStart ..< end])
 
-            let sliced = String(trimmed[start ..< end])
+            let before = trimmed[..<start]
 
-            if let argValue = argValues[sliced] {
-                segments.append(argValue)
+            let afterStart = trimmed.index(end, offsetBy: 1)
+            let after = trimmed[afterStart...]
+
+            if let argValue = argValues[key] {
+                segments.append("\(before)\(argValue)\(after)")
                 return
             }
         }
