@@ -1,0 +1,51 @@
+//
+//  LaunchManagerTests.swift
+//  CraftPortal
+//
+//  Created by Larry Zeng on 8/27/24.
+//
+import Foundation
+import Path
+import Testing
+import XCTest
+
+@testable import CraftPortal
+
+private let CP_MAPPING = [
+    (
+        "1.21",
+        """
+            /FakeDir/ca/weblite/java-objc-bridge/1.1/java-objc-bridge-1.1.jar:/FakeDir/com/github/oshi/oshi-core/6.4.10/oshi-core-6.4.10.jar:/FakeDir/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/FakeDir/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/FakeDir/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar:/FakeDir/com/ibm/icu/icu4j/73.2/icu4j-73.2.jar:/FakeDir/com/mojang/authlib/6.0.54/authlib-6.0.54.jar:/FakeDir/com/mojang/blocklist/1.0.10/blocklist-1.0.10.jar:/FakeDir/com/mojang/brigadier/1.2.9/brigadier-1.2.9.jar:/FakeDir/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar:/FakeDir/com/mojang/logging/1.2.7/logging-1.2.7.jar:/FakeDir/com/mojang/patchy/2.2.10/patchy-2.2.10.jar:/FakeDir/com/mojang/text2speech/1.17.9/text2speech-1.17.9.jar:/FakeDir/commons-codec/commons-codec/1.16.0/commons-codec-1.16.0.jar:/FakeDir/commons-io/commons-io/2.15.1/commons-io-2.15.1.jar:/FakeDir/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/FakeDir/io/netty/netty-buffer/4.1.97.Final/netty-buffer-4.1.97.Final.jar:/FakeDir/io/netty/netty-codec/4.1.97.Final/netty-codec-4.1.97.Final.jar:/FakeDir/io/netty/netty-common/4.1.97.Final/netty-common-4.1.97.Final.jar:/FakeDir/io/netty/netty-handler/4.1.97.Final/netty-handler-4.1.97.Final.jar:/FakeDir/io/netty/netty-resolver/4.1.97.Final/netty-resolver-4.1.97.Final.jar:/FakeDir/io/netty/netty-transport-classes-epoll/4.1.97.Final/netty-transport-classes-epoll-4.1.97.Final.jar:/FakeDir/io/netty/netty-transport-native-unix-common/4.1.97.Final/netty-transport-native-unix-common-4.1.97.Final.jar:/FakeDir/io/netty/netty-transport/4.1.97.Final/netty-transport-4.1.97.Final.jar:/FakeDir/it/unimi/dsi/fastutil/8.5.12/fastutil-8.5.12.jar:/FakeDir/net/java/dev/jna/jna-platform/5.14.0/jna-platform-5.14.0.jar:/FakeDir/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar:/FakeDir/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/FakeDir/org/apache/commons/commons-compress/1.26.0/commons-compress-1.26.0.jar:/FakeDir/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/FakeDir/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/FakeDir/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/FakeDir/org/apache/logging/log4j/log4j-api/2.22.1/log4j-api-2.22.1.jar:/FakeDir/org/apache/logging/log4j/log4j-core/2.22.1/log4j-core-2.22.1.jar:/FakeDir/org/apache/logging/log4j/log4j-slf4j2-impl/2.22.1/log4j-slf4j2-impl-2.22.1.jar:/FakeDir/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar:/FakeDir/org/joml/joml/1.10.5/joml-1.10.5.jar:/FakeDir/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3-natives-macos-patch.jar:/FakeDir/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/FakeDir/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/MinecraftClient/1.21.jar
+        """.trimmingCharacters(in: .whitespacesAndNewlines),
+        "/MinecraftClient/1.21.jar"
+    ),
+    (
+        "1.21.1-fabric-0.16.3",
+        """
+        /FakeDir/org/ow2/asm/asm/9.6/asm-9.6.jar:/FakeDir/org/ow2/asm/asm-analysis/9.6/asm-analysis-9.6.jar:/FakeDir/org/ow2/asm/asm-commons/9.6/asm-commons-9.6.jar:/FakeDir/org/ow2/asm/asm-tree/9.6/asm-tree-9.6.jar:/FakeDir/org/ow2/asm/asm-util/9.6/asm-util-9.6.jar:/FakeDir/net/fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/sponge-mixin-0.15.2+mixin.0.8.7.jar:/FakeDir/net/fabricmc/intermediary/1.21.1/intermediary-1.21.1.jar:/FakeDir/net/fabricmc/fabric-loader/0.16.3/fabric-loader-0.16.3.jar:/FakeDir/ca/weblite/java-objc-bridge/1.1/java-objc-bridge-1.1.jar:/FakeDir/com/github/oshi/oshi-core/6.4.10/oshi-core-6.4.10.jar:/FakeDir/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/FakeDir/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/FakeDir/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar:/FakeDir/com/ibm/icu/icu4j/73.2/icu4j-73.2.jar:/FakeDir/com/mojang/authlib/6.0.54/authlib-6.0.54.jar:/FakeDir/com/mojang/blocklist/1.0.10/blocklist-1.0.10.jar:/FakeDir/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar:/FakeDir/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar:/FakeDir/com/mojang/logging/1.2.7/logging-1.2.7.jar:/FakeDir/com/mojang/patchy/2.2.10/patchy-2.2.10.jar:/FakeDir/com/mojang/text2speech/1.17.9/text2speech-1.17.9.jar:/FakeDir/commons-codec/commons-codec/1.16.0/commons-codec-1.16.0.jar:/FakeDir/commons-io/commons-io/2.15.1/commons-io-2.15.1.jar:/FakeDir/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/FakeDir/io/netty/netty-buffer/4.1.97.Final/netty-buffer-4.1.97.Final.jar:/FakeDir/io/netty/netty-codec/4.1.97.Final/netty-codec-4.1.97.Final.jar:/FakeDir/io/netty/netty-common/4.1.97.Final/netty-common-4.1.97.Final.jar:/FakeDir/io/netty/netty-handler/4.1.97.Final/netty-handler-4.1.97.Final.jar:/FakeDir/io/netty/netty-resolver/4.1.97.Final/netty-resolver-4.1.97.Final.jar:/FakeDir/io/netty/netty-transport-classes-epoll/4.1.97.Final/netty-transport-classes-epoll-4.1.97.Final.jar:/FakeDir/io/netty/netty-transport-native-unix-common/4.1.97.Final/netty-transport-native-unix-common-4.1.97.Final.jar:/FakeDir/io/netty/netty-transport/4.1.97.Final/netty-transport-4.1.97.Final.jar:/FakeDir/it/unimi/dsi/fastutil/8.5.12/fastutil-8.5.12.jar:/FakeDir/net/java/dev/jna/jna-platform/5.14.0/jna-platform-5.14.0.jar:/FakeDir/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar:/FakeDir/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/FakeDir/org/apache/commons/commons-compress/1.26.0/commons-compress-1.26.0.jar:/FakeDir/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/FakeDir/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/FakeDir/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/FakeDir/org/apache/logging/log4j/log4j-api/2.22.1/log4j-api-2.22.1.jar:/FakeDir/org/apache/logging/log4j/log4j-core/2.22.1/log4j-core-2.22.1.jar:/FakeDir/org/apache/logging/log4j/log4j-slf4j2-impl/2.22.1/log4j-slf4j2-impl-2.22.1.jar:/FakeDir/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar:/FakeDir/org/joml/joml/1.10.5/joml-1.10.5.jar:/FakeDir/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3-natives-macos-patch.jar:/FakeDir/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3.jar:/FakeDir/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3-natives-macos.jar:/FakeDir/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3-natives-macos-arm64.jar:/FakeDir/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/FakeDir/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/MinecraftClient/1.21.1.jar
+        """.trimmingCharacters(in: .whitespacesAndNewlines),
+        "/MinecraftClient/1.21.1.jar"
+    ),
+]
+
+@Test(
+    "Test loading class paths",
+    arguments: CP_MAPPING
+)
+func loadClassPathsTest(name: String, expectedCP: String, clientJar: String) throws {
+    let appState = AppState()
+
+    let launchManager = LaunchManager()
+    launchManager.setAppState(appState)
+
+    let data = try AssetLoader.shared.loadAssetData(name: name)
+
+    let meta = try JSONDecoder().decode(MinecraftMeta.self, from: data)
+
+    let loadedCP = launchManager.loadClassPaths(
+        from: meta, withLibBase: Path("/FakeDir/")!,
+        withClientJar: Path(clientJar)!, features: [:]
+    )
+
+    #expect(loadedCP == expectedCP)
+}

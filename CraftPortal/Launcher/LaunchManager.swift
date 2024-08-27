@@ -29,13 +29,13 @@ enum LaunchArguments: String, Equatable, Hashable {
 
 private let SHELL_EXECUTABLE = "/bin/sh"
 
-private typealias LaunchArgValueCollection = [LaunchArguments: String]
-private typealias PlainArgValueCollection = [String: String]
-private typealias FeatureCollection = [String: Bool?]
-private typealias ArgPatchCollection = [String]
+typealias LaunchArgValueCollection = [LaunchArguments: String]
+typealias LaunchPlainArgValueCollection = [String: String]
+typealias LaunchFeatureCollection = [String: Bool?]
+typealias LaunchArgPatchCollection = [String]
 
 private extension LaunchArgValueCollection {
-    func plainArugments() -> PlainArgValueCollection {
+    func plainArugments() -> LaunchPlainArgValueCollection {
         return [String: String](
             uniqueKeysWithValues: map {
                 (key: LaunchArguments, value: String) in
@@ -153,6 +153,7 @@ class LaunchManager {
         }()
 
         let metaConfig = try loadClinetConfig(clientPath: clientConfigPath)
+        let launchFeatures: LaunchFeatureCollection = [:] // TODO: make features
 
         let argumentValues: LaunchArgValueCollection = [
             .authPlayerName: player.username,
@@ -173,7 +174,8 @@ class LaunchManager {
             .launcherVersion: launcherVersion,
             .classpath: loadClassPaths(
                 from: metaConfig, withLibBase: libraryPath,
-                withClientJar: clientJarPath
+                withClientJar: clientJarPath,
+                features: launchFeatures
             ),
         ]
 
@@ -182,7 +184,7 @@ class LaunchManager {
         let jvmArgs = composeArgs(
             from: metaConfig.arguments.jvm,
             argValues: plainArgumentValues,
-            features: [:], // TODO: make features
+            features: launchFeatures,
             patches: composeArgumentPatches(from: profile)
         )
         let gameArgs = composeArgs(
@@ -203,24 +205,67 @@ class LaunchManager {
         return try JSONDecoder().decode(MinecraftMeta.self, from: data)
     }
 
-    fileprivate func loadClassPaths(
-        from _: MinecraftMeta,
-        withLibBase _: Path,
-        withClientJar _: Path
+    func loadClassPaths(
+        from meta: MinecraftMeta,
+        withLibBase libBase: Path,
+        withClientJar clientJar: Path,
+        features: LaunchFeatureCollection
     ) -> String {
-        // TODO: load cp
-        return ""
+        var classPath: [String] = []
+
+        for lib in meta.libraries {
+            if let rules = lib.rules {
+                if !rules.allSatisfy(by: features) {
+                    continue
+                }
+            }
+            let libPath: Path
+
+            if let downloads = lib.downloads {
+                let artifact = downloads.artifact
+                libPath = libBase / artifact.path
+            } else {
+                let name = lib.name
+                let segments =
+                    name
+                        .split(separator: ":")
+                        .enumerated()
+                        .flatMap { index, seg in
+                            if index == 0 {
+                                return seg.split(separator: ".")
+                            } else {
+                                return [seg]
+                            }
+                        }
+
+                let fileNameStem = segments.suffix(2).joined(separator: "-")
+                let fileName = "\(fileNameStem).jar"
+
+                let basePath = segments.reduce(libBase) {
+                    partialResult, nextSlug in
+                    partialResult / nextSlug
+                }
+
+                libPath = basePath / fileName
+            }
+
+            classPath.append(libPath.string)
+        }
+
+        classPath.append(clientJar.string)
+
+        return classPath.joined(separator: ":")
     }
 
-    fileprivate func getJavaPath() -> String {
+    func getJavaPath() -> String {
         // TODO: load java path from settings
         return Path("~/.jenv/shims/java")!.string
     }
 
-    fileprivate func processStringArgument(
+    func processStringArgument(
         segments: inout [String],
         argument: String,
-        argValues: PlainArgValueCollection
+        argValues: LaunchPlainArgValueCollection
     ) {
         let trimmed = argument.trimmingCharacters(in: .whitespaces)
         if trimmed.hasPrefix("${"), trimmed.hasSuffix("}") {
@@ -240,11 +285,11 @@ class LaunchManager {
         segments.append(argument)
     }
 
-    fileprivate func processArgument(
+    func processArgument(
         of arg: MinecraftMetaArgumentElement,
         to segments: inout [String],
-        argValues: PlainArgValueCollection,
-        features: FeatureCollection
+        argValues: LaunchPlainArgValueCollection,
+        features: LaunchFeatureCollection
     ) {
         switch arg {
         case let .string(argStr):
@@ -254,34 +299,24 @@ class LaunchManager {
             )
 
         case let .complexArgument(complex):
-            for rule in complex.rules {
-                let ruleSat =
-                    rule.features?.allSatisfy {
-                        key, value in
-                        guard let featValue = features[key] else {
-                            return false
-                        }
-                        return featValue == value
-                    } ?? true
-                let osSat = rule.os?.isValidOS ?? true
+            let ruleSat = complex.rules.allSatisfy(by: features)
 
-                if ruleSat, osSat {
-                    for argStr in complex.value {
-                        processStringArgument(
-                            segments: &segments, argument: argStr,
-                            argValues: argValues
-                        )
-                    }
+            if ruleSat {
+                for argStr in complex.value {
+                    processStringArgument(
+                        segments: &segments, argument: argStr,
+                        argValues: argValues
+                    )
                 }
             }
         }
     }
 
-    fileprivate func composeArgs(
+    func composeArgs(
         from args: [MinecraftMetaArgumentElement]?,
-        argValues: PlainArgValueCollection,
-        features: FeatureCollection,
-        patches: ArgPatchCollection
+        argValues: LaunchPlainArgValueCollection,
+        features: LaunchFeatureCollection,
+        patches: LaunchArgPatchCollection
     ) -> String {
         var stringSegments = [String]()
 
@@ -297,8 +332,8 @@ class LaunchManager {
         return stringSegments.joined(separator: " ")
     }
 
-    fileprivate func composeArgumentPatches(from _: GameProfile)
-        -> ArgPatchCollection
+    func composeArgumentPatches(from _: GameProfile)
+        -> LaunchArgPatchCollection
     {
         // TODO: make custom arguments
         return []

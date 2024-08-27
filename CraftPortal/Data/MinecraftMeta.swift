@@ -19,7 +19,9 @@ enum MinecraftMetaArgumentElement: Codable {
         let container = try decoder.singleValueContainer()
         if let stringValue = try? container.decode(String.self) {
             self = .string(stringValue)
-        } else if let complexValue = try? container.decode(MinecraftMetaComplexArgument.self) {
+        } else if let complexValue = try? container.decode(
+            MinecraftMetaComplexArgument.self)
+        {
             self = .complexArgument(complexValue)
         } else {
             throw DecodingError.typeMismatch(
@@ -46,6 +48,26 @@ enum MinecraftMetaArgumentElement: Codable {
 struct MinecraftMetaComplexArgument: Codable {
     let rules: [MinecraftMetaRule]
     let value: [String]
+}
+
+extension [MinecraftMetaRule] {
+    func allSatisfy(by features: LaunchFeatureCollection) -> Bool {
+        return allSatisfy { rule in
+            let ruleSat =
+                rule.features?
+                    .map { key, val in (key, val) }
+                    .allSatisfy {
+                        key, value in
+                        guard let featValue = features[key] else {
+                            return false
+                        }
+                        return featValue == value
+                    } ?? true
+            let osSat = rule.os?.isValidOS ?? true
+
+            return ruleSat && osSat
+        }
+    }
 }
 
 enum MinecraftMetaRuleAction: String, Codable {
