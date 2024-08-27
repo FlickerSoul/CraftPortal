@@ -5,21 +5,14 @@
 //  Created by Larry Zeng on 8/27/24.
 //
 
-@testable import CraftPortal
 import Testing
-import XCTest
 
-class AppStateTests: XCTestCase {
-    var appState: AppState!
+@testable import CraftPortal
 
-    override func setUp() {
-        appState = AppState()
-    }
+@Test
+func testAppVersion() {
+    let appState = AppState()
+    let expectedVersion = "1.0 (1)"
 
-    @Test
-    func testAppVersion() {
-        let expectedVersion = "1.0 (1)"
-
-        XCTAssertEqual(appState.appVersion, expectedVersion)
-    }
+    #expect(appState.appVersion == expectedVersion)
 }
