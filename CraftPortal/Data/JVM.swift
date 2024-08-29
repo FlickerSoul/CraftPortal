@@ -138,6 +138,10 @@ struct JVMManager {
         validate()
     }
 
+    mutating func update(with versions: any Sequence<JVMInformation>) {
+        self.versions.formUnion(versions)
+    }
+
     mutating func validate() {
         versions = versions.filter { version in
             if let javaPath = Path(version.path), javaPath.exists {
@@ -148,9 +152,11 @@ struct JVMManager {
         }
     }
 
-    mutating func discover() {
-        for searchPath in JVMManager.JVM_SERACH_PATHS {
-            versions.formUnion(searchPath.getJVMInformation())
+    func discover() -> Set<JVMInformation> {
+        return JVMManager.JVM_SERACH_PATHS.reduce(
+            into: Set<JVMInformation>())
+        { partialResult, searchPath in
+            partialResult.formUnion(searchPath.getJVMInformation())
         }
     }
 }

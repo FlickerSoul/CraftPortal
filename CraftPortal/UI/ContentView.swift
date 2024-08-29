@@ -8,23 +8,56 @@
 import SwiftData
 import SwiftUI
 
+private struct LoadingView: View {
+    var body: some View {
+        VStack {
+            Text("Loading...")
+                .font(.title)
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+        }
+    }
+}
+
 struct ContentView: View {
     @State private var displaying: FunctionPanel = .Home
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         GeometryReader { geometry in
-            HStack {
-                sidebar
-                detailPanel
+            ZStack {
+                withAnimation(.none) {
+                    HStack {
+                        sidebar
+                        detailPanel
+                    }
+                    .frame(
+                        width: geometry.size.width, height: geometry.size.height
+                    )
+                }
+
+                if !appState.initialized {
+                    LoadingView()
+                        .frame(
+                            width: geometry.size.width,
+                            height: geometry.size.height
+                        )
+                        .background(
+                            FrostGlassEffect(
+                                material: .hudWindow,
+                                blendingMode: .withinWindow
+                            )
+                        )
+                }
             }
-            .frame(width: geometry.size.width, height: geometry.size.height)
-            .background(
-                Image("HomeBackground2")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
-            )
+            .animation(.easeIn(duration: 0.5), value: appState.initialized)
         }
+        .background(
+            Image("HomeBackground2")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+        )
     }
 
     @ViewBuilder
@@ -34,7 +67,7 @@ struct ContentView: View {
                 .frame(width: 260, height: geometry.size.height)
                 .background(
                     FrostGlassEffect(
-                        material: .toolTip, blendingMode: .withinWindow
+                        material: .hudWindow, blendingMode: .withinWindow
                     ))
         }
     }

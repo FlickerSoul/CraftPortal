@@ -13,10 +13,14 @@ struct CraftPortalApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema(versionedSchema: LatestSchema.self)
 
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        let modelConfiguration = ModelConfiguration(
+            schema: schema, isStoredInMemoryOnly: false
+        )
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(
+                for: schema, configurations: [modelConfiguration]
+            )
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -29,8 +33,15 @@ struct CraftPortalApp: App {
             ContentView()
                 .frame(width: 960, height: 540)
                 .environmentObject(appState)
+                .onAppear {
+                    lauching()
+                }
         }
         .windowResizability(.contentSize)
         .modelContainer(sharedModelContainer)
+    }
+
+    private func lauching() {
+        appState.initializeState()
     }
 }

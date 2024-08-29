@@ -37,9 +37,7 @@ struct JVMInformationTest {
 struct JVMManagerTests {
     @Test
     func testJVMManagerDiscover() {
-        var manager = JVMManager()
-        manager.discover()
-
-        manager.versions.forEach { print($0) }
+        let manager = JVMManager()
+        manager.discover().forEach { print($0) }
     }
 }

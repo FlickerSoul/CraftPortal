@@ -10,7 +10,9 @@ import SwiftData
 final class AppState: ObservableObject {
     @Published var currentUserProfile: PlayerProfile?
     @Published var currentGameDirectory: GameDirectory?
-    var launchManager: LaunchManager
+    private(set) var launchManager: LaunchManager
+    @Published private(set) var jvmManager: JVMManager
+    @Published private(set) var initialized: Bool = false
 
     let appVersion = {
         let version =
@@ -30,8 +32,21 @@ final class AppState: ObservableObject {
         self.currentUserProfile = currentUserProfile
         self.currentGameDirectory = currentGameDirectory
         launchManager = LaunchManager()
+        jvmManager = JVMManager()
 
         launchManager.setAppState(self)
+    }
+
+    func initializeState() {
+        DispatchQueue.global().async {
+            let infos = self.jvmManager.discover()
+
+            DispatchQueue.main.async {
+                self.jvmManager.update(with: infos)
+
+                self.initialized = true
+            }
+        }
     }
 
     func validateState(container: ModelContainer) {
