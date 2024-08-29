@@ -69,10 +69,14 @@ struct JVMInformation: Codable, Equatable, Hashable {
     let version: String
 
     var majorVersion: Int? {
-        guard let major = version.split(separator: ".").first else {
+        let versionComponents = version.split(separator: ".")
+        if versionComponents.first == "1", versionComponents.count > 1 {
+            return Int(versionComponents[1])
+        } else if let major = versionComponents.first {
+            return Int(major)
+        } else {
             return nil
         }
-        return Int(major)
     }
 
     static func from(path: Path) -> JVMInformation? {
