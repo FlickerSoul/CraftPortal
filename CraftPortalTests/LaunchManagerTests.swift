@@ -7,7 +7,6 @@
 import Foundation
 import Path
 import Testing
-import XCTest
 
 @testable import CraftPortal
 
