@@ -12,6 +12,7 @@
 		5720DA312C7D494400A64071 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA302C7D493F00A64071 /* AppStateTests.swift */; };
 		5720DA332C7D6DF400A64071 /* LaunchManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */; };
 		572406AD2C7D8D4500F4730F /* AsyncHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = 572406AC2C7D8D4500F4730F /* AsyncHTTPClient */; };
+		5750321F2C81206F00066D33 /* JVMManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750321E2C81206B00066D33 /* JVMManagerTests.swift */; };
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
 		577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1D92C7B63090061257C /* Assets.xcassets */; };
 		577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1DC2C7B63090061257C /* Preview Assets.xcassets */; };
@@ -45,6 +46,7 @@
 		5720DA2A2C7CFCFC00A64071 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		5720DA302C7D493F00A64071 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchManagerTests.swift; sourceTree = "<group>"; };
+		5750321E2C81206B00066D33 /* JVMManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JVMManagerTests.swift; sourceTree = "<group>"; };
 		577CE1D02C7B63080061257C /* CraftPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CraftPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		577CE1D32C7B63080061257C /* CraftPortalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalApp.swift; sourceTree = "<group>"; };
 		577CE1D92C7B63090061257C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 		577CE1F12C7B63090061257C /* CraftPortalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITests.swift; sourceTree = "<group>"; };
 		577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		57B94D232C7BEA66007EDEBD /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		57BEE3322C81221700FF7C8B /* CraftPortal.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CraftPortal.xctestplan; sourceTree = "<group>"; };
 		57D3917F2C7D759600810E3F /* MetaJSON.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MetaJSON.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,6 +137,7 @@
 		577CE1C72C7B63080061257C = {
 			isa = PBXGroup;
 			children = (
+				57BEE3322C81221700FF7C8B /* CraftPortal.xctestplan */,
 				577CE1D22C7B63080061257C /* CraftPortal */,
 				577CE1E62C7B63090061257C /* CraftPortalTests */,
 				577CE1F02C7B63090061257C /* CraftPortalUITests */,
@@ -180,6 +184,7 @@
 		577CE1E62C7B63090061257C /* CraftPortalTests */ = {
 			isa = PBXGroup;
 			children = (
+				5750321E2C81206B00066D33 /* JVMManagerTests.swift */,
 				5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */,
 				5720DA302C7D493F00A64071 /* AppStateTests.swift */,
 				5720DA2A2C7CFCFC00A64071 /* Utils.swift */,
@@ -354,6 +359,7 @@
 				577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */,
 				5720DA2B2C7CFCFF00A64071 /* Utils.swift in Sources */,
 				5720DA312C7D494400A64071 /* AppStateTests.swift in Sources */,
+				5750321F2C81206F00066D33 /* JVMManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
