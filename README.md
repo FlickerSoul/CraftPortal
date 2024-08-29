@@ -14,4 +14,4 @@ This is a WIP Minecraft launcher for MacOS in SwiftUI. It is a simple launcher t
 
 ## Screenshots
 
-![Main Window](./images/home.jpeg)
+![Main Window](./images/home2.jpeg)
