@@ -63,6 +63,9 @@
 		577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				GameSettings.swift,
+				GlobalSettings.swift,
+				JVM.swift,
 				MinecraftMeta.swift,
 				Schema.swift,
 			);
