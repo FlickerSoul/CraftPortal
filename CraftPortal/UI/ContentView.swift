@@ -19,7 +19,7 @@ struct ContentView: View {
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .background(
-                Image("MainBackground")
+                Image("HomeBackground2")
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()

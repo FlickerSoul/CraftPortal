@@ -78,7 +78,7 @@ struct MainPanel: View {
         MainPanel { _ in }
             .environmentObject(AppState())
     }
-    .background(Image("MainBackground"))
+    .background(Image("HomeBackground2"))
 }
 
 #Preview("has game profile") {
@@ -105,7 +105,7 @@ struct MainPanel: View {
                 )
             )
     }
-    .background(Image("MainBackground"))
+    .background(Image("HomeBackground2"))
     .modelContainer(
         {
             let schema = Schema(versionedSchema: LatestSchema.self)
