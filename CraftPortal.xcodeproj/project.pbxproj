@@ -15,6 +15,7 @@
 		57357F972C82050800F3B26F /* GameSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57357F962C82050300F3B26F /* GameSettingsTests.swift */; };
 		57357FFD2C8209BE00F3B26F /* GlobalSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57357FFC2C8209BA00F3B26F /* GlobalSettingsTests.swift */; };
 		5750321F2C81206F00066D33 /* JVMManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750321E2C81206B00066D33 /* JVMManagerTests.swift */; };
+		577744FA2C823CDB00633EB5 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 577744F92C823CDB00633EB5 /* Assets */; };
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
 		577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1D92C7B63090061257C /* Assets.xcassets */; };
 		577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 577CE1DC2C7B63090061257C /* Preview Assets.xcassets */; };
@@ -23,7 +24,6 @@
 		577CE1F42C7B63090061257C /* CraftPortalUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */; };
 		57B94D242C7BEA69007EDEBD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B94D232C7BEA66007EDEBD /* AppState.swift */; };
 		57B94D2F2C7CB251007EDEBD /* Path in Frameworks */ = {isa = PBXBuildFile; productRef = 57B94D2E2C7CB251007EDEBD /* Path */; };
-		57D391802C7D759600810E3F /* MetaJSON.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57D3917F2C7D759600810E3F /* MetaJSON.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +51,7 @@
 		57357F962C82050300F3B26F /* GameSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingsTests.swift; sourceTree = "<group>"; };
 		57357FFC2C8209BA00F3B26F /* GlobalSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettingsTests.swift; sourceTree = "<group>"; };
 		5750321E2C81206B00066D33 /* JVMManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JVMManagerTests.swift; sourceTree = "<group>"; };
+		577744F92C823CDB00633EB5 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		577CE1D02C7B63080061257C /* CraftPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CraftPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		577CE1D32C7B63080061257C /* CraftPortalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalApp.swift; sourceTree = "<group>"; };
 		577CE1D92C7B63090061257C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,7 +64,6 @@
 		577CE1F32C7B63090061257C /* CraftPortalUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPortalUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		57B94D232C7BEA66007EDEBD /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		57BEE3322C81221700FF7C8B /* CraftPortal.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = CraftPortal.xctestplan; sourceTree = "<group>"; };
-		57D3917F2C7D759600810E3F /* MetaJSON.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = MetaJSON.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -188,6 +188,7 @@
 		577CE1E62C7B63090061257C /* CraftPortalTests */ = {
 			isa = PBXGroup;
 			children = (
+				577744F92C823CDB00633EB5 /* Assets */,
 				57357FFC2C8209BA00F3B26F /* GlobalSettingsTests.swift */,
 				57357F962C82050300F3B26F /* GameSettingsTests.swift */,
 				5750321E2C81206B00066D33 /* JVMManagerTests.swift */,
@@ -196,7 +197,6 @@
 				5720DA2A2C7CFCFC00A64071 /* Utils.swift */,
 				5720DA232C7CFA4500A64071 /* MinecraftMetaTests.swift */,
 				577CE1E72C7B63090061257C /* CraftPortalTests.swift */,
-				57D3917F2C7D759600810E3F /* MetaJSON.xcassets */,
 			);
 			path = CraftPortalTests;
 			sourceTree = "<group>";
@@ -333,7 +333,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57D391802C7D759600810E3F /* MetaJSON.xcassets in Resources */,
+				577744FA2C823CDB00633EB5 /* Assets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

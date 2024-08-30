@@ -13,10 +13,13 @@ import Testing
 struct MinecraftMetaTests {
     @Test(
         "Test Minecraft Meta JSON Decoding",
-        arguments: ["1.21", "1.21.1-fabric-0.16.3"]
+        arguments: [
+            ("1.21", "Assets/ProfiledVanillaGame/meta/versions/1.21"),
+            ("1.21.1-fabric-0.16.3", "Assets/ProfiledModdedGame/meta/versions/1.21.1-fabric-0.16.3"),
+        ]
     )
-    func testJsonDecoding(name: String) throws {
-        let data = try AssetLoader.shared.loadAssetData(name: name)
+    func testJsonDecoding(name: String, from dir: String) throws {
+        let data = try AssetLoader.shared.loadAssetData(name: name, ext: "json", from: dir)
 
         let decoder = JSONDecoder()
         _ = try decoder.decode(MinecraftMeta.self, from: data)

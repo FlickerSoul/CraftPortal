@@ -20,15 +20,23 @@ extension AppState {
 class AssetLoader {
     static var shared: AssetLoader = .init()
 
-    func loadAssetData(name: String) throws -> Data {
+    func loadAssetData(name: String, ext: String, from subdir: String? = nil) throws -> Data {
         let bundle = Bundle(for: type(of: self))
-        let asset = try #require(NSDataAsset(name: name, bundle: bundle))
+        let url = try #require(bundle.url(forResource: name, withExtension: ext, subdirectory: subdir))
+        let asset = try Data(contentsOf: url)
 
-        return asset.data
+        return asset
     }
 
-    func loadMinecraftMeta(name: String) throws -> MinecraftMeta {
-        let data = try loadAssetData(name: name)
+    func loadAssetFolder(name: String, from subdir: String) throws -> URL {
+        let bundle = Bundle(for: type(of: self))
+        let asset = try #require(bundle.url(forResource: name, withExtension: nil, subdirectory: subdir))
+
+        return asset
+    }
+
+    func loadMinecraftMeta(name: String, from subdir: String? = nil) throws -> MinecraftMeta {
+        let data = try loadAssetData(name: name, ext: "json", from: subdir)
         return try JSONDecoder().decode(MinecraftMeta.self, from: data)
     }
 
