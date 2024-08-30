@@ -21,20 +21,38 @@ private struct LoadingView: View {
 
 struct ContentView: View {
     @State private var displaying: FunctionPanel = .Home
+    @State private var actualDisplaying: FunctionPanel = .Home
     @EnvironmentObject var appState: AppState
+    @State private var panelTransition: AnyTransition = .push(from: .bottom)
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                withAnimation(.none) {
-                    HStack {
+                HStack(spacing: 0) {
+                    withAnimation(.none) {
                         sidebar
-                        detailPanel
+                            .frame(width: 260, height: geometry.size.height)
+                            .background(
+                                FrostGlassEffect(
+                                    material: .sidebar,
+                                    blendingMode: .withinWindow
+                                ))
                     }
-                    .frame(
-                        width: geometry.size.width, height: geometry.size.height
-                    )
+
+                    detailPanel
+                        .frame(height: geometry.size.height)
+                        .background(
+                            FrostGlassEffect(
+                                material: actualDisplaying == .Home
+                                    ? nil : .hudWindow,
+                                blendingMode: .withinWindow
+                            )
+                        )
+                        .transition(panelTransition)
                 }
+                .frame(
+                    width: geometry.size.width, height: geometry.size.height
+                )
 
                 if !appState.initialized {
                     LoadingView()
@@ -58,23 +76,27 @@ struct ContentView: View {
                 .scaledToFill()
                 .ignoresSafeArea()
         )
-    }
+        .onChange(of: displaying) { oldValue, newValue in
+            if newValue.rawValue > oldValue.rawValue {
+                panelTransition = .push(from: .bottom)
+            } else {
+                panelTransition = .push(from: .top)
+            }
 
-    @ViewBuilder
-    var sidebar: some View {
-        GeometryReader { geometry in
-            Sidebar(updatePanel: updatePanel)
-                .frame(width: 260, height: geometry.size.height)
-                .background(
-                    FrostGlassEffect(
-                        material: .hudWindow, blendingMode: .withinWindow
-                    ))
+            withAnimation(.easeInOut(duration: 0.5)) {
+                actualDisplaying = displaying
+            }
         }
     }
 
     @ViewBuilder
+    var sidebar: some View {
+        Sidebar(updatePanel: updatePanel)
+    }
+
+    @ViewBuilder
     var detailPanel: some View {
-        switch displaying {
+        switch actualDisplaying {
         case .Home:
             MainPanel(updatePanel: updatePanel)
         case .Accounts:

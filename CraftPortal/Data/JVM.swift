@@ -64,9 +64,11 @@ enum JavaSearchPath {
     }
 }
 
-struct JVMInformation: Codable, Equatable, Hashable {
+struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
     let path: String
     let version: String
+
+    var id: String { path }
 
     var majorVersion: Int? {
         let versionComponents = version.split(separator: ".")
@@ -129,6 +131,11 @@ class JVMManager {
     ]
 
     var versions: Set<JVMInformation>
+    var sequentialVersions: [JVMInformation] {
+        versions.sorted {
+            $0.version > $1.version
+        }
+    }
 
     init() {
         versions = []

@@ -18,18 +18,25 @@ class JVMSettings: Codable {
 @Observable
 class GlobalSettings: Codable {
     var globalGameSettings: GameSettings
+    var gameDirectories: [GameDirectory]
+    var currentGameDirectory: GameDirectory?
     var jvmSettings: JVMSettings
 
     init(
         globalGameSettings: GameSettings = .init(),
-        jvmSettings: JVMSettings = .init()
+        jvmSettings: JVMSettings = .init(),
+        gameDirectories: [GameDirectory] = [],
+        currentGameDirectory: GameDirectory? = nil
     ) {
         self.globalGameSettings = globalGameSettings
         self.jvmSettings = jvmSettings
+        self.gameDirectories = gameDirectories
+        self.currentGameDirectory = currentGameDirectory
     }
 
     enum CodingKeys: String, CodingKey {
         case _globalGameSettings = "globalGameSettings"
+        case _gameDirectories = "gameDirectories"
         case _jvmSettings = "jvmSettings"
     }
 }
@@ -50,6 +57,14 @@ class GlobalSettingsManager {
 
     var jvmSettings: JVMSettings {
         settings.jvmSettings
+    }
+
+    var gameDirectories: [GameDirectory] {
+        settings.gameDirectories
+    }
+
+    var currentGameDirectory: GameDirectory? {
+        settings.currentGameDirectory
     }
 
     init(settings: GlobalSettings? = nil) {

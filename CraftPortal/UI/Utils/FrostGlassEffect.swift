@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct FrostGlassEffect: View {
-    var material: NSVisualEffectView.Material
+    var material: NSVisualEffectView.Material?
     var blendingMode: NSVisualEffectView.BlendingMode
 
     var body: some View {
-        Representable(material: material, blendingMode: blendingMode)
-            .edgesIgnoringSafeArea(.all)
+        if let material = material {
+            Representable(material: material, blendingMode: blendingMode)
+                .edgesIgnoringSafeArea(.all)
+        }
     }
 
     struct Representable: NSViewRepresentable {

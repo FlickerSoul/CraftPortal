@@ -9,7 +9,6 @@ import SwiftData
 
 final class AppState: ObservableObject {
     @Published var currentUserProfile: PlayerProfile?
-    @Published var currentGameDirectory: GameDirectory?
     private(set) var launchManager: LaunchManager
     @Published private(set) var jvmManager: JVMManager
     @Published private(set) var initialized: Bool = false
@@ -22,16 +21,19 @@ final class AppState: ObservableObject {
         return "\(version ?? "Unknown") (\(build ?? "Unknown"))"
     }()
 
+    var currentGameDirectory: GameDirectory? {
+        globalSettingsManager.currentGameDirectory
+    }
+
     var currentGameProfile: GameProfile? {
         currentGameDirectory?.selectedGame
     }
 
     init(
         currentUserProfile: PlayerProfile? = nil,
-        currentGameDirectory: GameDirectory? = nil
+        currentGameDirectory _: GameDirectory? = nil
     ) {
         self.currentUserProfile = currentUserProfile
-        self.currentGameDirectory = currentGameDirectory
         launchManager = LaunchManager()
         jvmManager = JVMManager()
         globalSettingsManager = GlobalSettingsManager()
@@ -42,13 +44,15 @@ final class AppState: ObservableObject {
     func initializeState() {
         DispatchQueue.global().async {
             let infos = self.jvmManager.discover()
-            let globalSettings = GlobalSettingsManager.loadSettings()
+            let globalSettings = GlobalSettingsManager.loadSettings() ?? GlobalSettings()
+
+            if globalSettings.jvmSettings.selectedJVM == nil || !infos.contains(globalSettings.jvmSettings.selectedJVM!) {
+                globalSettings.jvmSettings.selectedJVM = infos.first
+            }
 
             DispatchQueue.main.async {
                 self.jvmManager.update(with: infos)
-                if let globalSettings = globalSettings {
-                    self.globalSettingsManager.setSettings(with: globalSettings)
-                }
+                self.globalSettingsManager.setSettings(with: globalSettings)
 
                 self.initialized = true
             }

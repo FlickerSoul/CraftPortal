@@ -4,11 +4,12 @@
 //
 //  Created by Larry Zeng on 8/25/24.
 //
+import SwiftUI
 
-enum FunctionPanel {
-    case Home
+enum FunctionPanel: Int, Equatable {
     case Accounts
-    case GlobalSettings
+    case Home
     case GameSettings
     case GameLibrary
+    case GlobalSettings
 }
