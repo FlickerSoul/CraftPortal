@@ -73,6 +73,14 @@ class JVMAdvancedSettings: Codable {
     var additionalJVMArguments: AdditionalJVMArguments = .defaulted
     var disableDefaultJVMArguments: Bool = false
 
+    init(
+        additionalJVMArguments: AdditionalJVMArguments = .defaulted,
+        disableDefaultJVMArguments: Bool = false
+    ) {
+        self.additionalJVMArguments = additionalJVMArguments
+        self.disableDefaultJVMArguments = disableDefaultJVMArguments
+    }
+
     func composeAdditionalJVMArguments() -> Set<String> {
         var args: Set<String> =
             disableDefaultJVMArguments
@@ -141,7 +149,9 @@ class GameSettings: Codable {
     private static let resolutionDefaultPortion: UInt = 4
 
     private static func getDynamicMemory() -> UInt {
-        return UInt(ProcessInfo.processInfo.physicalMemory / (1024 * 1024 * dynamicMemoryDefaultPortion))
+        return UInt(
+            ProcessInfo.processInfo.physicalMemory
+                / (1024 * 1024 * dynamicMemoryDefaultPortion))
     }
 
     private static func getResolution() -> Resolution {

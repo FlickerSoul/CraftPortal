@@ -42,9 +42,13 @@ final class AppState: ObservableObject {
     func initializeState() {
         DispatchQueue.global().async {
             let infos = self.jvmManager.discover()
+            let globalSettings = GlobalSettingsManager.loadSettings()
 
             DispatchQueue.main.async {
                 self.jvmManager.update(with: infos)
+                if let globalSettings = globalSettings {
+                    self.globalSettingsManager.updateSettings(with: globalSettings)
+                }
 
                 self.initialized = true
             }

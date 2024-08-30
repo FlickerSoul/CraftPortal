@@ -56,17 +56,36 @@ class GlobalSettingsManager {
         self.settings = settings ?? .init()
     }
 
-    func change<T>(keyPath: WritableKeyPath<GlobalSettings, T>, value: T) {
+    func change<T>(
+        keyPath: WritableKeyPath<GlobalSettings, T>, value: T,
+        onComplete handle: (() -> Void)? = nil
+    ) {
         settings[keyPath: keyPath] = value
-        saveSettings()
+        saveSettings(onComplete: handle)
     }
 
-    func saveSettings() {
+    func updateSettings(with settings: GlobalSettings) {
+        self.settings = settings
+    }
+
+    func saveSettings(onComplete handle: (() -> Void)? = nil) {
         DispatchQueue.global().async {
             UserDefaults.standard.set(
                 try? JSONEncoder().encode(self.settings),
                 forKey: GlobalSettingsManager.settingsPersistenceKey
             )
+
+            if let handle = handle {
+                handle()
+            }
         }
+    }
+
+    static func loadSettings() -> GlobalSettings? {
+        return try? JSONDecoder().decode(
+            GlobalSettings.self,
+            from: UserDefaults.standard.data(forKey: settingsPersistenceKey)
+                ?? Data()
+        )
     }
 }
