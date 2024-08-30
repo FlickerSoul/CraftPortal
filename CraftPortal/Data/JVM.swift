@@ -119,7 +119,8 @@ struct JVMInformation: Codable, Equatable, Hashable {
     }
 }
 
-struct JVMManager {
+@Observable
+class JVMManager {
     static let JVM_SERACH_PATHS: [JavaSearchPath] = [
         .javaCollectionDir(Path("/Library/Java/JavaVirtualMachines/")!),
         .javaDir(Path("/usr/bin/java")!),
@@ -138,11 +139,11 @@ struct JVMManager {
         validate()
     }
 
-    mutating func update(with versions: any Sequence<JVMInformation>) {
+    func update(with versions: any Sequence<JVMInformation>) {
         self.versions.formUnion(versions)
     }
 
-    mutating func validate() {
+    func validate() {
         versions = versions.filter { version in
             if let javaPath = Path(version.path), javaPath.exists {
                 return true

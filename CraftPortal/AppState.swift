@@ -13,6 +13,7 @@ final class AppState: ObservableObject {
     private(set) var launchManager: LaunchManager
     @Published private(set) var jvmManager: JVMManager
     @Published private(set) var initialized: Bool = false
+    @Published private(set) var globalSettingsManager: GlobalSettingsManager
 
     let appVersion = {
         let version =
@@ -33,6 +34,7 @@ final class AppState: ObservableObject {
         self.currentGameDirectory = currentGameDirectory
         launchManager = LaunchManager()
         jvmManager = JVMManager()
+        globalSettingsManager = GlobalSettingsManager()
 
         launchManager.setAppState(self)
     }
