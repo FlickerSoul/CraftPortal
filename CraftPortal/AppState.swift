@@ -47,7 +47,7 @@ final class AppState: ObservableObject {
             DispatchQueue.main.async {
                 self.jvmManager.update(with: infos)
                 if let globalSettings = globalSettings {
-                    self.globalSettingsManager.updateSettings(with: globalSettings)
+                    self.globalSettingsManager.setSettings(with: globalSettings)
                 }
 
                 self.initialized = true

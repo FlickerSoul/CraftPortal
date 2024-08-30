@@ -35,12 +35,16 @@ struct ClassPathTests {
         "Test composing class paths",
         arguments: CP_MAPPING
     )
-    func loadClassPathsTest(name: String, subdir: String, expectedCP: String, clientJar: String)
+    func loadClassPathsTest(
+        name: String, subdir: String, expectedCP: String, clientJar: String
+    )
         throws
     {
         let launchManager = LaunchManager()
 
-        let meta = try AssetLoader.shared.loadMinecraftMeta(name: name, from: subdir)
+        let meta = try AssetLoader.shared.loadMinecraftMeta(
+            name: name, from: subdir
+        )
 
         let loadedCP = launchManager.composeClassPaths(
             from: meta, withLibBase: Path("/FakeDir/")!,
@@ -363,5 +367,96 @@ struct ArugmentsTests {
         )
 
         #expect(actual == expected)
+    }
+}
+
+@Suite
+struct LaunchScriptTests {
+    enum Expected {
+        case Error(LauncherError)
+        case Success(String)
+    }
+
+    static let assetFolderPath = try! AssetLoader.shared.loadAssetFolder(
+        name: "Assets"
+    ).path()
+
+    static let mockLocalPlayerId: UUID = .init(
+        uuidString: "00000000-0000-0000-0000-000000000000")!
+    static let mockLocalPlayer: PlayerProfile = .init(
+        id: mockLocalPlayerId, username: "fake_username",
+        playerType: .Local
+    )
+    static let mockedVanillaGamePath = Path(assetFolderPath)! / "ProfiledVanillaGame"
+
+    static let mockedVanillaGameDirectory: GameDirectory = .init(
+        path: mockedVanillaGamePath,
+        directoryType: .Profile
+    )
+
+    static let mockedVinallaGameProfile: GameProfile = .init(
+        name: "Mocked Vanilla Game",
+        gameVersion: .Release(major: 1, minor: 21), modLoader: nil,
+        gameDirectory: mockedVanillaGameDirectory
+    )
+
+    static let mockedAppState = {
+        let appState = AppState()
+        appState.globalSettingsManager.setSettings(
+            with:
+            GlobalSettings(
+                globalGameSettings: .init(
+                    dynamicMemory: 4096,
+                    resolution: .window(width: 1280, height: 720)
+                )))
+
+        return appState
+    }()
+
+    static let expectedVanillaGameShellScript = {
+        let shellPath = mockedVanillaGamePath / "expected-shell.txt"
+        return try! String(contentsOfFile: shellPath.string, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
+    }()
+
+    static let mockedJavaPath = "/Mocked/Java/Path/"
+
+    @Test(
+        "Test Launch Script Generation",
+        arguments: [
+            (
+                mockLocalPlayer,
+                mockedVinallaGameProfile,
+                mockedAppState,
+                Expected.Success(expectedVanillaGameShellScript)
+            ),
+        ]
+    )
+    func launchScriptTest(
+        player: PlayerProfile, profile: GameProfile, appState: AppState,
+        expected: Expected
+    ) throws {
+        let launchManager = LaunchManager()
+
+        launchManager.setAppState(appState)
+
+        switch expected {
+        case let .Error(expectedError):
+            #expect(throws: expectedError) {
+                _ = try launchManager.composeLaunchScript(
+                    player: player, profile: profile,
+                    javaPath: LaunchScriptTests.mockedJavaPath
+                )
+            }
+        case let .Success(expectedScript):
+            let composed = try launchManager.composeLaunchScript(
+                player: player, profile: profile,
+                javaPath: LaunchScriptTests.mockedJavaPath
+            )
+            let simplified = composed.replacingOccurrences(
+                of: LaunchScriptTests.assetFolderPath, with: ""
+            )
+
+            #expect(simplified == expectedScript)
+        }
     }
 }

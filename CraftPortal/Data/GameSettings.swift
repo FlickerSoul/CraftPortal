@@ -132,7 +132,8 @@ class GameSettings: Codable {
     var advanced: AdvancedSettings
 
     init(
-        dynamicMemory: UInt? = nil, resolution: Resolution? = nil,
+        dynamicMemory: UInt? = nil,
+        resolution: Resolution? = nil,
         processPriority: ProcessPriority = .normal,
         advanced: AdvancedSettings = .init()
     ) {

@@ -28,7 +28,7 @@ class AssetLoader {
         return asset
     }
 
-    func loadAssetFolder(name: String, from subdir: String) throws -> URL {
+    func loadAssetFolder(name: String, from subdir: String? = nil) throws -> URL {
         let bundle = Bundle(for: type(of: self))
         let asset = try #require(bundle.url(forResource: name, withExtension: nil, subdirectory: subdir))
 

@@ -92,8 +92,16 @@ class LaunchManager {
         }
 
         do {
+            guard
+                let javaPath = appState?.globalSettingsManager.jvmSettings
+                .selectedJVM?.path
+            else {
+                throw LauncherError.noJVM
+            }
+
             let script = try composeLaunchScript(
-                player: player, profile: profile
+                player: player, profile: profile,
+                javaPath: javaPath
             )
             _ = try executeScript(script)
         } catch {}
@@ -129,25 +137,18 @@ class LaunchManager {
         return process
     }
 
-    func composeLaunchScript(player: PlayerProfile, profile: GameProfile) throws
+    func composeLaunchScript(
+        player: PlayerProfile, profile: GameProfile, javaPath: String
+    ) throws
         -> String
     {
-        guard let javaPath = appState?.globalSettingsManager.jvmSettings.selectedJVM?.path else {
-            throw LauncherError.noJVM
-        }
+        let javaPath = ensureQuotes(javaPath)
 
         let gameDir = profile.gameDirectory
         let gameDirPath = profile.gameDirectory.path
         let fullVersion = profile.fullVersion
 
-        let metaPath: Path = {
-            switch gameDir.directoryType {
-            case .Mangled:
-                return gameDirPath
-            case .Profile:
-                return gameDirPath / "meta"
-            }
-        }()
+        let metaPath: Path = gameDir.getMetaPath()
 
         let libraryPath = metaPath / "libraries"
         let assetsPath = metaPath / "assets"
@@ -157,14 +158,7 @@ class LaunchManager {
         let clientJarPath = clientLocation / "\(fullVersion).jar"
         let clientConfigPath = clientLocation / "\(fullVersion).json"
 
-        let profilePath: Path = {
-            switch gameDir.directoryType {
-            case .Mangled:
-                return gameDirPath
-            case .Profile:
-                return gameDirPath / "profiles" / profile.name
-            }
-        }()
+        let profilePath: Path = profile.getProfilePath()
 
         let metaConfig = try loadClinetConfig(clientPath: clientConfigPath)
         let gameSettings =
@@ -179,17 +173,17 @@ class LaunchManager {
                 .authPlayerName: player.username,
                 .versionName: fullVersion,
                 .gameDirectory: ensureQuotes(profilePath.string),
-                .assetsRoot: assetsPath.string,
+                .assetsRoot: ensureQuotes(assetsPath.string),
                 .assetsIndexName: metaConfig.assetIndex.id,
                 .authUUID: player.id.flatUUIDString,
                 .authAccessToken: player.getAccessToken(),
-                .clientId: "", // hmmm
-                .authXUID: "", // hmmm
+                .clientId: ensureQuotes("clientid"), // TODO: hmmm
+                .authXUID: ensureQuotes("authxuid"), // TODO: hmmm
                 .userType: player.userType,
                 .versionType: profile.gameVersion.versionType,
                 .resolutionWidth: resolutionSize.width,
                 .resolutionHeight: resolutionSize.height,
-                .nativesDirectory: ensureQuotes(nativesPath.string),
+                .nativesDirectory: nativesPath.string, // the jvm args will be applied with quotes so we don't need it here
                 .launcherName: launcherName,
                 .launcherVersion: launcherVersion,
                 .classpath: ensureQuotes(
@@ -220,8 +214,14 @@ class LaunchManager {
         )
 
         let mainClass = metaConfig.mainClass
+        let javaLaunchScript = "\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
 
-        return "\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
+        if case .normal = gameSettings.processPriority {
+            return javaLaunchScript
+        } else {
+            return
+                "nice -n \(gameSettings.processPriority.rawValue) \(javaLaunchScript)"
+        }
     }
 
     func loadClinetConfig(clientPath: Path) throws -> MinecraftMeta {
@@ -382,7 +382,7 @@ class LaunchManager {
         results.append("-Xmx\(settings.dynamicMemory)m")
 
         results.append(
-            contentsOf: settings.advanced.jvm.composeAdditionalJVMArguments()
+            contentsOf: settings.advanced.jvm.composeAdditionalJVMArguments().sorted()
         )
 
         return results

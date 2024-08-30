@@ -37,14 +37,14 @@ enum ModLoader: Codable, FullVersion {
 
 /// An enum represeting the versions of the game
 enum GameVersion: Codable, FullVersion {
-    case Release(major: Int, minor: Int, patch: Int)
+    case Release(major: Int, minor: Int, patch: Int? = nil)
     case Snapshot(version: String)
     case Historical(major: Int, minor: Int, patch: Int)
 
     var fullVersion: String {
         switch self {
         case let .Release(major, minor, patch):
-            return "\(major).\(minor).\(patch)"
+            return "\(major).\(minor)" + (patch.map { ".\($0)" } ?? "")
         case let .Snapshot(version):
             return version
         case let .Historical(major, minor, patch):
@@ -127,7 +127,7 @@ extension CraftPortalSchemaV1 {
         func getAccessToken() -> String {
             // TODO: link with auth
             // TODO: maybe do it with the auth manager so that you get token refresh
-            return UUID().flatUUIDString
+            return id.flatUUIDString
         }
     }
 }
@@ -194,6 +194,16 @@ extension CraftPortalSchemaV1 {
 
             if found {
                 selectedGame = game
+            }
+        }
+
+        static let metaDirectoryName = "meta"
+        func getMetaPath() -> Path {
+            switch directoryType {
+            case .Mangled:
+                return path
+            case .Profile:
+                return path / GameDirectory.metaDirectoryName
             }
         }
     }
@@ -264,6 +274,17 @@ extension CraftPortalSchemaV1 {
 
         var fullVersion: String {
             return gameVersion.fullVersion + (modLoader?.fullVersion ?? "")
+        }
+
+        static let profileDirectoryName: String = "profiles"
+
+        func getProfilePath() -> Path {
+            switch gameDirectory.directoryType {
+            case .Mangled:
+                return gameDirectory.path
+            case .Profile:
+                return gameDirectory.path / GameProfile.profileDirectoryName / name
+            }
         }
     }
 }

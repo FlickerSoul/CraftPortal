@@ -64,7 +64,7 @@ class GlobalSettingsManager {
         saveSettings(onComplete: handle)
     }
 
-    func updateSettings(with settings: GlobalSettings) {
+    func setSettings(with settings: GlobalSettings) {
         self.settings = settings
     }
 

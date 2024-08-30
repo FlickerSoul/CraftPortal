@@ -94,7 +94,7 @@ struct MainPanel: View {
                         let game = GameProfile(
                             name: "Test",
                             gameVersion: .Release(
-                                major: 1, minor: 21, patch: 0
+                                major: 1, minor: 21
                             ),
                             modLoader: nil,
                             gameDirectory: dir
