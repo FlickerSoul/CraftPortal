@@ -60,9 +60,7 @@ struct MainPanel: View {
                 }
             }
         }
-        .onHover { hovering in
-            changeMouseHovering(hovering)
-        }
+        .hoverCursor()
         .onTapGesture {
             if noGameSelected {
                 updatePanel(.GameLibrary)

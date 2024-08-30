@@ -6,10 +6,23 @@
 //
 import SwiftUI
 
-func changeMouseHovering(_ isHovered: Bool) {
-    if isHovered {
-        NSCursor.pointingHand.push()
-    } else {
-        NSCursor.pop()
+struct HoverCursorModifier: ViewModifier {
+    let cursor: NSCursor
+
+    func body(content: Content) -> some View {
+        content
+            .onHover { isHovering in
+                if isHovering {
+                    cursor.push()
+                } else {
+                    NSCursor.pop()
+                }
+            }
+    }
+}
+
+extension View {
+    func hoverCursor(_ cursor: NSCursor = .pointingHand) -> some View {
+        modifier(HoverCursorModifier(cursor: cursor))
     }
 }

@@ -56,11 +56,11 @@ struct SidebarItemChip<Content: View>: View {
             isHovered ? Color.gray.opacity(0.2) : Color.gray.opacity(0.1)
         )
         .shadow(radius: isHovered ? 4 : 2)
+        .hoverCursor()
         .onHover { hovering in
             withAnimation(.easeInOut(duration: 0.2)) {
                 isHovered = hovering
             }
-            changeMouseHovering(hovering)
         }
     }
 }
