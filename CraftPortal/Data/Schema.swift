@@ -123,6 +123,12 @@ extension CraftPortalSchemaV1 {
         var userType: String {
             return "msa"
         }
+
+        func getAccessToken() -> String {
+            // TODO: link with auth
+            // TODO: maybe do it with the auth manager so that you get token refresh
+            return UUID().flatUUIDString
+        }
     }
 }
 
@@ -203,19 +209,22 @@ extension CraftPortalSchemaV1 {
         var gameVersion: GameVersion
         var modLoader: ModLoader?
         var gameDirectory: GameDirectory
+        var perGameSettingsOn: Bool
 
         init(
             id: UUID = UUID(),
             name: String,
             gameVersion: GameVersion,
             modLoader: ModLoader?,
-            gameDirectory: GameDirectory
+            gameDirectory: GameDirectory,
+            perGameSettingsOn: Bool = false
         ) {
             self.id = id
             self.name = name
             self.gameVersion = gameVersion
             self.modLoader = modLoader
             self.gameDirectory = gameDirectory
+            self.perGameSettingsOn = perGameSettingsOn
         }
 
         required init(from decoder: Decoder) throws {
@@ -231,6 +240,7 @@ extension CraftPortalSchemaV1 {
             gameDirectory = try container.decode(
                 GameDirectory.self, forKey: .gameDirectory
             )
+            perGameSettingsOn = try container.decode(Bool.self, forKey: .perGameSettingsOn)
         }
 
         func encode(to encoder: any Encoder) throws {
@@ -240,6 +250,7 @@ extension CraftPortalSchemaV1 {
             try container.encode(gameVersion, forKey: .gameVersion)
             try container.encode(modLoader, forKey: .modLoader)
             try container.encode(gameDirectory, forKey: .gameDirectory)
+            try container.encode(perGameSettingsOn, forKey: .perGameSettingsOn)
         }
 
         enum CodingKeys: String, CodingKey {
@@ -248,6 +259,7 @@ extension CraftPortalSchemaV1 {
             case gameVersion
             case modLoader
             case gameDirectory
+            case perGameSettingsOn
         }
 
         var fullVersion: String {

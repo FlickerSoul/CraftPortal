@@ -38,10 +38,18 @@ class GlobalSettings: Codable {
 class GlobalSettingsManager {
     static let settingsPersistenceKey: String = "GlobalSettings"
 
-    private(set) var settings: GlobalSettings {
+    private var settings: GlobalSettings {
         didSet {
             saveSettings()
         }
+    }
+
+    var globalGameSettings: GameSettings {
+        settings.globalGameSettings
+    }
+
+    var jvmSettings: JVMSettings {
+        settings.jvmSettings
     }
 
     init(settings: GlobalSettings? = nil) {

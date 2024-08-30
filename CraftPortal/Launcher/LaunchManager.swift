@@ -52,9 +52,19 @@ enum LauncherState: Equatable {
 enum LauncherError: Error {
     case noShellExecutable
     case launchFailed
+    case noJVM
+}
+
+private func ensureQuotes(_ value: String) -> String {
+    return value.hasPrefix("\"") && value.hasSuffix("\"")
+        ? value : "\"\(value)\""
 }
 
 class LaunchManager {
+    static let defaultLaunchFeatures: LaunchFeatureCollection = [
+        "has_custom_resolution": true,
+    ]
+
     weak var appState: AppState?
     private(set) var launcherState: LauncherState = .idle
 
@@ -122,6 +132,10 @@ class LaunchManager {
     func composeLaunchScript(player: PlayerProfile, profile: GameProfile) throws
         -> String
     {
+        guard let javaPath = appState?.globalSettingsManager.jvmSettings.selectedJVM?.path else {
+            throw LauncherError.noJVM
+        }
+
         let gameDir = profile.gameDirectory
         let gameDirPath = profile.gameDirectory.path
         let fullVersion = profile.fullVersion
@@ -153,48 +167,58 @@ class LaunchManager {
         }()
 
         let metaConfig = try loadClinetConfig(clientPath: clientConfigPath)
-        let launchFeatures: LaunchFeatureCollection = [:] // TODO: make features
+        let gameSettings =
+            appState?.globalSettingsManager.globalGameSettings
+                ?? .init() // TODO: huhhhh
+        // TODO: per game settings loading
 
-        let argumentValues: LaunchArgValueCollection = [
-            .authPlayerName: player.username,
-            .versionName: fullVersion,
-            .gameDirectory: profilePath.string,
-            .assetsRoot: assetsPath.string,
-            .assetsIndexName: metaConfig.assetIndex.id,
-            .authUUID: player.id.flatUUIDString,
-            .authAccessToken: "", // TODO: player auth
-            .clientId: "", // hmmm
-            .authXUID: "", // hmmm
-            .userType: player.userType,
-            .versionType: profile.gameVersion.versionType,
-            .resolutionWidth: "", // TODO: add later with settings
-            .resolutionHeight: "", // TODO: add later with settings
-            .nativesDirectory: nativesPath.string,
-            .launcherName: launcherName,
-            .launcherVersion: launcherVersion,
-            .classpath: composeClassPaths(
-                from: metaConfig, withLibBase: libraryPath,
-                withClientJar: clientJarPath,
-                features: launchFeatures
-            ),
-        ]
+        let argumentValues: LaunchArgValueCollection = {
+            let resolutionSize = gameSettings.resolution.toSizeStrings()
+
+            return [
+                .authPlayerName: player.username,
+                .versionName: fullVersion,
+                .gameDirectory: ensureQuotes(profilePath.string),
+                .assetsRoot: assetsPath.string,
+                .assetsIndexName: metaConfig.assetIndex.id,
+                .authUUID: player.id.flatUUIDString,
+                .authAccessToken: player.getAccessToken(),
+                .clientId: "", // hmmm
+                .authXUID: "", // hmmm
+                .userType: player.userType,
+                .versionType: profile.gameVersion.versionType,
+                .resolutionWidth: resolutionSize.width,
+                .resolutionHeight: resolutionSize.height,
+                .nativesDirectory: ensureQuotes(nativesPath.string),
+                .launcherName: launcherName,
+                .launcherVersion: launcherVersion,
+                .classpath: ensureQuotes(
+                    composeClassPaths(
+                        from: metaConfig,
+                        withLibBase: libraryPath,
+                        withClientJar: clientJarPath,
+                        features: LaunchManager.defaultLaunchFeatures
+                    )
+                ),
+            ]
+        }()
 
         let plainArgumentValues = argumentValues.plainArugments()
 
         let jvmArgs = composeArgs(
             from: metaConfig.arguments.jvm,
             argValues: plainArgumentValues,
-            features: launchFeatures,
-            patches: composeArgumentPatches(from: profile)
+            features: LaunchManager.defaultLaunchFeatures,
+            patches: composeJVMArgPatches(from: gameSettings),
+            shouldEnsureQuotes: true
         )
         let gameArgs = composeArgs(
             from: metaConfig.arguments.game,
             argValues: plainArgumentValues,
-            features: [:], // TODO: make features
-            patches: composeArgumentPatches(from: profile)
+            features: LaunchManager.defaultLaunchFeatures,
+            patches: composeGameArgPatches(from: gameSettings)
         )
 
-        let javaPath = getJavaPath()
         let mainClass = metaConfig.mainClass
 
         return "\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
@@ -257,18 +281,16 @@ class LaunchManager {
         return classPath.joined(separator: ":")
     }
 
-    func getJavaPath() -> String {
-        // TODO: load java path from settings
-        return Path("~/.jenv/shims/java")!.string
-    }
-
     func processStringArgument(
         segments: inout [String],
         argument: String,
         argValues: LaunchPlainArgValueCollection
     ) {
         let trimmed = argument.trimmingCharacters(in: .whitespaces)
-        if let start = trimmed.firstIndex(of: "$"), let end = trimmed.firstIndex(of: "}"), start < end, trimmed[trimmed.index(start, offsetBy: 1)] == "{" {
+        if let start = trimmed.firstIndex(of: "$"),
+           let end = trimmed.firstIndex(of: "}"), start < end,
+           trimmed[trimmed.index(start, offsetBy: 1)] == "{"
+        {
             let keyStart = trimmed.index(start, offsetBy: 2)
             let key = String(trimmed[keyStart ..< end])
 
@@ -317,7 +339,8 @@ class LaunchManager {
         from args: [MinecraftMetaArgumentElement]?,
         argValues: LaunchPlainArgValueCollection,
         features: LaunchFeatureCollection,
-        patches: LaunchArgPatchCollection
+        patches: LaunchArgPatchCollection,
+        shouldEnsureQuotes: Bool = false
     ) -> String {
         var stringSegments = [String]()
 
@@ -330,14 +353,39 @@ class LaunchManager {
 
         stringSegments.append(contentsOf: patches)
 
+        if shouldEnsureQuotes {
+            stringSegments = stringSegments.map(ensureQuotes)
+        }
+
         return stringSegments.joined(separator: " ")
     }
 
-    func composeArgumentPatches(from _: GameProfile)
+    func composeGameArgPatches(from settings: GameSettings)
         -> LaunchArgPatchCollection
     {
-        // TODO: make custom arguments
-        return []
+        var results = LaunchArgPatchCollection()
+
+        // Game Arg Patches
+        if case .fullscreen = settings.resolution {
+            results.append("--fullscreen")
+        }
+
+        return results
+    }
+
+    func composeJVMArgPatches(from settings: GameSettings)
+        -> LaunchArgPatchCollection
+    {
+        var results = LaunchArgPatchCollection()
+
+        // dynamic memory cap
+        results.append("-Xmx\(settings.dynamicMemory)m")
+
+        results.append(
+            contentsOf: settings.advanced.jvm.composeAdditionalJVMArguments()
+        )
+
+        return results
     }
 
     var launcherName: String {

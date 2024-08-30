@@ -10,6 +10,15 @@ import Foundation
 enum Resolution: Codable {
     case fullscreen
     case window(width: UInt, height: UInt)
+
+    func toSizeStrings() -> (width: String, height: String) {
+        switch self {
+        case .fullscreen:
+            return ("", "")
+        case let .window(width: width, height: height):
+            return (String(width), String(height))
+        }
+    }
 }
 
 enum ProcessPriority: Int, Codable {
@@ -64,7 +73,7 @@ class JVMAdvancedSettings: Codable {
     var additionalJVMArguments: AdditionalJVMArguments = .defaulted
     var disableDefaultJVMArguments: Bool = false
 
-    var formattedAdditionalJVMArguments: String {
+    func composeAdditionalJVMArguments() -> Set<String> {
         var args: Set<String> =
             disableDefaultJVMArguments
                 ? [] : AdditionalJVMArguments.defaulted.arguments()
@@ -76,7 +85,7 @@ class JVMAdvancedSettings: Codable {
             break
         }
 
-        return args.joined(separator: " ")
+        return args
     }
 
     enum CodingKeys: String, CodingKey {
