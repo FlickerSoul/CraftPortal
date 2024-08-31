@@ -45,42 +45,50 @@ final class AppState: ObservableObject {
     func initializeState() {
         DispatchQueue.global().async {
             let infos = JVMManager.load()
-            let globalSettings =
-                GlobalSettingsManager.loadSettings() ?? GlobalSettings()
+            let loadedSettings =
+                GlobalSettingsManager.loadSettings()
 
-            if globalSettings.jvmSettings.selectedJVM == nil
-                || !infos.contains(globalSettings.jvmSettings.selectedJVM!)
-            {
-                globalSettings.jvmSettings.selectedJVM = infos.first
-            }
+            let globalSettings = loadedSettings ?? GlobalSettings()
 
-            if globalSettings.gameDirectories.isEmpty {
-                if let applicationSupport = FileManager.default.urls(
-                    for: .applicationSupportDirectory, in: .userDomainMask
-                ).first {
-                    if let minecraftPath =
-                        Path(applicationSupport.appendingPathComponent("minecraft", isDirectory: true).path(percentEncoded: false)),
-                        minecraftPath.exists
-                    {
-                        globalSettings.gameDirectories.append(
-                            GameDirectory(
-                                path: minecraftPath, directoryType: .Mangled
-                            ))
-                    }
+            if loadedSettings == nil {
+                // select JVM if none is present
+                if globalSettings.jvmSettings.selectedJVM == nil
+                    || !infos.contains(globalSettings.jvmSettings.selectedJVM!)
+                {
+                    globalSettings.jvmSettings.selectedJVM = infos.first
+                }
 
-                    print("a")
-                    if let applicationPath = Path(
-                        applicationSupport.appendingPathComponent(APP_NAME, isDirectory: true).path(percentEncoded: false)),
-                        applicationPath.exists
-                        || (try? applicationPath.mkdir()) != nil
-                    {
-                        print("b")
-                        globalSettings.gameDirectories.append(
-                            GameDirectory(
-                                path: applicationPath, directoryType: .Profile
+                // discover game directories
+                if globalSettings.gameDirectories.isEmpty {
+                    if let applicationSupport = FileManager.default.urls(
+                        for: .applicationSupportDirectory, in: .userDomainMask
+                    ).first {
+                        if let minecraftPath =
+                            Path(applicationSupport.appendingPathComponent("minecraft", isDirectory: true).path(percentEncoded: false)),
+                            minecraftPath.exists
+                        {
+                            globalSettings.gameDirectories.append(
+                                GameDirectory(
+                                    path: minecraftPath, directoryType: .Mangled
+                                ))
+                        }
+
+                        if let applicationPath = Path(
+                            applicationSupport.appendingPathComponent(APP_NAME, isDirectory: true).path(percentEncoded: false)),
+                            applicationPath.exists
+                            || (try? applicationPath.mkdir()) != nil
+                        {
+                            globalSettings.gameDirectories.append(
+                                GameDirectory(
+                                    path: applicationPath, directoryType: .Profile
+                                )
                             )
-                        )
+                        }
                     }
+                }
+            } else {
+                if let currentJVM = globalSettings.jvmSettings.selectedJVM, !infos.contains(currentJVM) {
+                    globalSettings.jvmSettings.selectedJVM = nil
                 }
             }
 

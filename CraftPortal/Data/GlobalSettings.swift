@@ -39,6 +39,7 @@ class GlobalSettings: Codable {
         case _globalGameSettings = "globalGameSettings"
         case _gameDirectories = "gameDirectories"
         case _jvmSettings = "jvmSettings"
+        case _currentGameDirectory = "currentGameDirectory"
     }
 }
 

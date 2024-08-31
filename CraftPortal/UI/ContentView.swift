@@ -14,7 +14,7 @@ private struct LoadingView: View {
             Text("Loading...")
                 .font(.title)
             ProgressView()
-                .progressViewStyle(CircularProgressViewStyle())
+                .progressViewStyle(.circular)
         }
     }
 }

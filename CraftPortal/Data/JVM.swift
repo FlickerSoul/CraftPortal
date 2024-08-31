@@ -84,6 +84,14 @@ struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
         }
     }
 
+    static func from(url: URL) -> JVMInformation? {
+        if let path = Path(url: url) {
+            return from(path: path)
+        }
+
+        return nil
+    }
+
     static func from(path: Path) -> JVMInformation? {
         let task = Process()
 
@@ -152,6 +160,11 @@ class JVMManager {
 
     func update(with versions: any Sequence<JVMInformation>) {
         self.versions.formUnion(versions)
+        saveChanges()
+    }
+
+    func add(version: JVMInformation) {
+        versions.insert(version)
         saveChanges()
     }
 

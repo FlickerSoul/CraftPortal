@@ -92,6 +92,8 @@
 				WindowPanels/Panels/GameSettingsPanel.swift,
 				WindowPanels/Panels/GlobalSettingsPanel.swift,
 				WindowPanels/Panels/MainPanel.swift,
+				WindowPanels/Panels/SettingsViews/CurrentGameDirectorySettings.swift,
+				WindowPanels/Panels/SettingsViews/JVMSettingsView.swift,
 				WindowPanels/Sidebar/Sidebar.swift,
 				WindowPanels/Sidebar/SidebarAccounts.swift,
 				WindowPanels/Sidebar/SidebarGameLibrary.swift,
