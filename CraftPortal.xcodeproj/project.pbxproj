@@ -74,7 +74,11 @@
 				GlobalSettings.swift,
 				JVM.swift,
 				MinecraftMeta.swift,
-				Schema.swift,
+				Schemas/Utils.swift,
+				Schemas/V1/GameDirectory.swift,
+				Schemas/V1/GameProfile.swift,
+				Schemas/V1/PlayerProfile.swift,
+				Schemas/V1/V1.swift,
 			);
 			target = 577CE1CF2C7B63080061257C /* CraftPortal */;
 		};
