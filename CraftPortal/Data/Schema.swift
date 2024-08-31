@@ -68,9 +68,16 @@ enum UserAccountType: Codable {
 }
 
 /// An enum represeting the game directory type: how game directory is structured
-enum GameDirectoryType: Codable {
+enum GameDirectoryType: Codable, CaseIterable, Equatable, Identifiable {
     case Mangled
     case Profile
+
+    var id: String {
+        switch self {
+        case .Mangled: return "mangled"
+        case .Profile: return "profile"
+        }
+    }
 }
 
 // MARK: - V1 Schema

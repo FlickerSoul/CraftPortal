@@ -82,6 +82,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ContentView.swift,
+				Utils/FileChooser.swift,
 				Utils/FrostGlassEffect.swift,
 				Utils/FunctionPanel.swift,
 				Utils/ImageSource.swift,

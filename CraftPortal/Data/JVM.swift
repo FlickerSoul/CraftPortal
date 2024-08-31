@@ -19,18 +19,24 @@ enum JavaSearchPath {
         }
     }
 
-    func getJVMInformation() -> Set<JVMInformation> {
+    func getJVMInformation(to collection: inout Set<JVMInformation>) {
         switch self {
-        case let .javaDir(dir):
-            if let info = JVMInformation.from(path: dir) {
-                return [info]
+        case let .javaDir(path):
+            if collection.filter({ info in
+                info.path == path
+            }).count != 0 {
+                break
             }
-            return []
-        case let .binDir(dir):
-            return JavaSearchPath.javaDir(dir / "java").getJVMInformation()
-        case let .javaCollectionDir(dir):
-            var result = Set<JVMInformation>()
 
+            if let info = JVMInformation.from(path: path) {
+                collection.insert(info)
+            }
+
+        case let .binDir(dir):
+            return JavaSearchPath.javaDir(dir / "java").getJVMInformation(
+                to: &collection)
+
+        case let .javaCollectionDir(dir):
             for versionDir in dir.ls() {
                 let realDir: Path?
                 if versionDir.isSymlink {
@@ -47,28 +53,25 @@ enum JavaSearchPath {
                 let contentsPath = realDir / "Contents"
 
                 if binPath.exists {
-                    result.formUnion(
-                        JavaSearchPath.binDir(versionDir / "bin")
-                            .getJVMInformation())
+                    JavaSearchPath.binDir(binPath)
+                        .getJVMInformation(to: &collection)
                 } else if contentsPath.exists {
-                    result.formUnion(
-                        JavaSearchPath.binDir(
-                            contentsPath / "Home/bin"
-                        ).getJVMInformation())
+                    JavaSearchPath.binDir(
+                        contentsPath / "Home/bin"
+                    ).getJVMInformation(to: &collection)
                 } else {
                     continue
                 }
             }
-            return result
         }
     }
 }
 
 struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
-    let path: String
+    let path: Path
     let version: String
 
-    var id: String { path }
+    var id: String { path.string }
 
     var majorVersion: Int? {
         let versionComponents = version.split(separator: ".")
@@ -114,7 +117,7 @@ struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
             let versionNumberIndex = versionIndex + 1
             let version = String(components[versionNumberIndex])
 
-            return .init(path: path.string, version: version)
+            return .init(path: path, version: version)
         }
 
         return nil
@@ -126,9 +129,11 @@ class JVMManager {
     static let JVM_SERACH_PATHS: [JavaSearchPath] = [
         .javaCollectionDir(Path("/Library/Java/JavaVirtualMachines/")!),
         .javaDir(Path("/usr/bin/java")!),
-        //        .javaCollectionDir(Path.home / ".jenv/versions/"),  // Not usable because of sandboxing
+        .javaCollectionDir(Path.home / ".jenv/versions/"),
         .javaCollectionDir(Path("/opt/homebrew/Cellar/openjdk/")!),
     ]
+
+    static let JVM_CACHE_KEY: String = "JVM_CACHE_KEY"
 
     var versions: Set<JVMInformation>
     var sequentialVersions: [JVMInformation] {
@@ -142,17 +147,21 @@ class JVMManager {
     }
 
     init(withExisting versions: any Sequence<JVMInformation>) {
-        self.versions = Set(versions)
-        validate()
+        self.versions = Self.validate(versions: Set(versions))
     }
 
     func update(with versions: any Sequence<JVMInformation>) {
         self.versions.formUnion(versions)
+        saveChanges()
     }
 
-    func validate() {
-        versions = versions.filter { version in
-            if let javaPath = Path(version.path), javaPath.exists {
+    func saveChanges() {
+        UserDefaults.standard.set(try? JSONEncoder().encode(versions), forKey: JVMManager.JVM_CACHE_KEY)
+    }
+
+    static func validate(versions: Set<JVMInformation>) -> Set<JVMInformation> {
+        return versions.filter { version in
+            if version.path.exists {
                 return true
             } else {
                 return false
@@ -160,11 +169,19 @@ class JVMManager {
         }
     }
 
-    func discover() -> Set<JVMInformation> {
+    static func load() -> Set<JVMInformation> {
+        if let data = UserDefaults.standard.data(forKey: JVMManager.JVM_CACHE_KEY), let decoded = try? JSONDecoder().decode(Set<JVMInformation>.self, from: data) {
+            return validate(versions: decoded)
+        }
+
+        return Self.discover()
+    }
+
+    static func discover() -> Set<JVMInformation> {
         return JVMManager.JVM_SERACH_PATHS.reduce(
-            into: Set<JVMInformation>())
-        { partialResult, searchPath in
-            partialResult.formUnion(searchPath.getJVMInformation())
+            into: Set<JVMInformation>()
+        ) { partialResult, searchPath in
+            searchPath.getJVMInformation(to: &partialResult)
         }
     }
 }

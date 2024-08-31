@@ -18,16 +18,9 @@ struct GlobalSettingsTests {
             \.globalGameSettings.dynamicMemory
         let changedVal: UInt = 100
 
-        var saved = false
-
         manager.change(
-            keyPath: keyPath, value: changedVal,
-            onComplete: {
-                saved = true
-            }
+            keyPath: keyPath, value: changedVal
         )
-
-        while !saved {}
 
         let loaded = try #require(GlobalSettingsManager.loadSettings())
 

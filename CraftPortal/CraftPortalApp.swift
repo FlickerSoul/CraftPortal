@@ -8,6 +8,8 @@
 import SwiftData
 import SwiftUI
 
+let APP_NAME = "CraftPortalLauncher"
+
 @main
 struct CraftPortalApp: App {
     var sharedModelContainer: ModelContainer = {

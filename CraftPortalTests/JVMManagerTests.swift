@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Path
 import Testing
 
 @testable import CraftPortal
@@ -28,7 +29,7 @@ struct JVMInformationTest {
         ("22.0.2", 22),
     ])
     func testMajorVersion(fullVersion: String, expectedMajor: Int) {
-        let info = JVMInformation(path: "", version: fullVersion)
+        let info = JVMInformation(path: Path("/FakePath/")!, version: fullVersion)
         #expect(info.majorVersion == expectedMajor)
     }
 }
@@ -37,7 +38,6 @@ struct JVMInformationTest {
 struct JVMManagerTests {
     @Test
     func testJVMManagerDiscover() {
-        let manager = JVMManager()
-        manager.discover().forEach { print($0) }
+        JVMManager.discover().forEach { print($0) }
     }
 }

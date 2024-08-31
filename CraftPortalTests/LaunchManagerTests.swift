@@ -439,7 +439,7 @@ struct LaunchScriptTests {
 extension LaunchScriptTests {
     static let assetFolderPath = try! AssetLoader.shared.loadAssetFolder(
         name: "Assets"
-    ).path()
+    ).path(percentEncoded: false)
 
     static let mockLocalPlayerId: UUID = .init(
         uuidString: "00000000-0000-0000-0000-000000000000")!

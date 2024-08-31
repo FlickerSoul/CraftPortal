@@ -101,7 +101,7 @@ class LaunchManager {
 
             let script = try composeLaunchScript(
                 player: player, profile: profile,
-                javaPath: javaPath
+                javaPath: javaPath.string
             )
             _ = try executeScript(script)
         } catch {}
@@ -145,7 +145,6 @@ class LaunchManager {
         let javaPath = ensureQuotes(javaPath)
 
         let gameDir = profile.gameDirectory
-        let gameDirPath = profile.gameDirectory.path
         let fullVersion = profile.fullVersion
 
         let metaPath: Path = gameDir.getMetaPath()
