@@ -8,15 +8,27 @@ import CoreGraphics
 import Foundation
 
 enum Resolution: Codable {
-    case fullscreen
+    case fullscreen(width: UInt, height: UInt)
     case window(width: UInt, height: UInt)
 
     func toSizeStrings() -> (width: String, height: String) {
         switch self {
-        case .fullscreen:
-            return ("", "")
-        case let .window(width: width, height: height):
+        case let .fullscreen(width: width, height: height), let .window(width: width, height: height):
             return (String(width), String(height))
+        }
+    }
+
+    var width: UInt {
+        switch self {
+        case let .fullscreen(width: width, height: _), let .window(width: width, height: _):
+            return width
+        }
+    }
+
+    var height: UInt {
+        switch self {
+        case let .fullscreen(width: _, height: height), let .window(width: _, height: height):
+            return height
         }
     }
 }
@@ -148,11 +160,11 @@ class GameSettings: Codable {
         width: 854, height: 480
     )
     private static let resolutionDefaultPortion: UInt = 4
+    static let physicalMemeoryCap: UInt64 =
+        ProcessInfo.processInfo.physicalMemory / (1024 * 1024)
 
     private static func getDynamicMemory() -> UInt {
-        return UInt(
-            ProcessInfo.processInfo.physicalMemory
-                / (1024 * 1024 * dynamicMemoryDefaultPortion))
+        return UInt(physicalMemeoryCap / dynamicMemoryDefaultPortion)
     }
 
     private static func getResolution() -> Resolution {

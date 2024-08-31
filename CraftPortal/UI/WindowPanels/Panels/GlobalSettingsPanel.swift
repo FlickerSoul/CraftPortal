@@ -7,11 +7,19 @@
 import SwiftUI
 
 struct GlobalSettingsPanel: View {
+    @EnvironmentObject var appState: AppState
+
     var body: some View {
         VStack {
             JVMSettingsView()
             Divider()
             CurrentGameDirectorySettings()
+            Divider()
+            GameSettingsView(
+                gameSettings: appState.globalSettingsManager.globalGameSettings)
+            {
+                appState.globalSettingsManager.saveSettings()
+            }
         }
         .padding()
     }

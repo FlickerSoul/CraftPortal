@@ -13,7 +13,7 @@ struct ResolutionTests {
     @Test(
         "Test Resolution Formatting",
         arguments: [
-            (Resolution.fullscreen, "", ""),
+            (Resolution.fullscreen(width: 400, height: 300), "400", "300"),
             (Resolution.window(width: 800, height: 600), "800", "600"),
         ]
     )
