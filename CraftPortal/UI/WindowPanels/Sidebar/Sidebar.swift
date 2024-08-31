@@ -23,6 +23,10 @@ struct Sidebar: View {
                 .onTapGesture {
                     updatePanel(.Home)
                 }
+            SidebarSelectedGame()
+                .onTapGesture {
+                    updatePanel(.GameSettings)
+                }
             SidebarGameLibrary()
                 .onTapGesture {
                     updatePanel(.GameLibrary)

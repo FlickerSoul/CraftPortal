@@ -102,6 +102,7 @@
 				WindowPanels/Sidebar/SidebarGameLibrary.swift,
 				WindowPanels/Sidebar/SidebarHome.swift,
 				WindowPanels/Sidebar/SidebarItemChip.swift,
+				WindowPanels/Sidebar/SidebarSelectedGame.swift,
 				WindowPanels/Sidebar/SidebarSettings.swift,
 			);
 			target = 577CE1CF2C7B63080061257C /* CraftPortal */;

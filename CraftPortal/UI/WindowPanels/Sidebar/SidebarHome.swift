@@ -9,12 +9,8 @@ import SwiftUI
 
 struct SidebarHome: View {
     var body: some View {
-        noSelection
-    }
-
-    var noSelection: some View {
-        SidebarItemChip(imageSource: .asset(name: "NoGameProfileDefaultIcon")) {
-            Text("No Game Selected")
+        SidebarItemChip(imageSource: .systemIcon(name: "house")) {
+            Text("Home")
                 .font(.headline)
                 .foregroundColor(.primary)
         }
