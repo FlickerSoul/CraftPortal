@@ -8,6 +8,7 @@ import SwiftUI
 
 struct GlobalSettingsPanel: View {
     @EnvironmentObject var appState: AppState
+    @Environment(GlobalSettings.self) private var globalSettings
 
     @ViewBuilder
     var title: some View {
@@ -19,6 +20,11 @@ struct GlobalSettingsPanel: View {
     }
 
     var body: some View {
+        let gameSettingsBinding = Binding {
+            globalSettings.gameSettings
+        } set: { val in
+            return globalSettings.gameSettings = val
+        }
         VStack {
             title
 
@@ -27,10 +33,8 @@ struct GlobalSettingsPanel: View {
             CurrentGameDirectorySettings()
             Divider()
             GameSettingsView(
-                gameSettings: appState.globalSettingsManager.globalGameSettings
-            ) {
-                appState.globalSettingsManager.saveSettings()
-            }
+                gameSettings: gameSettingsBinding
+            )
             Spacer()
         }
         .padding()

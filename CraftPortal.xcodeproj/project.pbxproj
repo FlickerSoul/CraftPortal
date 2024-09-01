@@ -13,7 +13,6 @@
 		5720DA332C7D6DF400A64071 /* LaunchManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */; };
 		572406AD2C7D8D4500F4730F /* AsyncHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = 572406AC2C7D8D4500F4730F /* AsyncHTTPClient */; };
 		57357F972C82050800F3B26F /* GameSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57357F962C82050300F3B26F /* GameSettingsTests.swift */; };
-		57357FFD2C8209BE00F3B26F /* GlobalSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57357FFC2C8209BA00F3B26F /* GlobalSettingsTests.swift */; };
 		5750321F2C81206F00066D33 /* JVMManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750321E2C81206B00066D33 /* JVMManagerTests.swift */; };
 		577744FA2C823CDB00633EB5 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 577744F92C823CDB00633EB5 /* Assets */; };
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
@@ -49,7 +48,6 @@
 		5720DA302C7D493F00A64071 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchManagerTests.swift; sourceTree = "<group>"; };
 		57357F962C82050300F3B26F /* GameSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingsTests.swift; sourceTree = "<group>"; };
-		57357FFC2C8209BA00F3B26F /* GlobalSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSettingsTests.swift; sourceTree = "<group>"; };
 		5750321E2C81206B00066D33 /* JVMManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JVMManagerTests.swift; sourceTree = "<group>"; };
 		577744F92C823CDB00633EB5 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		577CE1D02C7B63080061257C /* CraftPortal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CraftPortal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,15 +68,18 @@
 		577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				GameSettings.swift,
-				GlobalSettings.swift,
 				JVM.swift,
 				MinecraftMeta.swift,
+				Schemas/LatestSchema.swift,
 				Schemas/Utils.swift,
+				Schemas/V1/AdvancedSettings.swift,
 				Schemas/V1/GameDirectory.swift,
 				"Schemas/V1/GameDirectory+.swift",
 				Schemas/V1/GameProfile.swift,
 				"Schemas/V1/GameProfile+.swift",
+				Schemas/V1/GameSettings.swift,
+				Schemas/V1/GlobalSettings.swift,
+				Schemas/V1/JVMSettings.swift,
 				Schemas/V1/PlayerProfile.swift,
 				Schemas/V1/V1.swift,
 			);
@@ -202,7 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				577744F92C823CDB00633EB5 /* Assets */,
-				57357FFC2C8209BA00F3B26F /* GlobalSettingsTests.swift */,
 				57357F962C82050300F3B26F /* GameSettingsTests.swift */,
 				5750321E2C81206B00066D33 /* JVMManagerTests.swift */,
 				5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */,
@@ -374,7 +374,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5720DA242C7CFA4D00A64071 /* MinecraftMetaTests.swift in Sources */,
-				57357FFD2C8209BE00F3B26F /* GlobalSettingsTests.swift in Sources */,
 				5720DA332C7D6DF400A64071 /* LaunchManagerTests.swift in Sources */,
 				57357F972C82050800F3B26F /* GameSettingsTests.swift in Sources */,
 				577CE1E82C7B63090061257C /* CraftPortalTests.swift in Sources */,
@@ -541,6 +540,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Craft Portal Launcher";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -569,6 +570,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Craft Portal Launcher";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

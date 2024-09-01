@@ -57,25 +57,25 @@ struct AdditionalJVMArgumentsTests {
         "Test Advanced JVM Settings",
         arguments: [
             (
-                JVMAdvancedSettings(),
+                AdvancedJVMSettings(),
                 AdditionalJVMArguments.defaulted.arguments()
             ),
             (
-                JVMAdvancedSettings(
+                AdvancedJVMSettings(
                     additionalJVMArguments: .defaulted,
                     disableDefaultJVMArguments: true
                 ),
                 Set([])
             ),
             (
-                JVMAdvancedSettings(
+                AdvancedJVMSettings(
                     additionalJVMArguments: .custom(["-Dadditional"]),
                     disableDefaultJVMArguments: false
                 ),
                 AdditionalJVMArguments.defaulted.arguments().union(["-Dadditional"])
             ),
             (
-                JVMAdvancedSettings(
+                AdvancedJVMSettings(
                     additionalJVMArguments: .custom(["-Dadditional"]),
                     disableDefaultJVMArguments: true
                 ),
@@ -84,7 +84,7 @@ struct AdditionalJVMArgumentsTests {
         ]
     )
     func testJVMAdvancedSettings(
-        settings: JVMAdvancedSettings, expected: Set<String>
+        settings: AdvancedJVMSettings, expected: Set<String>
     ) throws {
         let composed = settings.composeAdditionalJVMArguments()
 

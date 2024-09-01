@@ -11,11 +11,12 @@ import SwiftUI
 import SwiftUICore
 
 struct MainPanel: View {
+    @Environment(GlobalSettings.self) private var globalSettings
     @EnvironmentObject var appState: AppState
     var updatePanel: (FunctionPanel) -> Void
 
     var noGameSelected: Bool {
-        appState.currentGameProfile == nil
+        globalSettings.currentGameDirectory?.selectedGame == nil
     }
 
     var body: some View {
@@ -47,15 +48,18 @@ struct MainPanel: View {
         }
         .overlay {
             VStack {
-                if noGameSelected {
+                if let selectegameProfile = globalSettings.currentGameDirectory?
+                    .selectedGame
+                {
+                    Text("Launch Game")
+                        .font(.headline)
+                    Text(selectegameProfile.name)
+                        .font(.subheadline)
+
+                } else {
                     Text("No Game Selected")
                         .font(.headline)
                     Text("Go To Game Library")
-                        .font(.subheadline)
-                } else {
-                    Text("Launch Game")
-                        .font(.headline)
-                    Text(appState.currentGameProfile!.name)
                         .font(.subheadline)
                 }
             }
@@ -65,7 +69,7 @@ struct MainPanel: View {
             if noGameSelected {
                 updatePanel(.GameLibrary)
             } else {
-                appState.launchManager.launch()
+                appState.launchManager.launch(globalSettings: globalSettings)
             }
         }
     }
@@ -77,39 +81,4 @@ struct MainPanel: View {
             .environmentObject(AppState())
     }
     .background(Image("HomeBackground2"))
-}
-
-#Preview("has game profile") {
-    VStack {
-        MainPanel { _ in }
-            .environmentObject(
-                AppState(
-                    currentGameDirectory: {
-                        let dir = GameDirectory(
-                            path: "~/Library/Application Support/minecraft/",
-                            directoryType: .Mangled
-                        )
-                        let game = GameProfile(
-                            name: "Test",
-                            gameVersion: .Release("1.21"),
-                            modLoader: nil,
-                            gameDirectory: dir
-                        )
-                        dir.addAndSelectGame(game)
-                        return dir
-                    }()
-                )
-            )
-    }
-    .background(Image("HomeBackground2"))
-    .modelContainer(
-        {
-            let schema = Schema(versionedSchema: LatestSchema.self)
-
-            let config = ModelConfiguration(
-                schema: schema, isStoredInMemoryOnly: true
-            )
-
-            return try! ModelContainer(for: schema, configurations: [config])
-        }())
 }

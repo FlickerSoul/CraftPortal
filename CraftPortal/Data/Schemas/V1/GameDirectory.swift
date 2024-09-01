@@ -8,8 +8,6 @@ import Foundation
 import Path
 import SwiftData
 
-typealias GameDirectory = LatestSchema.GameDirectory
-
 // MARK: - GameDirectory
 
 extension CraftPortalSchemaV1 {
@@ -18,9 +16,10 @@ extension CraftPortalSchemaV1 {
         @Attribute(.unique) var id: UUID
         @Relationship(deleteRule: .cascade, inverse: \GameProfile.gameDirectory)
         var gameProfiles: [GameProfile] = []
-        var path: String
+        @Attribute(.unique) var path: String
         var selectedGame: GameProfile?
         var directoryType: GameDirectoryType
+        var belongsTo: GlobalSettings?
 
         init(
             id: UUID = UUID(),
@@ -73,6 +72,10 @@ extension CraftPortalSchemaV1 {
             if found {
                 selectedGame = game
             }
+        }
+
+        func addGames(_ games: [GameProfile]) {
+            gameProfiles.append(contentsOf: games)
         }
 
         static let metaDirectoryName = "meta"

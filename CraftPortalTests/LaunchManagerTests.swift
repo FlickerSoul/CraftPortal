@@ -399,31 +399,33 @@ struct LaunchScriptTests {
             (
                 mockLocalPlayer,
                 mockedVinallaGameProfile,
-                mockedAppState,
+                mockedGameSettings,
                 LaunchExpected.Success(expectedVanillaGameShellScript)
             ),
         ]
     )
     func launchScriptTest(
-        player: PlayerProfile, profile: GameProfile, appState: AppState,
+        player: PlayerProfile, profile: GameProfile, gameSettings: GameSettings,
         expected: LaunchExpected
     ) throws {
         let launchManager = LaunchManager()
-
-        launchManager.setAppState(appState)
+        let appState: AppState = .init()
+        launchManager.appState = appState
 
         switch expected {
         case let .Error(expectedError):
             #expect(throws: expectedError) {
                 _ = try launchManager.composeLaunchScript(
                     player: player, profile: profile,
-                    javaPath: LaunchScriptTests.mockedJavaPath
+                    javaPath: LaunchScriptTests.mockedJavaPath,
+                    gameSettings: .init(advanced: .init(jvm: .init(), workaround: .init()))
                 )
             }
         case let .Success(expectedScript):
             let composed = try launchManager.composeLaunchScript(
                 player: player, profile: profile,
-                javaPath: LaunchScriptTests.mockedJavaPath
+                javaPath: LaunchScriptTests.mockedJavaPath,
+                gameSettings: gameSettings
             )
             let simplified = composed.replacingOccurrences(
                 of: LaunchScriptTests.assetFolderPath, with: ""
@@ -467,18 +469,11 @@ extension LaunchScriptTests {
         gameDirectory: mockedVanillaGameDirectory
     )
 
-    static let mockedAppState = {
-        let appState = AppState()
-        appState.globalSettingsManager.setSettings(
-            with:
-            GlobalSettings(
-                globalGameSettings: .init(
-                    dynamicMemory: 4096,
-                    resolution: .window(width: 1280, height: 720)
-                )))
-
-        return appState
-    }()
+    static let mockedGameSettings = GameSettings(
+        dynamicMemory: 4096,
+        resolution: .window(width: 1280, height: 720),
+        advanced: .init(jvm: .init(), workaround: .init())
+    )
 
     static let expectedVanillaGameShellScript = {
         let shellPath = mockedVanillaGamePath / "expected-shell.txt"

@@ -29,7 +29,7 @@ struct JVMInformationTest {
         ("22.0.2", 22),
     ])
     func testMajorVersion(fullVersion: String, expectedMajor: Int) {
-        let info = JVMInformation(path: Path("/FakePath/")!, version: fullVersion)
+        let info = JVMInformation(path: "/FakePath/", version: fullVersion)
         #expect(info.majorVersion == expectedMajor)
     }
 }

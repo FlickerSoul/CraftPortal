@@ -76,13 +76,13 @@ class LaunchManager {
         launcherState = state
     }
 
-    func launch(profile: GameProfile? = nil) {
+    func launch(globalSettings: GlobalSettings, profile: GameProfile? = nil) {
         // TODO: logging lauching failed
         if launcherState != .idle { return }
 
         toggleLauncherState(.idle)
 
-        guard let profile = profile ?? appState?.currentGameProfile else {
+        guard let profile = profile ?? globalSettings.currentGameDirectory?.selectedGame else {
             toggleLauncherState(.idle)
             return
         }
@@ -93,15 +93,16 @@ class LaunchManager {
 
         do {
             guard
-                let javaPath = appState?.globalSettingsManager.jvmSettings
-                .selectedJVM?.path
+                let javaPath = globalSettings.jvmSettings.selectedJVM?.path
             else {
                 throw LauncherError.noJVM
             }
 
             let script = try composeLaunchScript(
-                player: player, profile: profile,
-                javaPath: javaPath.string
+                player: player,
+                profile: profile,
+                javaPath: javaPath,
+                gameSettings: globalSettings.gameSettings // TODO: per game settings loading
             )
             _ = try executeScript(script)
         } catch {}
@@ -138,7 +139,7 @@ class LaunchManager {
     }
 
     func composeLaunchScript(
-        player: PlayerProfile, profile: GameProfile, javaPath: String
+        player: PlayerProfile, profile: GameProfile, javaPath: String, gameSettings: GameSettings
     ) throws
         -> String
     {
@@ -160,10 +161,6 @@ class LaunchManager {
         let profilePath: Path = profile.getProfilePath()
 
         let metaConfig = try loadClinetConfig(clientPath: clientConfigPath)
-        let gameSettings =
-            appState?.globalSettingsManager.globalGameSettings
-                ?? .init() // TODO: huhhhh
-        // TODO: per game settings loading
 
         let argumentValues: LaunchArgValueCollection = {
             let resolutionSize = gameSettings.resolution.toSizeStrings()
@@ -381,7 +378,8 @@ class LaunchManager {
         results.append("-Xmx\(settings.dynamicMemory)m")
 
         results.append(
-            contentsOf: settings.advanced.jvm.composeAdditionalJVMArguments().sorted()
+            contentsOf: settings.advanced.jvm.composeAdditionalJVMArguments()
+                .sorted()
         )
 
         return results

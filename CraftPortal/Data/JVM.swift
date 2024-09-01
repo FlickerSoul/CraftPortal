@@ -23,7 +23,7 @@ enum JavaSearchPath {
         switch self {
         case let .javaDir(path):
             if collection.filter({ info in
-                info.path == path
+                info.path == path.string
             }).count != 0 {
                 break
             }
@@ -68,10 +68,10 @@ enum JavaSearchPath {
 }
 
 struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
-    let path: Path
+    let path: String
     let version: String
 
-    var id: String { path.string }
+    var id: String { path }
 
     var majorVersion: Int? {
         let versionComponents = version.split(separator: ".")
@@ -125,7 +125,7 @@ struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
             let versionNumberIndex = versionIndex + 1
             let version = String(components[versionNumberIndex])
 
-            return .init(path: path, version: version)
+            return .init(path: path.string, version: version)
         }
 
         return nil
@@ -174,7 +174,7 @@ class JVMManager {
 
     static func validate(versions: Set<JVMInformation>) -> Set<JVMInformation> {
         return versions.filter { version in
-            if version.path.exists {
+            if Path(version.path)!.exists {
                 return true
             } else {
                 return false

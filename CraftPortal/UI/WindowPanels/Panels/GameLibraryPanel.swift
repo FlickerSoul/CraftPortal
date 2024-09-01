@@ -11,10 +11,11 @@ struct DiscoverProfilesView: View {
     @State var loading: Bool = false
     @State var loadedProfileCount: Int = 0
     @EnvironmentObject var appState: AppState
-    @Environment(\.dismiss) var dismiss
+    @Environment(GlobalSettings.self) private var globalSettings
+    @Environment(\.dismiss) private var dismiss
 
     var currentGameDirectory: GameDirectory? {
-        appState.currentGameDirectory
+        globalSettings.currentGameDirectory
     }
 
     var body: some View {
@@ -42,18 +43,18 @@ struct DiscoverProfilesView: View {
     }
 
     func loadGameDirectories() {
-        if let currentGameDirectory {
-            loading = true
-            DispatchQueue.global().async {
-                let profiles = GameDirectory.discoverProfiles(
-                    in: currentGameDirectory)
-                self.appState.globalSettingsManager.addProfiles(
-                    profiles: profiles)
+        guard let currentGameDirectory else { return }
 
-                DispatchQueue.main.async {
-                    self.loadedProfileCount = profiles.count
-                    self.loading = false
-                }
+        loading = true
+        DispatchQueue.global().async {
+            let profiles = GameDirectory.discoverProfiles(
+                in: currentGameDirectory
+            )
+
+            DispatchQueue.main.async {
+                currentGameDirectory.addGames(profiles)
+                self.loadedProfileCount = profiles.count
+                self.loading = false
             }
         }
     }
@@ -77,17 +78,25 @@ struct DiscoverProfilesButton: View {
 
 struct DirectoryProfileListing: View {
     @EnvironmentObject var appState: AppState
+    @Environment(GlobalSettings.self) private var globalSettings
 
     var body: some View {
         VStack {
-            Text("Profile List (\(appState.currentGameDirectory?.gameProfiles.count ?? 0))")
+            Text(
+                "Profile List (\(globalSettings.currentGameDirectory?.gameProfiles.count ?? 0))"
+            )
             ScrollView {
                 LazyVStack {
-                    ForEach(appState.currentGameDirectory?.gameProfiles ?? []) {
+                    ForEach(
+                        globalSettings.currentGameDirectory?.gameProfiles ?? []
+                    ) {
                         profile in
                         HStack(spacing: 16) {
                             HStack {
-                                if profile == appState.currentGameProfile {
+                                if profile
+                                    == globalSettings.currentGameDirectory?
+                                    .selectedGame
+                                {
                                     Image(systemName: "checkmark")
                                 } else {
                                     Image(systemName: "circle")
@@ -101,10 +110,14 @@ struct DirectoryProfileListing: View {
                         .padding(.vertical, 4)
                         .hoverCursor()
                         .onTapGesture {
-                            // TODO: fix this
-//                            if appState.currentGameDirectory != nil {
-//                                appState.globalSettingsManager.change(keyPath: \.currentGameDirectory!.selectedGame, value: profile)
-//                            }
+                            guard
+                                let currentDirectory = globalSettings
+                                .currentGameDirectory
+                            else {
+                                return
+                            }
+
+                            currentDirectory.selectGame(profile)
                         }
                     }
                 }

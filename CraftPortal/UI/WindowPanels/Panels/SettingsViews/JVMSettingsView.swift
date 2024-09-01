@@ -12,27 +12,17 @@ struct JVMChooser: View {
     @State private var showingPopover = false
 
     @EnvironmentObject var appState: AppState
+    @Environment(GlobalSettings.self) private var globalSettings
 
     var body: some View {
-        let currentJVM = Binding(
-            get: {
-                appState.globalSettingsManager.jvmSettings.selectedJVM
-            },
-            set: {
-                appState.globalSettingsManager.change(
-                    keyPath: \.jvmSettings.selectedJVM, value: $0
-                )
-            }
-        )
-
         HStack {
             Image(systemName: "apple.terminal.on.rectangle")
 
             VStack(alignment: .leading) {
-                if let currentJVM = currentJVM.wrappedValue {
+                if let currentJVM = globalSettings.jvmSettings.selectedJVM {
                     Text("Java \(currentJVM.version)")
                         .font(.headline)
-                    Text(currentJVM.path.string)
+                    Text(currentJVM.path)
                         .font(.footnote)
                 } else {
                     Text("No JVM Selected")
@@ -48,14 +38,20 @@ struct JVMChooser: View {
         .hoverCursor()
         .popover(isPresented: $showingPopover) {
             VStack(alignment: .center) {
-                Picker("Available JVMs", selection: currentJVM) {
+                let jvmBinding = Binding<JVMInformation?> {
+                    globalSettings.jvmSettings.selectedJVM
+                } set: { val in
+                    return globalSettings.jvmSettings.selectedJVM = val
+                }
+
+                Picker("Available JVMs", selection: jvmBinding) {
                     ForEach(
                         appState.jvmManager.sequentialVersions
                     ) { jvm in
                         VStack(alignment: .center) {
                             Text(jvm.version)
                                 .font(.headline)
-                            Text(jvm.path.string)
+                            Text(jvm.path)
                                 .font(.subheadline)
                         }
                         .tag(jvm)
@@ -78,6 +74,7 @@ struct JVMPathOptionSheet: View {
     @State private var useAsCurrentJVM: Bool = false
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var appState: AppState
+    @Environment(GlobalSettings.self) var globalSettings
 
     var body: some View {
         VStack(spacing: 16) {
@@ -89,7 +86,7 @@ struct JVMPathOptionSheet: View {
                     if let selected {
                         Text("Java version: \(selected.version)")
                             .font(.headline)
-                        Text(selected.path.string)
+                        Text(selected.path)
                             .font(.subheadline)
 
                         Toggle("Use as current JVM", isOn: $useAsCurrentJVM)
@@ -113,10 +110,7 @@ struct JVMPathOptionSheet: View {
                         appState.jvmManager.add(version: selected)
 
                         if useAsCurrentJVM {
-                            appState.globalSettingsManager.change(
-                                keyPath: \.jvmSettings.selectedJVM,
-                                value: selected
-                            )
+                            globalSettings.jvmSettings.selectedJVM = selected
                         }
                     }
 

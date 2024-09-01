@@ -7,8 +7,6 @@
 import Foundation
 import SwiftData
 
-typealias PlayerProfile = LatestSchema.PlayerProfile
-
 // MARK: - UserProfile Model
 
 extension CraftPortalSchemaV1 {

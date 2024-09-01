@@ -1,3 +1,5 @@
+import SwiftData
+
 //
 //  CurrentGameDirectorySettings.swift
 //  CraftPortal
@@ -9,26 +11,18 @@ import SwiftUI
 struct CurrentGameDirecotryChooser: View {
     @State private var showingPopover = false
     @EnvironmentObject private var appState: AppState
+    @Environment(GlobalSettings.self) private var globalSettings
+    @Query private var gameDirectories: [GameDirectory]
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
-        let currentGameDirectory = Binding(
-            get: {
-                appState.currentGameDirectory
-            },
-            set: {
-                appState.globalSettingsManager.change(
-                    keyPath: \.currentGameDirectory, value: $0
-                )
-            }
-        )
-
         HStack {
             Image(systemName: "folder")
 
             VStack(alignment: .leading) {
                 Text("Current Game Directory")
                     .font(.headline)
-                if let currentDir = currentGameDirectory.wrappedValue {
+                if let currentDir = globalSettings.currentGameDirectory {
                     Text(currentDir.path)
                         .font(.footnote)
                 } else {
@@ -41,26 +35,26 @@ struct CurrentGameDirecotryChooser: View {
         }
         .hoverCursor()
         .popover(isPresented: $showingPopover) {
+            let binding = Binding {
+                globalSettings.currentGameDirectory
+            } set: { val in
+                globalSettings.currentGameDirectory = val
+                if modelContext.hasChanges {
+                    try? modelContext.save()
+                }
+            }
             VStack {
                 Picker(
                     "Available Directories",
-                    selection: currentGameDirectory
+                    selection: binding
                 ) {
-                    ForEach(
-                        Array(
-                            zip(
-                                appState.globalSettingsManager.gameDirectories
-                                    .indices,
-                                appState.globalSettingsManager.gameDirectories
-                            )),
-                        id: \.0
-                    ) {
-                        index, dir in
+                    ForEach(gameDirectories) {
+                        dir in
                         HStack {
                             Text(dir.path)
                             Spacer()
                             Button(action: {
-                                deleteDirectory(at: index)
+                                deleteDirectory(dir)
                             }) {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
@@ -78,19 +72,12 @@ struct CurrentGameDirecotryChooser: View {
         }
     }
 
-    func deleteDirectory(at index: Int) {
-        if let selected = appState.currentGameDirectory,
-           let foundIndex = appState.globalSettingsManager.gameDirectories
-           .firstIndex(of: selected)
-        {
-            if index == foundIndex {
-                appState.globalSettingsManager.change(
-                    keyPath: \.currentGameDirectory, value: nil
-                )
-            }
+    func deleteDirectory(_ dir: GameDirectory) {
+        if globalSettings.currentGameDirectory == dir {
+            globalSettings.currentGameDirectory = nil
         }
 
-        appState.globalSettingsManager.removeDirectory(at: index)
+        modelContext.delete(dir)
     }
 }
 
@@ -100,6 +87,8 @@ struct AddGameDirectoryOption: View {
     @State private var setAsCurrent: Bool = true
     @State private var discoverProfile: Bool = true
     @Environment(\.dismiss) private var dismiss
+    @Environment(GlobalSettings.self) private var globalSettings
+    @Environment(\.modelContext) private var modelContext
 
     let pathURL: URL
 
@@ -132,11 +121,16 @@ struct AddGameDirectoryOption: View {
                 }
 
                 Button {
-                    appState.globalSettingsManager.addDirectory(
-                        withURL: pathURL, type: selectedStyle,
-                        setAsCurrent: setAsCurrent,
-                        discoverProfile: discoverProfile
-                    )
+                    let newDir = GameDirectory(path: pathURL.path(percentEncoded: false), directoryType: selectedStyle)
+
+                    modelContext.insert(newDir)
+
+                    if setAsCurrent {
+                        globalSettings.currentGameDirectory = newDir
+                    }
+
+                    // TODO: discover profiles
+                    if discoverProfile {}
 
                     dismiss()
                 } label: {

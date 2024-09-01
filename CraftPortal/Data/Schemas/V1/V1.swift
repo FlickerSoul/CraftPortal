@@ -12,8 +12,16 @@ enum CraftPortalSchemaV1: VersionedSchema {
     static var versionIdentifier: Schema.Version = .init(1, 0, 0)
 
     static var models: [any PersistentModel.Type] {
-        [PlayerProfile.self, GameDirectory.self, GameProfile.self]
+        [
+            PlayerProfile.self,
+            GameDirectory.self,
+            GameProfile.self,
+            GlobalSettings.self,
+            GameSettings.self,
+            JVMSettings.self,
+            AdvancedSettings.self,
+            AdvancedJVMSettings.self,
+            AdvancedWorkaroundSettings.self,
+        ]
     }
 }
-
-typealias LatestSchema = CraftPortalSchemaV1

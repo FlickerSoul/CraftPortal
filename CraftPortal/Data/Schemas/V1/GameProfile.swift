@@ -8,8 +8,6 @@ import Foundation
 import Path
 import SwiftData
 
-typealias GameProfile = LatestSchema.GameProfile
-
 // MARK: - GameProfile
 
 extension CraftPortalSchemaV1 {

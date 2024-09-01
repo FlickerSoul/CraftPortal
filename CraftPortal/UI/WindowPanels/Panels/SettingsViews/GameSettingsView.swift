@@ -7,15 +7,13 @@
 import SwiftUI
 
 struct GameSettingsView: View {
-    var gameSettings: GameSettings
-    let onUpdate: () -> Void
+    @Binding var gameSettings: GameSettings
 
     var body: some View {
         let memoryBinding = Binding {
             Double(gameSettings.dynamicMemory)
         } set: { val in
             gameSettings.dynamicMemory = UInt(val)
-            onUpdate()
         }
 
         let fullScreenBinding = Binding<Bool> {
@@ -32,8 +30,6 @@ struct GameSettingsView: View {
                     gameSettings.resolution = .fullscreen(width: width, height: height)
                 }
             }
-
-            onUpdate()
         }
 
         let widthBinding = Binding<String> {
@@ -50,8 +46,6 @@ struct GameSettingsView: View {
                 }
 
                 gameSettings.resolution = changeTo
-
-                onUpdate()
             }
         }
 
@@ -69,8 +63,6 @@ struct GameSettingsView: View {
                 }
 
                 gameSettings.resolution = changeTo
-
-                onUpdate()
             }
         }
 

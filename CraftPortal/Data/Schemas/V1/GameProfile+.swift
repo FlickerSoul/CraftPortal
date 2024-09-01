@@ -13,6 +13,8 @@ extension GameProfile {
 
         let modLoader = ModLoader.fromFullMeta(fullMeta)
 
-        return .init(name: name, gameVersion: gameVersion, modLoader: modLoader, gameDirectory: directory)
+        let profile: GameProfile = .init(name: name, gameVersion: gameVersion, modLoader: modLoader, gameDirectory: directory)
+
+        return profile
     }
 }
