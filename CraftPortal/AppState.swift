@@ -29,62 +29,28 @@ final class AppState: ObservableObject {
         launchManager.setAppState(self)
     }
 
-    func initializeState() {
-        DispatchQueue.global().async {
-            let infos = JVMManager.load()
-//            let loadedSettings =
-//                GlobalSettingsManager.loadSettings()
-//
-//            let globalSettings = loadedSettings ?? GlobalSettings()
-//
-//            if loadedSettings == nil {
-//                // select JVM if none is present
-//                if globalSettings.jvmSettings.selectedJVM == nil
-//                    || !infos.contains(globalSettings.jvmSettings.selectedJVM!)
-//                {
-//                    globalSettings.jvmSettings.selectedJVM = infos.first
-//                }
-//
-//                // discover game directories
-//                if globalSettings.gameDirectories.isEmpty {
-//                    if let applicationSupport = FileManager.default.urls(
-//                        for: .applicationSupportDirectory, in: .userDomainMask
-//                    ).first {
-//                        if let minecraftPath =
-//                            Path(applicationSupport.appendingPathComponent("minecraft", isDirectory: true).path(percentEncoded: false)),
-//                            minecraftPath.exists
-//                        {
-//                            globalSettings.gameDirectories.append(
-//                                GameDirectory(
-//                                    path: minecraftPath.string, directoryType: .Mangled
-//                                ))
-//                        }
-//
-//                        if let applicationPath = Path(
-//                            applicationSupport.appendingPathComponent(APP_NAME, isDirectory: true).path(percentEncoded: false)),
-//                            applicationPath.exists
-//                            || (try? applicationPath.mkdir()) != nil
-//                        {
-//                            globalSettings.gameDirectories.append(
-//                                GameDirectory(
-//                                    path: applicationPath.string, directoryType: .Profile
-//                                )
-//                            )
-//                        }
-//                    }
-//                }
-//            } else {
-//                if let currentJVM = globalSettings.jvmSettings.selectedJVM, !infos.contains(currentJVM) {
-//                    globalSettings.jvmSettings.selectedJVM = nil
-//                }
-//            }
+    private static let LAUNCHED_BEFORE_FLAG_KEY: String =
+        "CraftPortal.LAUNCHED_BEFORE"
 
-            DispatchQueue.main.async {
-                self.jvmManager.update(with: infos)
-//                self.globalSettingsManager.setSettings(with: globalSettings)
+    static let isFirstLaunch = {
+        let result = UserDefaults.standard.bool(
+            forKey: AppState.LAUNCHED_BEFORE_FLAG_KEY)
 
-                self.initialized = true
-            }
+        if !result {
+            UserDefaults.standard.set(
+                true, forKey: AppState.LAUNCHED_BEFORE_FLAG_KEY
+            )
         }
+
+        return !result
+    }()
+
+    func initializeState(globalSettings _: GlobalSettings) {
+        let infos = JVMManager.load()
+        jvmManager.update(with: infos)
+    }
+
+    func finishInitialization() {
+        initialized = true
     }
 }

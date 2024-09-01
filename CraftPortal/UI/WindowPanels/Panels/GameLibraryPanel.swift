@@ -93,14 +93,17 @@ struct DirectoryProfileListing: View {
                         profile in
                         HStack(spacing: 16) {
                             HStack {
-                                if profile
-                                    == globalSettings.currentGameDirectory?
-                                    .selectedGame
-                                {
-                                    Image(systemName: "checkmark")
-                                } else {
-                                    Image(systemName: "circle")
+                                VStack {
+                                    if profile
+                                        == globalSettings.currentGameDirectory?
+                                        .selectedGame
+                                    {
+                                        Image(systemName: "checkmark")
+                                    } else {
+                                        Image(systemName: "circle")
+                                    }
                                 }
+                                .frame(width: 16, height: 16)
                                 Divider()
                             }
 

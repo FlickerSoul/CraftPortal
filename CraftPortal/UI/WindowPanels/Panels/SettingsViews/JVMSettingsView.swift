@@ -14,22 +14,19 @@ struct JVMChooser: View {
     @EnvironmentObject var appState: AppState
     @Environment(GlobalSettings.self) private var globalSettings
 
+    var selectedJVM: SelectedJVM {
+        globalSettings.selectedJVM
+    }
+
     var body: some View {
         HStack {
             Image(systemName: "apple.terminal.on.rectangle")
 
             VStack(alignment: .leading) {
-                if let currentJVM = globalSettings.jvmSettings.selectedJVM {
-                    Text("Java \(currentJVM.version)")
-                        .font(.headline)
-                    Text(currentJVM.path)
-                        .font(.footnote)
-                } else {
-                    Text("No JVM Selected")
-                        .font(.headline)
-                    Text("Path Unavailable")
-                        .font(.footnote)
-                }
+                Text("Java \(selectedJVM.formattedVersion)")
+                    .font(.headline)
+                Text(selectedJVM.formattedPath)
+                    .font(.footnote)
             }
         }
         .onTapGesture {
@@ -38,13 +35,15 @@ struct JVMChooser: View {
         .hoverCursor()
         .popover(isPresented: $showingPopover) {
             VStack(alignment: .center) {
-                let jvmBinding = Binding<JVMInformation?> {
-                    globalSettings.jvmSettings.selectedJVM
+                let jvmBinding = Binding<SelectedJVM> {
+                    globalSettings.selectedJVM
                 } set: { val in
-                    return globalSettings.jvmSettings.selectedJVM = val
+                    globalSettings.selectedJVM = val
                 }
 
                 Picker("Available JVMs", selection: jvmBinding) {
+                    Text("Automatic").tag(SelectedJVM.automatic)
+
                     ForEach(
                         appState.jvmManager.sequentialVersions
                     ) { jvm in
@@ -54,10 +53,8 @@ struct JVMChooser: View {
                             Text(jvm.path)
                                 .font(.subheadline)
                         }
-                        .tag(jvm)
+                        .tag(SelectedJVM.manual(jvm))
                     }
-
-                    Text("None").tag(nil as JVMInformation?)
                 }
                 .pickerStyle(.radioGroup)
             }
@@ -110,7 +107,7 @@ struct JVMPathOptionSheet: View {
                         appState.jvmManager.add(version: selected)
 
                         if useAsCurrentJVM {
-                            globalSettings.jvmSettings.selectedJVM = selected
+                            globalSettings.selectedJVM = .manual(selected)
                         }
                     }
 

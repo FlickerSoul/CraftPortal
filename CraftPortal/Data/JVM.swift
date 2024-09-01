@@ -73,14 +73,16 @@ struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
 
     var id: String { path }
 
-    var majorVersion: Int? {
+    static let invalidVersion = -1
+
+    var majorVersion: Int {
         let versionComponents = version.split(separator: ".")
         if versionComponents.first == "1", versionComponents.count > 1 {
-            return Int(versionComponents[1])
+            return Int(versionComponents[1]) ?? JVMInformation.invalidVersion
         } else if let major = versionComponents.first {
-            return Int(major)
+            return Int(major) ?? JVMInformation.invalidVersion
         } else {
-            return nil
+            return JVMInformation.invalidVersion
         }
     }
 
@@ -141,7 +143,7 @@ class JVMManager {
         .javaCollectionDir(Path("/opt/homebrew/Cellar/openjdk/")!),
     ]
 
-    static let JVM_CACHE_KEY: String = "JVM_CACHE_KEY"
+    static let JVM_CACHE_KEY: String = "CraftPortal.JVM_CACHE"
 
     var versions: Set<JVMInformation>
     var sequentialVersions: [JVMInformation] {
@@ -195,6 +197,18 @@ class JVMManager {
             into: Set<JVMInformation>()
         ) { partialResult, searchPath in
             searchPath.getJVMInformation(to: &partialResult)
+        }
+    }
+
+    func resolveJVM(for selected: SelectedJVM) -> JVMInformation? {
+        switch selected {
+        case .automatic:
+            return versions.sorted { lhs, rhs in
+                lhs.majorVersion > rhs.majorVersion
+            }
+            .first
+        case let .manual(version):
+            return version
         }
     }
 }

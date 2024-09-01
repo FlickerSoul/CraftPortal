@@ -53,6 +53,8 @@ enum LauncherError: Error {
     case noShellExecutable
     case launchFailed
     case noJVM
+    case noGameProfile
+    case noPlayerProfile
 }
 
 private func ensureQuotes(_ value: String) -> String {
@@ -80,20 +82,20 @@ class LaunchManager {
         // TODO: logging lauching failed
         if launcherState != .idle { return }
 
-        toggleLauncherState(.idle)
+        guard let appState = appState else { return }
 
-        guard let profile = profile ?? globalSettings.currentGameDirectory?.selectedGame else {
-            toggleLauncherState(.idle)
-            return
-        }
-        guard let player = appState?.currentUserProfile else {
-            toggleLauncherState(.idle)
-            return
-        }
+        toggleLauncherState(.launching)
 
         do {
-            guard
-                let javaPath = globalSettings.jvmSettings.selectedJVM?.path
+            guard let profile = profile ?? globalSettings.currentGameDirectory?.selectedGame else {
+                throw LauncherError.noGameProfile
+            }
+
+            guard let player = appState.currentUserProfile else {
+                throw LauncherError.noPlayerProfile
+            }
+
+            guard let jvm = appState.jvmManager.resolveJVM(for: globalSettings.selectedJVM)
             else {
                 throw LauncherError.noJVM
             }
@@ -101,7 +103,7 @@ class LaunchManager {
             let script = try composeLaunchScript(
                 player: player,
                 profile: profile,
-                javaPath: javaPath,
+                javaPath: jvm.path,
                 gameSettings: globalSettings.gameSettings // TODO: per game settings loading
             )
             _ = try executeScript(script)

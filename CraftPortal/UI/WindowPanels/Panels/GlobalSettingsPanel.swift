@@ -41,11 +41,12 @@ struct GlobalSettingsPanel: View {
     }
 }
 
-#Preview {
-    let appState = {
-        let state = AppState()
-        state.initializeState()
-        return state
-    }()
-    GlobalSettingsPanel().environmentObject(appState)
-}
+//
+// #Preview {
+//    let appState = {
+//        let state = AppState()
+//        state.initializeState(globalSettings: .init(), )
+//        return state
+//    }()
+//    GlobalSettingsPanel().environmentObject(appState)
+// }
