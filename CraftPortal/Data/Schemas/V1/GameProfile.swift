@@ -16,7 +16,7 @@ extension CraftPortalSchemaV1 {
     @Model
     class GameProfile: Identifiable, Codable, FullVersion {
         @Attribute(.unique) var id: UUID
-        @Attribute(.unique) var name: String
+        var name: String // TODO: how to do unique together...
         var gameVersion: GameVersion
         var modLoader: ModLoader?
         var gameDirectory: GameDirectory
@@ -82,9 +82,9 @@ extension CraftPortalSchemaV1 {
         func getProfilePath() -> Path {
             switch gameDirectory.directoryType {
             case .Mangled:
-                return gameDirectory.path
+                return Path(gameDirectory.path)!
             case .Profile:
-                return gameDirectory.path / GameProfile.profileDirectoryName / name
+                return Path(gameDirectory.path)! / GameProfile.profileDirectoryName / name
             }
         }
     }

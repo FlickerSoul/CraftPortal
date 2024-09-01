@@ -7,8 +7,8 @@
 import Foundation
 
 struct MinecraftMetaArguments: Codable {
-    let game: [MinecraftMetaArgumentElement]?
-    let jvm: [MinecraftMetaArgumentElement]?
+    fileprivate(set) var game: [MinecraftMetaArgumentElement]?
+    fileprivate(set) var jvm: [MinecraftMetaArgumentElement]?
 }
 
 enum MinecraftMetaArgumentElement: Codable {
@@ -45,9 +45,44 @@ enum MinecraftMetaArgumentElement: Codable {
     }
 }
 
+enum StringOrStringArray: Codable, Sequence {
+    case single(String)
+    case multiple([String])
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let singleValue = try? container.decode(String.self) {
+            self = .single(singleValue)
+        } else if let multipleValues = try? container.decode([String].self) {
+            self = .multiple(multipleValues)
+        } else {
+            throw DecodingError.typeMismatch(StringOrStringArray.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected a String or an array of Strings"))
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .single(value):
+            try container.encode(value)
+        case let .multiple(values):
+            try container.encode(values)
+        }
+    }
+
+    func makeIterator() -> IndexingIterator<[String]> {
+        switch self {
+        case let .single(value):
+            return [value].makeIterator()
+        case let .multiple(values):
+            return values.makeIterator()
+        }
+    }
+}
+
 struct MinecraftMetaComplexArgument: Codable {
     let rules: [MinecraftMetaRule]
-    let value: [String]
+    let value: StringOrStringArray
 }
 
 extension [MinecraftMetaRule] {
@@ -81,7 +116,7 @@ struct MinecraftMetaRule: Codable {
 }
 
 struct MinecraftMetaOS: Codable {
-    let name: String
+    let name: String?
     let arch: String?
 
     var isValidOS: Bool {
@@ -164,20 +199,74 @@ struct MinecraftMetaLoggingFile: Codable {
 // }
 
 struct MinecraftMeta: Codable {
-    let id: String
-    let arguments: MinecraftMetaArguments
-    let mainClass: String
-    let jar: String
-    let assetIndex: MinecraftMetaAssetIndex
-    let assets: String
-    let javaVersion: MinecraftMetaJavaVersion
-    let libraries: [MinecraftMetaLibrary]
-    let downloads: MinecraftMetaDownloads
-    let logging: MinecraftMetaLogging?
-    let type: String
-    let time: String
-    let releaseTime: String
-    let minimumLauncherVersion: Int
-    let root: Bool?
+    private(set) var id: String
+    private(set) var arguments: MinecraftMetaArguments
+    private(set) var mainClass: String
+    private(set) var jar: String?
+    private(set) var mcVersion: String?
+    private(set) var assetIndex: MinecraftMetaAssetIndex
+    private(set) var assets: String
+    private(set) var javaVersion: MinecraftMetaJavaVersion
+    private(set) var libraries: [MinecraftMetaLibrary]
+    private(set) var downloads: MinecraftMetaDownloads
+    private(set) var logging: MinecraftMetaLogging?
+    private(set) var type: String
+    private(set) var time: String
+    private(set) var releaseTime: String
+    private(set) var minimumLauncherVersion: Int
+    private(set) var root: Bool?
     // let patches: [MinecraftMetaPatch]?
+
+    func patch(with patch: MinecraftInheritsMeta) -> MinecraftMeta {
+        var patched = self
+        patched.mainClass = patch.mainClass
+        patched.libraries.append(contentsOf: patch.libraries)
+        patched.arguments.jvm = (patch.arguments.jvm ?? []) + (patch.arguments.jvm ?? [])
+        patched.arguments.game = (patch.arguments.game ?? []) + (patch.arguments.game ?? [])
+        patched.mcVersion = patch.inheritsFrom
+        patched.type = patch.type
+
+        return patched
+    }
+}
+
+struct MinecraftInheritsMeta: Codable {
+    let id: String
+    let inheritsFrom: String
+    let mainClass: String
+    let libraries: [MinecraftMetaLibrary]
+    let arguments: MinecraftMetaArguments
+    let type: String
+}
+
+enum MinecraftMetadata: Codable {
+    case full(MinecraftMeta)
+    case inherits(MinecraftInheritsMeta)
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        if container.contains(.inheritsFrom) {
+            // If the JSON contains "inheritsFrom", we decode as `MinecraftInheritsMeta`
+            let inheritsMeta = try MinecraftInheritsMeta(from: decoder)
+            self = .inherits(inheritsMeta)
+        } else {
+            // Otherwise, decode as `MinecraftMeta`
+            let fullMeta = try MinecraftMeta(from: decoder)
+            self = .full(fullMeta)
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        switch self {
+        case let .full(minecraftMeta):
+            try minecraftMeta.encode(to: encoder)
+        case let .inherits(minecraftInheritsMeta):
+            try minecraftInheritsMeta.encode(to: encoder)
+        }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case inheritsFrom
+    }
 }

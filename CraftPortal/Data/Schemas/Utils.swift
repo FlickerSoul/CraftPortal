@@ -11,39 +11,77 @@ protocol FullVersion {
 
 /// An enum represeting the mod loader used in the game
 enum ModLoader: Codable, FullVersion {
-    case Forge(major: Int, minor: Int, patch: Int)
-    case NeoForge(major: Int, minor: Int, patch: Int)
-    case Fabric(major: Int, minor: Int, patch: Int)
-    case Quilt(major: Int, minor: Int, patch: Int)
+    case Forge(String)
+    case NeoForge(String)
+    case Fabric(String)
+    case Quilt(String)
 
     var fullVersion: String {
         switch self {
-        case let .Forge(major, minor, patch):
-            return "forge-\(major).\(minor).\(patch)"
-        case let .NeoForge(major, minor, patch):
-            return "neoforge-\(major).\(minor).\(patch)"
-        case let .Fabric(major, minor, patch):
-            return "fabric-\(major).\(minor).\(patch)"
-        case let .Quilt(major, minor, patch):
-            return "quilt-\(major).\(minor).\(patch)"
+        case let .Forge(version):
+            return "forge-\(version)"
+        case let .NeoForge(version):
+            return "neoforge-\(version)"
+        case let .Fabric(version):
+            return "fabric-\(version)"
+        case let .Quilt(version):
+            return "quilt-\(version)"
         }
+    }
+
+    static func fromFullMeta(_ meta: MinecraftMeta) -> ModLoader? {
+        from(ibraries: meta.libraries, arguments: meta.arguments)
+    }
+
+    static func fromInheritedMeta(_ meta: MinecraftInheritsMeta) -> ModLoader? {
+        return from(ibraries: meta.libraries, arguments: meta.arguments)
+    }
+
+    static func from(ibraries: [MinecraftMetaLibrary], arguments: MinecraftMetaArguments) -> ModLoader? {
+        for lib in ibraries {
+            if lib.name.hasPrefix("net.fabricmc:fabric-loader") {
+                let modVersion = lib.name.split(separator: ":").last!
+                return .Fabric(String(modVersion))
+            } else if lib.name.hasPrefix("net.minecraftforge:fmlloader") {
+                let clientAndModVersion = lib.name.split(separator: ":").last!
+                let modVersion = clientAndModVersion.split(separator: "-").last!
+                return .Forge(String(modVersion))
+            } else if lib.name.hasPrefix("org.quiltmc:quilt-loader") {
+                let modVersion = lib.name.split(separator: ":").last!
+                return .Quilt(String(modVersion))
+            }
+        }
+
+        let neoForgeVerIndicatorIndex = arguments.game?.firstIndex(where: {
+            if case let .string(str) = $0 {
+                return str == "--fml.neoForgeVersion"
+            }
+
+            return false
+        })
+
+        if let neoForgeVerIndicatorIndex,
+           let arg = arguments.game?[neoForgeVerIndicatorIndex + 1],
+           case let .string(neoForgeVersion) = arg
+        {
+            return .NeoForge(neoForgeVersion)
+        }
+
+        return nil
     }
 }
 
 /// An enum represeting the versions of the game
 enum GameVersion: Codable, FullVersion {
-    case Release(major: Int, minor: Int, patch: Int? = nil)
-    case Snapshot(version: String)
-    case Historical(major: Int, minor: Int, patch: Int)
+    case Release(String)
+    case Snapshot(String)
+    case Historical(String)
 
     var fullVersion: String {
         switch self {
-        case let .Release(major, minor, patch):
-            return "\(major).\(minor)" + (patch.map { ".\($0)" } ?? "")
-        case let .Snapshot(version):
+        case let .Release(version), let .Snapshot(version),
+             let .Historical(version):
             return version
-        case let .Historical(major, minor, patch):
-            return "\(major).\(minor).\(patch)"
         }
     }
 
@@ -52,6 +90,15 @@ enum GameVersion: Codable, FullVersion {
         case .Release: "release"
         case .Snapshot: "snapshot"
         case .Historical: "historical"
+        }
+    }
+
+    init?(type: String, version: String) {
+        switch type {
+        case "release": self = .Release(version)
+        case "snapshot": self = .Snapshot(version)
+        case "historical": self = .Historical(version)
+        default: return nil
         }
     }
 }
@@ -63,7 +110,7 @@ enum UserAccountType: Codable {
 }
 
 /// An enum represeting the game directory type: how game directory is structured
-enum GameDirectoryType: Codable, CaseIterable, Equatable, Identifiable {
+enum GameDirectoryType: Int, Codable, CaseIterable, Equatable, Identifiable {
     case Mangled
     case Profile
 

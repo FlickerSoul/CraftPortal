@@ -6,6 +6,7 @@
 //
 import Foundation
 import Path
+import SwiftData
 
 @Observable
 class JVMSettings: Codable {
@@ -69,11 +70,7 @@ class GlobalSettingsManager {
         withURL url: URL, type _: GameDirectoryType, setAsCurrent: Bool = false,
         discoverProfile: Bool = false
     ) {
-        guard let path = Path(url.path(percentEncoded: false)) else {
-            return
-        }
-
-        let newDir = GameDirectory(path: path, directoryType: .Profile)
+        let newDir = GameDirectory(path: url.path(percentEncoded: false), directoryType: .Profile)
         settings.gameDirectories.append(newDir)
         saveSettings()
 
@@ -84,6 +81,11 @@ class GlobalSettingsManager {
         if discoverProfile {
             // TODO: discover profile
         }
+    }
+
+    func addProfiles(profiles: [GameProfile]) {
+        currentGameDirectory?.gameProfiles.append(contentsOf: profiles)
+        saveSettings()
     }
 
     func removeDirectory(at index: Int) {

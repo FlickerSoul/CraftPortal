@@ -26,10 +26,10 @@ struct CurrentGameDirecotryChooser: View {
             Image(systemName: "folder")
 
             VStack(alignment: .leading) {
+                Text("Current Game Directory")
+                    .font(.headline)
                 if let currentDir = currentGameDirectory.wrappedValue {
-                    Text("Current Game Directory")
-                        .font(.headline)
-                    Text(currentDir.path.string)
+                    Text(currentDir.path)
                         .font(.footnote)
                 } else {
                     Text("No Game Directory Set")
@@ -57,7 +57,7 @@ struct CurrentGameDirecotryChooser: View {
                     ) {
                         index, dir in
                         HStack {
-                            Text(dir.path.string)
+                            Text(dir.path)
                             Spacer()
                             Button(action: {
                                 deleteDirectory(at: index)
@@ -65,7 +65,7 @@ struct CurrentGameDirecotryChooser: View {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
                             }
-                            .buttonStyle(BorderlessButtonStyle())
+                            .buttonStyle(.borderless)
                         }
                         .tag(dir)
                     }
@@ -158,6 +158,7 @@ struct AddGameDirectory: View {
         } label: {
             Image(systemName: "folder.badge.plus")
         }
+        .help("Select a game directory to add to the list of game directories.")
         .sheet(
             isPresented: $showingSheet,
             onDismiss: {

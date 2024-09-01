@@ -9,17 +9,29 @@ import SwiftUI
 struct GlobalSettingsPanel: View {
     @EnvironmentObject var appState: AppState
 
+    @ViewBuilder
+    var title: some View {
+        HStack {
+            Text("Global Settings")
+                .font(.title)
+            Spacer()
+        }.padding()
+    }
+
     var body: some View {
         VStack {
+            title
+
             JVMSettingsView()
             Divider()
             CurrentGameDirectorySettings()
             Divider()
             GameSettingsView(
-                gameSettings: appState.globalSettingsManager.globalGameSettings)
-            {
+                gameSettings: appState.globalSettingsManager.globalGameSettings
+            ) {
                 appState.globalSettingsManager.saveSettings()
             }
+            Spacer()
         }
         .padding()
     }

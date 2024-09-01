@@ -69,7 +69,7 @@ final class AppState: ObservableObject {
                         {
                             globalSettings.gameDirectories.append(
                                 GameDirectory(
-                                    path: minecraftPath, directoryType: .Mangled
+                                    path: minecraftPath.string, directoryType: .Mangled
                                 ))
                         }
 
@@ -80,7 +80,7 @@ final class AppState: ObservableObject {
                         {
                             globalSettings.gameDirectories.append(
                                 GameDirectory(
-                                    path: applicationPath, directoryType: .Profile
+                                    path: applicationPath.string, directoryType: .Profile
                                 )
                             )
                         }
@@ -97,32 +97,6 @@ final class AppState: ObservableObject {
                 self.globalSettingsManager.setSettings(with: globalSettings)
 
                 self.initialized = true
-            }
-        }
-    }
-
-    func validateState(container: ModelContainer) {
-        validateUserProfile(container: container)
-    }
-
-    func validateUserProfile(container: ModelContainer) {
-        let context = ModelContext(container)
-
-        // validate usre still exists
-        if currentUserProfile != nil {
-            let fetchedProfiles = try? context.fetch(
-                FetchDescriptor<PlayerProfile>(
-                    predicate: #Predicate { userProfile in
-                        if let currentUserProfile = currentUserProfile {
-                            return currentUserProfile.id == userProfile.id
-                        } else {
-                            return false
-                        }
-                    }
-                ))
-
-            if fetchedProfiles == nil || fetchedProfiles!.isEmpty {
-                currentUserProfile = nil
             }
         }
     }

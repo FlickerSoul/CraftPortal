@@ -86,14 +86,12 @@ struct MainPanel: View {
                 AppState(
                     currentGameDirectory: {
                         let dir = GameDirectory(
-                            path: Path("~/Library/Application Support/minecraft/")!,
+                            path: "~/Library/Application Support/minecraft/",
                             directoryType: .Mangled
                         )
                         let game = GameProfile(
                             name: "Test",
-                            gameVersion: .Release(
-                                major: 1, minor: 21
-                            ),
+                            gameVersion: .Release("1.21"),
                             modLoader: nil,
                             gameDirectory: dir
                         )

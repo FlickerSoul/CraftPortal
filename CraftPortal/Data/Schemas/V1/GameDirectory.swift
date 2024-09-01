@@ -18,13 +18,13 @@ extension CraftPortalSchemaV1 {
         @Attribute(.unique) var id: UUID
         @Relationship(deleteRule: .cascade, inverse: \GameProfile.gameDirectory)
         var gameProfiles: [GameProfile] = []
-        var path: Path
+        var path: String
         var selectedGame: GameProfile?
         var directoryType: GameDirectoryType
 
         init(
             id: UUID = UUID(),
-            path: Path,
+            path: String,
             directoryType: GameDirectoryType
         ) {
             self.id = id
@@ -35,7 +35,7 @@ extension CraftPortalSchemaV1 {
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             id = try container.decode(UUID.self, forKey: .id)
-            path = try container.decode(Path.self, forKey: .directory)
+            path = try container.decode(String.self, forKey: .directory)
             selectedGame = try container.decodeIfPresent(
                 GameProfile.self, forKey: .selectedGame
             )
@@ -79,9 +79,9 @@ extension CraftPortalSchemaV1 {
         func getMetaPath() -> Path {
             switch directoryType {
             case .Mangled:
-                return path
+                return Path(path)!
             case .Profile:
-                return path / GameDirectory.metaDirectoryName
+                return Path(path)! / GameDirectory.metaDirectoryName
             }
         }
     }

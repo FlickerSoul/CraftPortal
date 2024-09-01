@@ -456,13 +456,14 @@ extension LaunchScriptTests {
         Path(assetFolderPath)! / "ProfiledVanillaGame"
 
     static let mockedVanillaGameDirectory: GameDirectory = .init(
-        path: mockedVanillaGamePath,
+        path: mockedVanillaGamePath.string,
         directoryType: .Profile
     )
 
     static let mockedVinallaGameProfile: GameProfile = .init(
         name: "Mocked Vanilla Game",
-        gameVersion: .Release(major: 1, minor: 21), modLoader: nil,
+        gameVersion: .Release("1.21"),
+        modLoader: nil,
         gameDirectory: mockedVanillaGameDirectory
     )
 

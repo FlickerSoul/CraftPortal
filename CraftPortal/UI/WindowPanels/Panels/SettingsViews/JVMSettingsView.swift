@@ -36,6 +36,9 @@ struct JVMChooser: View {
                         .font(.footnote)
                 } else {
                     Text("No JVM Selected")
+                        .font(.headline)
+                    Text("Path Unavailable")
+                        .font(.footnote)
                 }
             }
         }
@@ -146,6 +149,7 @@ struct AddJVMPath: View {
         } label: {
             Image(systemName: "plus.app")
         }
+        .help("Add a JVM path to be used to launch the game.")
         .sheet(
             isPresented: $showingSheet,
             onDismiss: {
@@ -172,6 +176,7 @@ struct DiscoverJVMButton: View {
         } label: {
             Image(systemName: "magnifyingglass")
         }
+        .help("Discover JVM paths that can be used to launch the game.")
     }
 }
 
