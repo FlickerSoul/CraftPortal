@@ -27,7 +27,7 @@ enum LaunchArguments: String, Equatable, Hashable {
     case classpath
 }
 
-private let SHELL_EXECUTABLE = "/bin/sh"
+private let SHELL_EXECUTABLE = "/bin/bash"
 
 typealias LaunchArgValueCollection = [LaunchArguments: String]
 typealias LaunchPlainArgValueCollection = [String: String]
@@ -55,6 +55,8 @@ enum LauncherError: Error {
     case noJVM
     case noGameProfile
     case noPlayerProfile
+    case cannotCreateShellExecutable
+    case cannotFindFullMetadata
 }
 
 private func ensureQuotes(_ value: String) -> String {
@@ -80,22 +82,35 @@ class LaunchManager {
 
     func launch(globalSettings: GlobalSettings, profile: GameProfile? = nil) {
         // TODO: logging lauching failed
-        if launcherState != .idle { return }
+        if launcherState != .idle {
+            print("laucher is not idle")
+            return
+        }
 
-        guard let appState = appState else { return }
+        guard let appState = appState else {
+            print("cannot find app state")
+            return
+        }
 
         toggleLauncherState(.launching)
 
+        print("start launching")
+
         do {
-            guard let profile = profile ?? globalSettings.currentGameDirectory?.selectedGame else {
+            guard
+                let profile = profile
+                ?? globalSettings.currentGameDirectory?.selectedGame
+            else {
                 throw LauncherError.noGameProfile
             }
 
-            guard let player = appState.currentUserProfile else {
+            guard let player = globalSettings.currentPlayerProfile else {
                 throw LauncherError.noPlayerProfile
             }
 
-            guard let jvm = appState.jvmManager.resolveJVM(for: globalSettings.selectedJVM)
+            guard
+                let jvm = appState.jvmManager.resolveJVM(
+                    for: globalSettings.selectedJVM)
             else {
                 throw LauncherError.noJVM
             }
@@ -106,42 +121,62 @@ class LaunchManager {
                 javaPath: jvm.path,
                 gameSettings: globalSettings.gameSettings // TODO: per game settings loading
             )
-            _ = try executeScript(script)
-        } catch {}
+
+            print("launch script composed")
+            print(script)
+
+            try executeScript(script)
+
+            print("launch script executed")
+        } catch let error as LauncherError {
+            print("caught launcher error: \(error)")
+        } catch {
+            print("caught unknown error: \(error)")
+        }
 
         toggleLauncherState(.idle)
+        print("launcher stopped")
     }
 
-    func executeScript(
-        _ script: String, shellExecutable: String = SHELL_EXECUTABLE
-    ) throws -> Process {
-        let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: shellExecutable) {
-            throw LauncherError.noShellExecutable
-        }
+    static func createTemporaryBashScript(_ script: String) throws -> URL {
+        let tempDirectory = FileManager.default.temporaryDirectory
 
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: shellExecutable)
-        process.arguments = ["-c", script]
-        process.qualityOfService = .userInteractive
+        let fileName = "mc-launch-\(UUID().uuidString).sh"
 
-        // TODO: pipe the logs
-        process.standardOutput = nil
-        process.standardError = nil
-        process.standardInput = nil
+        let tempFileURL = tempDirectory.appendingPathComponent(fileName)
+
+        let script = "#!/bin/bash\n\(script)\n"
 
         do {
-            try process.run()
-            print("Process running \(process.processIdentifier)")
+            try script.write(to: tempFileURL, atomically: true, encoding: .utf8)
+            try FileManager.default.setAttributes(
+                [.posixPermissions: 0o755], ofItemAtPath: tempFileURL.path
+            )
         } catch {
-            throw LauncherError.launchFailed
+            throw LauncherError.cannotCreateShellExecutable
         }
 
-        return process
+        return tempFileURL
+    }
+
+    func executeScript(_ script: String) throws {
+        let script = try LaunchManager.createTemporaryBashScript(script)
+
+        print("script path")
+        print(script.path(percentEncoded: false))
+
+        let scriptTask = try NSUserScriptTask(url: script)
+        scriptTask.execute { error in
+            let error = error as? NSError
+            if let error {
+                print("launcher error: \(error)")
+            }
+        }
     }
 
     func composeLaunchScript(
-        player: PlayerProfile, profile: GameProfile, javaPath: String, gameSettings: GameSettings
+        player: PlayerProfile, profile: GameProfile, javaPath: String,
+        gameSettings: GameSettings
     ) throws
         -> String
     {
@@ -156,13 +191,31 @@ class LaunchManager {
         let assetsPath = metaPath / "assets"
         let nativesPath = metaPath / "natives" / fullVersion
 
-        let clientLocation = metaPath / "versions" / fullVersion
+        let clientVersionsDir = metaPath / "versions"
+        let clientLocation = clientVersionsDir / fullVersion
         let clientJarPath = clientLocation / "\(fullVersion).jar"
         let clientConfigPath = clientLocation / "\(fullVersion).json"
 
         let profilePath: Path = profile.getProfilePath()
 
-        let metaConfig = try loadClinetConfig(clientPath: clientConfigPath)
+        let metadata = try loadClinetConfig(clientPath: clientConfigPath)
+        let metaConfig: MinecraftMeta
+
+        switch metadata {
+        case let .full(fullConfig):
+            metaConfig = fullConfig
+        case let .inherits(inherits):
+            let fullMetaLocation =
+                clientVersionsDir / inherits.inheritsFrom
+                    / "\(inherits.inheritsFrom).json"
+            if case let .full(toBePatched) = try loadClinetConfig(
+                clientPath: fullMetaLocation)
+            {
+                metaConfig = toBePatched.patch(with: inherits)
+            } else {
+                throw LauncherError.cannotFindFullMetadata
+            }
+        }
 
         let argumentValues: LaunchArgValueCollection = {
             let resolutionSize = gameSettings.resolution.toSizeStrings()
@@ -222,9 +275,9 @@ class LaunchManager {
         }
     }
 
-    func loadClinetConfig(clientPath: Path) throws -> MinecraftMeta {
+    func loadClinetConfig(clientPath: Path) throws -> MinecraftMetadata {
         let data = try Data(contentsOf: clientPath.url.absoluteURL)
-        return try JSONDecoder().decode(MinecraftMeta.self, from: data)
+        return try JSONDecoder().decode(MinecraftMetadata.self, from: data)
     }
 
     func composeClassPaths(

@@ -39,7 +39,23 @@ struct DiscoverProfilesView: View {
             }
         }
         .padding()
-        .onAppear(perform: loadGameDirectories)
+        .task {
+            await loadGameDirectoriesAsync()
+        }
+    }
+
+    func loadGameDirectoriesAsync() async {
+        guard let currentGameDirectory else { return }
+
+        loading = true
+
+        let profiles = GameDirectory.discoverProfiles(
+            in: currentGameDirectory
+        )
+
+        currentGameDirectory.addGames(profiles)
+        loadedProfileCount = profiles.count
+        loading = false
     }
 
     func loadGameDirectories() {
@@ -79,54 +95,83 @@ struct DiscoverProfilesButton: View {
 struct DirectoryProfileListing: View {
     @EnvironmentObject var appState: AppState
     @Environment(GlobalSettings.self) private var globalSettings
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
+        @Bindable var globalSettingsBindable = globalSettings
+
+        let binding = Binding {
+            globalSettings.currentGameDirectory?.selectedGame
+        } set: { val in
+            globalSettings.currentGameDirectory?.selectedGame = val
+        }
+
         VStack {
             Text(
                 "Profile List (\(globalSettings.currentGameDirectory?.gameProfiles.count ?? 0))"
             )
-            ScrollView {
-                LazyVStack {
-                    ForEach(
-                        globalSettings.currentGameDirectory?.gameProfiles ?? []
-                    ) {
-                        profile in
-                        HStack(spacing: 16) {
-                            HStack {
-                                VStack {
-                                    if profile
-                                        == globalSettings.currentGameDirectory?
-                                        .selectedGame
-                                    {
-                                        Image(systemName: "checkmark")
-                                    } else {
-                                        Image(systemName: "circle")
-                                    }
-                                }
-                                .frame(width: 16, height: 16)
-                                Divider()
-                            }
-
-                            Text(profile.name)
-                            Spacer()
-                        }
-                        .padding(.vertical, 4)
-                        .hoverCursor()
-                        .onTapGesture {
-                            guard
-                                let currentDirectory = globalSettings
-                                .currentGameDirectory
-                            else {
-                                return
-                            }
-
-                            currentDirectory.selectGame(profile)
-                        }
+            Picker(selection: binding) {
+                ForEach(
+                    globalSettingsBindable.currentGameDirectory?.gameProfiles
+                        ?? []
+                ) {
+                    profile in
+                    HStack(spacing: 16) {
+                        Text(profile.name)
+                        Spacer()
                     }
+                    .tag(profile)
+                    .padding(.vertical, 4)
+                    .hoverCursor()
                 }
+            } label: {
+                Text("Profiles")
             }
+            .pickerStyle(.radioGroup)
+
+//        ScrollView {
+//            ForEach(
+//                globalSettingsBindable.currentGameDirectory?.gameProfiles ?? []
+//            ) {
+//                profile in
+//                HStack(spacing: 16) {
+//                    selectedGameIndicator(for: profile)
+//
+//                    Text(profile.name)
+//                    Spacer()
+//                }
+//                .padding(.vertical, 4)
+//                .hoverCursor()
+//                .onTapGesture {
+//                    binding.wrappedValue = profile
+//
+//                    if modelContext.hasChanges {
+//                        try? modelContext.save()
+//                    }
+//                }
+//            }
+//
         }
         .padding()
+    }
+
+    @ViewBuilder
+    @inlinable
+    func selectedGameIndicator(for profile: GameProfile?) -> some View {
+        HStack {
+            VStack {
+                if profile
+                    == globalSettings.currentGameDirectory?
+                    .selectedGame
+                {
+                    Image(systemName: "checkmark")
+                } else {
+                    Image(systemName: "circle")
+                }
+            }
+            .frame(width: 16, height: 16)
+            Divider()
+        }
     }
 }
 

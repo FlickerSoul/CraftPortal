@@ -221,8 +221,8 @@ struct MinecraftMeta: Codable {
         var patched = self
         patched.mainClass = patch.mainClass
         patched.libraries.append(contentsOf: patch.libraries)
-        patched.arguments.jvm = (patch.arguments.jvm ?? []) + (patch.arguments.jvm ?? [])
-        patched.arguments.game = (patch.arguments.game ?? []) + (patch.arguments.game ?? [])
+        patched.arguments.jvm = (patched.arguments.jvm ?? []) + (patch.arguments.jvm ?? [])
+        patched.arguments.game = (patched.arguments.game ?? []) + (patch.arguments.game ?? [])
         patched.mcVersion = patch.inheritsFrom
         patched.type = patch.type
 

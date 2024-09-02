@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct SidebarAccounts: View {
-    @EnvironmentObject var appState: AppState
+    @Environment(GlobalSettings.self) private var globalSettings
 
     var emptyAccount: Bool {
-        appState.currentUserProfile == nil
+        globalSettings.currentPlayerProfile == nil
     }
 
     var body: some View {
@@ -35,7 +35,13 @@ struct SidebarAccounts: View {
     }
 
     var accountDisplay: some View {
-        Text("Has Account!")
+        SidebarItemChip(imageSource: .asset(name: "NoAccountDefaultFace")) {
+            VStack(alignment: .leading) {
+                Text("Has Account")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+            }
+        }
     }
 }
 

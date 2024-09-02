@@ -9,7 +9,6 @@ import Path
 import SwiftData
 
 final class AppState: ObservableObject {
-    @Published var currentUserProfile: PlayerProfile?
     private(set) var launchManager: LaunchManager
     @Published private(set) var jvmManager: JVMManager
     @Published private(set) var initialized: Bool = false
@@ -21,8 +20,7 @@ final class AppState: ObservableObject {
         return "\(version ?? "Unknown") (\(build ?? "Unknown"))"
     }()
 
-    init(currentUserProfile: PlayerProfile? = nil) {
-        self.currentUserProfile = currentUserProfile
+    init() {
         launchManager = LaunchManager()
         jvmManager = JVMManager()
 

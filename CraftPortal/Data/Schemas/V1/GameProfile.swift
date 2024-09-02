@@ -72,7 +72,12 @@ extension CraftPortalSchemaV1 {
         }
 
         var fullVersion: String {
-            return gameVersion.fullVersion + (modLoader?.fullVersion ?? "")
+            switch gameDirectory.directoryType {
+            case .Mangled:
+                return name
+            case .Profile:
+                return gameVersion.fullVersion + (modLoader?.fullVersion ?? "")
+            }
         }
 
         static let profileDirectoryName: String = "profiles"

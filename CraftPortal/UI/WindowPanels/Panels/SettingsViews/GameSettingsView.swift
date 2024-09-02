@@ -21,13 +21,14 @@ struct GameSettingsView: View {
                 return true
             }
             return false
+
         } set: { isFullscreen in
             switch gameSettings.resolution {
             case let .fullscreen(width, height), let .window(width, height):
                 if isFullscreen {
-                    gameSettings.resolution = .window(width: width, height: height)
-                } else {
                     gameSettings.resolution = .fullscreen(width: width, height: height)
+                } else {
+                    gameSettings.resolution = .window(width: width, height: height)
                 }
             }
         }
