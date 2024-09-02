@@ -4,11 +4,14 @@ This is a WIP Minecraft launcher for MacOS in SwiftUI. It is a simple launcher t
 
 ## Roadmap
 
-- [ ] Basic UI
+- [X] Basic UI
 - [x] Launch script generation
-- [ ] Game settings and global settings
+- [X] global settings
+- [ ] Per game settings
 - [ ] Player login
 - [ ] Game download
+- [ ] Game integraty check and JVM version check
+- [ ] Pipe game logging to the app
 - [ ] Mod downloads and management
 - [ ] Better UI and animations
 
