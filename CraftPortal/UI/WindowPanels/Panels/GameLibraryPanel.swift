@@ -92,6 +92,43 @@ struct DiscoverProfilesButton: View {
     }
 }
 
+struct DirectoryProfileListingEntry: View {
+    let profile: GameProfile
+
+    var body: some View {
+        HStack(spacing: 16) {
+            Text(profile.name)
+                .font(.headline)
+                .lineLimit(1)
+                .truncationMode(.middle)
+
+            Spacer(minLength: 32)
+
+            HStack {
+                Button {
+                    // TODO: open saves
+                } label: {
+                    Image(systemName: "flag.checkered")
+                }
+                .help("Open saves folder")
+
+                Button {
+                    // TODO: open profile directory
+                } label: {
+                    Image(systemName: "folder.badge.gearshape")
+                }
+                .help("Open profile directory")
+
+                Button {
+                    // TODO: trash profile
+                } label: {
+                    Image(systemName: "trash")
+                }
+            }
+        }
+    }
+}
+
 struct DirectoryProfileListing: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject private var globalSettings: GlobalSettings
@@ -106,13 +143,14 @@ struct DirectoryProfileListing: View {
                 HStack(spacing: 16) {
                     selectedGameIndicator(for: profile)
 
-                    Text(profile.name)
-                    Spacer()
+                    DirectoryProfileListingEntry(profile: profile)
                 }
                 .padding(.vertical, 4)
                 .hoverCursor()
                 .onTapGesture {
-                    globalSettings.currentGameProfile = profile
+                    withAnimation(.easeInOut) {
+                        globalSettings.currentGameProfile = profile
+                    }
                 }
             }
         }
@@ -123,16 +161,14 @@ struct DirectoryProfileListing: View {
     @inlinable
     func selectedGameIndicator(for profile: GameProfile?) -> some View {
         HStack {
-            VStack {
-                if profile
+            Image(
+                systemName: profile
                     == globalSettings.currentGameProfile
-                {
-                    Image(systemName: "checkmark")
-                } else {
-                    Image(systemName: "circle")
-                }
-            }
+                    ? "checkmark" : "circle"
+            )
             .frame(width: 16, height: 16)
+            .contentTransition(.symbolEffect(.replace))
+
             Divider()
         }
     }
@@ -142,7 +178,7 @@ struct GameDirectoryView: View {
     @ViewBuilder
     var title: some View {
         HStack {
-            Text("Manage Game Directory")
+            Text("Manage Games")
                 .font(.title)
             Spacer()
             Button {
@@ -150,6 +186,7 @@ struct GameDirectoryView: View {
             } label: {
                 Image(systemName: "plus")
             }
+            .help("Add new games or mods")
         }.padding()
     }
 

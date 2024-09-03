@@ -53,7 +53,6 @@ struct MainPanel: View {
                         .font(.headline)
                     Text(selectegameProfile.name)
                         .font(.subheadline)
-
                 } else {
                     Text("No Game Selected")
                         .font(.headline)

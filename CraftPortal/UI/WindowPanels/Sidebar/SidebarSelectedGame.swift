@@ -9,49 +9,52 @@ import SwiftUI
 struct SidebarSelectedGame: View {
     @EnvironmentObject private var globalSettings: GlobalSettings
 
-    var body: some View {
-        if globalSettings.currentGameProfile != nil {
-            showSelectedGame
-        } else {
-            noSelection
-        }
-    }
-
-    @ViewBuilder
-    var noSelection: some View {
-        SidebarItemChip(imageSource: .asset(name: "NoGameProfileDefaultIcon")) {
-            Text("No Game Selected")
-                .font(.headline)
-                .foregroundColor(.primary)
-        }
-    }
-
-    @ViewBuilder
-    var showSelectedGame: some View {
+    var versionString: String {
         if let game = globalSettings.currentGameProfile {
-            SidebarItemChip(
-                imageSource: .asset(name: "NoGameProfileDefaultIcon")
-            ) {
-                VStack(alignment: .leading) {
-                    Text("\(game.name)")
-                        .font(.headline)
-                        .foregroundStyle(.primary)
+            if let modLoader = game.modLoader {
+                return
+                    "\(game.gameVersion.fullVersion) - \(modLoader.fullVersion)"
+            } else {
+                return game.gameVersion.fullVersion
+            }
+        }
+        return ""
+    }
 
-                    Text("Minecraft: \(game.gameVersion.fullVersion)")
-                        .font(.subheadline)
-
-                    if let modLoader = game.modLoader {
-                        Text("Mod Loader: \(modLoader.fullVersion)")
-                            .font(.subheadline)
-                    }
+    var body: some View {
+        SidebarItemChip(
+            imageSource: .asset(name: "NoGameProfileDefaultIcon")
+        ) {
+            VStack(alignment: .leading) {
+                if let game = globalSettings.currentGameProfile {
+                    showSelectedGame(game)
+                } else {
+                    noSelectedGame
                 }
             }
-        } else {
-            SidebarItemChip(
-                imageSource: .systemIcon(name: "exclamationmark.square")
-            ) {
-                Text("Unknown Error")
-            }
+            .transition(.opacity)
         }
+    }
+
+    @ViewBuilder
+    @inlinable
+    func showSelectedGame(_ game: GameProfile) -> some View {
+        Text("\(game.name)")
+            .font(.headline)
+            .foregroundStyle(.primary)
+            .lineLimit(1)
+            .truncationMode(.tail)
+
+        Text("\(versionString)")
+            .font(.subheadline)
+            .lineLimit(1)
+            .truncationMode(.middle)
+    }
+
+    @ViewBuilder
+    var noSelectedGame: some View {
+        Text("No Game Selected")
+            .font(.headline)
+            .foregroundColor(.primary)
     }
 }
