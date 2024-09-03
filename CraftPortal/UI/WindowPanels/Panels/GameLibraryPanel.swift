@@ -11,7 +11,7 @@ struct DiscoverProfilesView: View {
     @State var loading: Bool = false
     @State var loadedProfileCount: Int = 0
     @EnvironmentObject var appState: AppState
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
     @Environment(\.dismiss) private var dismiss
 
     var currentGameDirectory: GameDirectory? {
@@ -94,63 +94,27 @@ struct DiscoverProfilesButton: View {
 
 struct DirectoryProfileListing: View {
     @EnvironmentObject var appState: AppState
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
-        @Bindable var globalSettingsBindable = globalSettings
+        ScrollView {
+            ForEach(
+                globalSettings.currentGameDirectory?.gameProfiles ?? []
+            ) {
+                profile in
+                HStack(spacing: 16) {
+                    selectedGameIndicator(for: profile)
 
-        let binding = Binding {
-            globalSettings.currentGameDirectory?.selectedGame
-        } set: { val in
-            globalSettings.currentGameDirectory?.selectedGame = val
-        }
-
-        VStack {
-            Text(
-                "Profile List (\(globalSettings.currentGameDirectory?.gameProfiles.count ?? 0))"
-            )
-            Picker(selection: binding) {
-                ForEach(
-                    globalSettingsBindable.currentGameDirectory?.gameProfiles
-                        ?? []
-                ) {
-                    profile in
-                    HStack(spacing: 16) {
-                        Text(profile.name)
-                        Spacer()
-                    }
-                    .tag(profile)
-                    .padding(.vertical, 4)
-                    .hoverCursor()
+                    Text(profile.name)
+                    Spacer()
                 }
-            } label: {
-                Text("Profiles")
+                .padding(.vertical, 4)
+                .hoverCursor()
+                .onTapGesture {
+                    globalSettings.currentGameDirectory?.selectGame(profile)
+                }
             }
-            .pickerStyle(.radioGroup)
-
-//        ScrollView {
-//            ForEach(
-//                globalSettingsBindable.currentGameDirectory?.gameProfiles ?? []
-//            ) {
-//                profile in
-//                HStack(spacing: 16) {
-//                    selectedGameIndicator(for: profile)
-//
-//                    Text(profile.name)
-//                    Spacer()
-//                }
-//                .padding(.vertical, 4)
-//                .hoverCursor()
-//                .onTapGesture {
-//                    binding.wrappedValue = profile
-//
-//                    if modelContext.hasChanges {
-//                        try? modelContext.save()
-//                    }
-//                }
-//            }
-//
         }
         .padding()
     }

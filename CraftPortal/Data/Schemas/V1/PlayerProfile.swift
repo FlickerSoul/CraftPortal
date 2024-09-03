@@ -11,7 +11,7 @@ import SwiftData
 
 extension CraftPortalSchemaV1 {
     @Model
-    class PlayerProfile: Identifiable, Codable {
+    class PlayerProfile: Identifiable, Codable, ObservableObject {
         @Attribute(.unique) var id: UUID
         @Attribute(.unique) var username: String
         var playerType: UserAccountType

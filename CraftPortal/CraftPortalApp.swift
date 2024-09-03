@@ -30,11 +30,11 @@ struct RootView: View {
     var body: some View {
         ContentView()
             .frame(width: 960, height: 540)
-            .environmentObject(appState)
             .onAppear {
                 lauching()
             }
-            .environment(globalSettings)
+            .environmentObject(appState)
+            .environmentObject(globalSettings)
         // It's guaranteed that settings has one thing
         // See the init section of main App below
     }

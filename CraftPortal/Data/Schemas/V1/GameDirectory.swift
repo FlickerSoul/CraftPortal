@@ -12,11 +12,11 @@ import SwiftData
 
 extension CraftPortalSchemaV1 {
     @Model
-    class GameDirectory: Identifiable, Codable {
+    class GameDirectory: Identifiable, Codable, ObservableObject {
         @Attribute(.unique) var id: UUID
+        @Attribute(.unique) var path: String
         @Relationship(deleteRule: .cascade, inverse: \GameProfile.gameDirectory)
         var gameProfiles: [GameProfile] = []
-        @Attribute(.unique) var path: String
         var selectedGame: GameProfile?
         var directoryType: GameDirectoryType
         var belongsTo: GlobalSettings?

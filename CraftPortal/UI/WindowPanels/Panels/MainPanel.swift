@@ -11,7 +11,7 @@ import SwiftUI
 import SwiftUICore
 
 struct MainPanel: View {
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
     @EnvironmentObject var appState: AppState
     var updatePanel: (FunctionPanel) -> Void
 

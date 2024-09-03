@@ -8,7 +8,7 @@ import SwiftUI
 
 struct GlobalSettingsPanel: View {
     @EnvironmentObject var appState: AppState
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
 
     @ViewBuilder
     var title: some View {

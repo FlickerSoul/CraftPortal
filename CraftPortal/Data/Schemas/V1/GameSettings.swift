@@ -44,7 +44,7 @@ enum ProcessPriority: Int, Codable {
 
 extension CraftPortalSchemaV1 {
     @Model
-    class GameSettings: Codable {
+    class GameSettings: Codable, ObservableObject {
         var dynamicMemory: UInt
         var resolution: Resolution
         var processPriority: ProcessPriority

@@ -12,7 +12,7 @@ struct JVMChooser: View {
     @State private var showingPopover = false
 
     @EnvironmentObject var appState: AppState
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
 
     var selectedJVM: SelectedJVM {
         globalSettings.selectedJVM
@@ -71,7 +71,7 @@ struct JVMPathOptionSheet: View {
     @State private var useAsCurrentJVM: Bool = false
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var appState: AppState
-    @Environment(GlobalSettings.self) var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
 
     var body: some View {
         VStack(spacing: 16) {

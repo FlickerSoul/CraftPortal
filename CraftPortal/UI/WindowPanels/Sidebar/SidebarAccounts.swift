@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SidebarAccounts: View {
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
 
     var emptyAccount: Bool {
         globalSettings.currentPlayerProfile == nil

@@ -33,7 +33,7 @@ enum SelectedJVM: Codable, Equatable, Hashable {
 
 extension CraftPortalSchemaV1 {
     @Model
-    class GlobalSettings: Codable {
+    class GlobalSettings: Codable, ObservableObject {
         var gameSettings: GameSettings
         var selectedJVM: SelectedJVM
         var currentGameDirectory: GameDirectory?

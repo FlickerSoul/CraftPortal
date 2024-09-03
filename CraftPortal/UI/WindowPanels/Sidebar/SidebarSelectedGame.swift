@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct SidebarSelectedGame: View {
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
 
     var selectedGame: GameProfile? {
         globalSettings.currentGameDirectory?.selectedGame

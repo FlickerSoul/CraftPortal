@@ -11,7 +11,7 @@ import SwiftUI
 struct AccountsListing: View {
     @Query(sort: \PlayerProfile.username) private var players: [PlayerProfile]
 
-    @Environment(GlobalSettings.self) private var globalSettings
+    @EnvironmentObject private var globalSettings: GlobalSettings
 
     var body: some View {
         let binding = Binding {

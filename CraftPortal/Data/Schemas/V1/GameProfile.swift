@@ -12,7 +12,7 @@ import SwiftData
 
 extension CraftPortalSchemaV1 {
     @Model
-    class GameProfile: Identifiable, Codable, FullVersion {
+    class GameProfile: Identifiable, Codable, FullVersion, ObservableObject {
         @Attribute(.unique) var id: UUID
         var name: String // TODO: how to do unique together...
         var gameVersion: GameVersion

@@ -4,6 +4,7 @@
 //
 //  Created by Larry Zeng on 9/1/24.
 //
+import Foundation
 import SwiftData
 
 enum AdditionalJVMArguments: Codable {
@@ -48,7 +49,7 @@ enum AdditionalJVMArguments: Codable {
 
 extension CraftPortalSchemaV1 {
     @Model
-    class AdvancedJVMSettings: Codable {
+    class AdvancedJVMSettings: Codable, ObservableObject {
         var additionalJVMArguments: AdditionalJVMArguments =
             AdditionalJVMArguments.defaulted
         var disableDefaultJVMArguments: Bool = false
@@ -103,7 +104,7 @@ extension CraftPortalSchemaV1 {
     }
 
     @Model
-    class AdvancedWorkaroundSettings: Codable {
+    class AdvancedWorkaroundSettings: Codable, ObservableObject {
         var disableGameIntegratyCheck: Bool = false
         var disableJVMCompatibilityCheck: Bool = false
 
@@ -143,7 +144,7 @@ extension CraftPortalSchemaV1 {
     }
 
     @Model
-    class AdvancedSettings: Codable {
+    class AdvancedSettings: Codable, ObservableObject {
         var jvm: AdvancedJVMSettings
         var workaround: AdvancedWorkaroundSettings
 
