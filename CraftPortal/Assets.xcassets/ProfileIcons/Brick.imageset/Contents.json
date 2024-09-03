@@ -1,12 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "icon_128x128.png",
+      "filename" : "Brick.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon_256x256.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
