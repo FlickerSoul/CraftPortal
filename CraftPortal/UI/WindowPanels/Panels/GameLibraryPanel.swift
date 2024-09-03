@@ -92,11 +92,33 @@ struct DiscoverProfilesButton: View {
     }
 }
 
+struct DirectoryProfilePicture: View {
+    @State private var isHovered: Bool = false
+    @Binding var profilePictureName: String?
+
+    var body: some View {
+        Image(profilePictureName ?? "default")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 32, height: 32)
+            .onHover { hovering in
+                isHovered = hovering
+            }
+            .hoverCursor()
+            .border(isHovered ? .gray : .clear)
+            .onTapGesture {
+                // TODO: hook to change profile picture
+            }
+    }
+}
+
 struct DirectoryProfileListingEntry: View {
     let profile: GameProfile
 
     var body: some View {
         HStack(spacing: 16) {
+            DirectoryProfilePicture(profilePictureName: .constant("Crafting_Table")) // TODO: bind this to data structure
+
             Text(profile.name)
                 .font(.headline)
                 .lineLimit(1)
@@ -142,16 +164,16 @@ struct DirectoryProfileListing: View {
                 profile in
                 HStack(spacing: 16) {
                     selectedGameIndicator(for: profile)
+                        .hoverCursor()
+                        .onTapGesture {
+                            withAnimation(.easeInOut) {
+                                globalSettings.currentGameProfile = profile
+                            }
+                        }
 
                     DirectoryProfileListingEntry(profile: profile)
                 }
                 .padding(.vertical, 4)
-                .hoverCursor()
-                .onTapGesture {
-                    withAnimation(.easeInOut) {
-                        globalSettings.currentGameProfile = profile
-                    }
-                }
             }
         }
         .padding()
