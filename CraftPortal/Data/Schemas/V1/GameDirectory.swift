@@ -58,23 +58,9 @@ extension CraftPortalSchemaV1 {
             case directoryType
         }
 
-        func addAndSelectGame(_ game: GameProfile) {
-            let found = gameProfiles.filter { $0.id == game.id }.count > 0
-            if !found {
-                gameProfiles.append(game)
-            }
-            selectedGame = game
-        }
-
-        func selectGame(_ game: GameProfile) {
-            let found = gameProfiles.filter { $0.id == game.id }.count > 0
-
-            if found {
-                selectedGame = game
-            }
-        }
-
         func addGames(_ games: [GameProfile]) {
+            // TODO: we don't really need it??
+            _$observationRegistrar.willSet(self, keyPath: \.gameProfiles)
             gameProfiles.append(contentsOf: games)
         }
 
