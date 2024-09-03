@@ -16,7 +16,7 @@ struct MainPanel: View {
     var updatePanel: (FunctionPanel) -> Void
 
     var noGameSelected: Bool {
-        globalSettings.currentGameDirectory?.selectedGame == nil
+        globalSettings.currentGameProfile == nil
     }
 
     var body: some View {
@@ -48,9 +48,7 @@ struct MainPanel: View {
         }
         .overlay {
             VStack {
-                if let selectegameProfile = globalSettings.currentGameDirectory?
-                    .selectedGame
-                {
+                if let selectegameProfile = globalSettings.currentGameProfile {
                     Text("Launch Game")
                         .font(.headline)
                     Text(selectegameProfile.name)

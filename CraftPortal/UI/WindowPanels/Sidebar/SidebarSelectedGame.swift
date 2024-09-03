@@ -9,12 +9,8 @@ import SwiftUI
 struct SidebarSelectedGame: View {
     @EnvironmentObject private var globalSettings: GlobalSettings
 
-    var selectedGame: GameProfile? {
-        globalSettings.currentGameDirectory?.selectedGame
-    }
-
     var body: some View {
-        if selectedGame != nil {
+        if globalSettings.currentGameProfile != nil {
             showSelectedGame
         } else {
             noSelection
@@ -32,25 +28,21 @@ struct SidebarSelectedGame: View {
 
     @ViewBuilder
     var showSelectedGame: some View {
-        if let game = selectedGame {
+        if let game = globalSettings.currentGameProfile {
             SidebarItemChip(
                 imageSource: .asset(name: "NoGameProfileDefaultIcon")
             ) {
-                VStack {
-                    Text("Selected Game")
+                VStack(alignment: .leading) {
+                    Text("\(game.name)")
                         .font(.headline)
                         .foregroundStyle(.primary)
 
-                    Text("\(game.name)")
+                    Text("Minecraft: \(game.gameVersion.fullVersion)")
                         .font(.subheadline)
 
                     if let modLoader = game.modLoader {
-                        Text(
-                            "Minecraft: \(game.gameVersion.fullVersion) | \(modLoader.fullVersion)"
-                        )
-                        .font(.subheadline)
-                    } else {
-                        Text("Minecraft: \(game.gameVersion.fullVersion)")
+                        Text("Mod Loader: \(modLoader.fullVersion)")
+                            .font(.subheadline)
                     }
                 }
             }

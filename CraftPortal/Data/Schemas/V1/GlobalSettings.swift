@@ -39,6 +39,21 @@ extension CraftPortalSchemaV1 {
         var currentGameDirectory: GameDirectory?
         var currentPlayerProfile: PlayerProfile?
 
+        var currentGameProfile: GameProfile? {
+            get {
+                _$observationRegistrar.access(
+                    self, keyPath: \.currentGameDirectory?.selectedGame
+                )
+                return currentGameDirectory?.selectedGame
+            }
+            set {
+                _$observationRegistrar.willSet(
+                    self, keyPath: \.currentGameDirectory?.selectedGame
+                )
+                currentGameDirectory?.selectedGame = newValue
+            }
+        }
+
         init(
             globalGameSettings: GameSettings = .init(),
             selectedJVM: SelectedJVM = .automatic,

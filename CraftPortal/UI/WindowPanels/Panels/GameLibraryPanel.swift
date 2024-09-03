@@ -112,7 +112,7 @@ struct DirectoryProfileListing: View {
                 .padding(.vertical, 4)
                 .hoverCursor()
                 .onTapGesture {
-                    globalSettings.currentGameDirectory?.selectGame(profile)
+                    globalSettings.currentGameProfile = profile
                 }
             }
         }
@@ -125,8 +125,7 @@ struct DirectoryProfileListing: View {
         HStack {
             VStack {
                 if profile
-                    == globalSettings.currentGameDirectory?
-                    .selectedGame
+                    == globalSettings.currentGameProfile
                 {
                     Image(systemName: "checkmark")
                 } else {

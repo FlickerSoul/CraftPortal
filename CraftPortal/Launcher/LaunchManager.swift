@@ -99,7 +99,7 @@ class LaunchManager {
         do {
             guard
                 let profile = profile
-                ?? globalSettings.currentGameDirectory?.selectedGame
+                ?? globalSettings.currentGameProfile
             else {
                 throw LauncherError.noGameProfile
             }
