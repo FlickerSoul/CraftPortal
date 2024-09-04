@@ -41,8 +41,8 @@ extension CraftPortalSchemaV1 {
 
         var currentGameProfile: GameProfile? {
             get {
-                _$observationRegistrar.access(
-                    self, keyPath: \.currentGameDirectory?.selectedGame
+                access(
+                    keyPath: \.currentGameDirectory?.selectedGame
                 )
                 return currentGameDirectory?.selectedGame
             }
@@ -51,6 +51,19 @@ extension CraftPortalSchemaV1 {
                     self, keyPath: \.currentGameDirectory?.selectedGame
                 )
                 currentGameDirectory?.selectedGame = newValue
+            }
+        }
+
+        var currentGameProfiles: [GameProfile] {
+            get {
+                access(keyPath: \.currentGameDirectory?.gameProfiles)
+                return currentGameDirectory?.gameProfiles ?? []
+            }
+            set {
+                _$observationRegistrar.willSet(
+                    self, keyPath: \.currentGameDirectory?.gameProfiles
+                )
+                currentGameDirectory?.gameProfiles = newValue
             }
         }
 

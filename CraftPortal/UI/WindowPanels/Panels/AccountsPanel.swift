@@ -27,11 +27,10 @@ struct AccountsListing: View {
 
                     Spacer()
 
-                    Button {} label: {
+                    Button(role: .destructive) {} label: {
                         Image(systemName: "trash")
                     }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(.red)
+                    .buttonStyle(.borderless)
                 }
                 .tag(player)
             }
@@ -55,7 +54,7 @@ struct AddLocalAccountSheet: View {
             }
 
             HStack {
-                Button {
+                Button(role: .cancel) {
                     dismiss()
                 } label: {
                     Text("Back")

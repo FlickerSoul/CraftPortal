@@ -96,7 +96,7 @@ struct JVMPathOptionSheet: View {
             }
 
             HStack {
-                Button {
+                Button(role: .cancel) {
                     dismiss()
                 } label: {
                     Text("Back")

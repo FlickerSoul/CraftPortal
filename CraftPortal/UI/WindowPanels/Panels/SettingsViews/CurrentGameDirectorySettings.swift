@@ -53,9 +53,9 @@ struct CurrentGameDirecotryChooser: View {
                         HStack {
                             Text(dir.path)
                             Spacer()
-                            Button(action: {
+                            Button(role: .destructive) {
                                 deleteDirectory(dir)
-                            }) {
+                            } label: {
                                 Image(systemName: "trash")
                                     .foregroundColor(.red)
                             }
@@ -121,7 +121,10 @@ struct AddGameDirectoryOption: View {
                 }
 
                 Button {
-                    let newDir = GameDirectory(path: pathURL.path(percentEncoded: false), directoryType: selectedStyle)
+                    let newDir = GameDirectory(
+                        path: pathURL.path(percentEncoded: false),
+                        directoryType: selectedStyle
+                    )
 
                     modelContext.insert(newDir)
 

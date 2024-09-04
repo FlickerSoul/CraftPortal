@@ -13,26 +13,39 @@ import SwiftData
 extension CraftPortalSchemaV1 {
     @Model
     class GameProfile: Identifiable, Codable, FullVersion, ObservableObject {
+        #Unique<GameProfile>([\._gameDirectory, \.name])
+
         @Attribute(.unique) var id: UUID
         var name: String // TODO: how to do unique together...
         var gameVersion: GameVersion
         var modLoader: ModLoader?
-        var gameDirectory: GameDirectory
+        var _gameDirectory: GameDirectory?
         var perGameSettingsOn: Bool
+
+        @Transient
+        var gameDirectory: GameDirectory {
+            get {
+                return _gameDirectory!
+            }
+
+            set {
+                _gameDirectory = newValue
+            }
+        }
 
         init(
             id: UUID = UUID(),
             name: String,
             gameVersion: GameVersion,
             modLoader: ModLoader?,
-            gameDirectory: GameDirectory,
+            gameDirectory: GameDirectory? = nil,
             perGameSettingsOn: Bool = false
         ) {
             self.id = id
             self.name = name
             self.gameVersion = gameVersion
             self.modLoader = modLoader
-            self.gameDirectory = gameDirectory
+            _gameDirectory = gameDirectory
             self.perGameSettingsOn = perGameSettingsOn
         }
 
@@ -46,10 +59,12 @@ extension CraftPortalSchemaV1 {
             modLoader = try container.decodeIfPresent(
                 ModLoader.self, forKey: .modLoader
             )
-            gameDirectory = try container.decode(
+            _gameDirectory = try container.decode(
                 GameDirectory.self, forKey: .gameDirectory
             )
-            perGameSettingsOn = try container.decode(Bool.self, forKey: .perGameSettingsOn)
+            perGameSettingsOn = try container.decode(
+                Bool.self, forKey: .perGameSettingsOn
+            )
         }
 
         func encode(to encoder: any Encoder) throws {
@@ -87,8 +102,27 @@ extension CraftPortalSchemaV1 {
             case .Mangled:
                 return Path(gameDirectory.path)!
             case .Profile:
-                return Path(gameDirectory.path)! / GameProfile.profileDirectoryName / name
+                return Path(gameDirectory.path)!
+                    / GameProfile.profileDirectoryName / name
             }
+        }
+
+        func getProfileToDeletePath() -> Path {
+            switch gameDirectory.directoryType {
+            case .Mangled:
+                return Path(gameDirectory.path)! / "versions" / name
+            case .Profile:
+                return Path(gameDirectory.path)!
+                    / GameProfile.profileDirectoryName / name
+            }
+        }
+
+        func getSavesPath() -> Path {
+            getProfilePath() / "saves"
+        }
+
+        func getModsPath() -> Path {
+            getProfilePath() / "mods"
         }
     }
 }

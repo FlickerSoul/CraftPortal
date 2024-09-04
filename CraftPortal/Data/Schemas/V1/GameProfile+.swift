@@ -6,14 +6,14 @@
 //
 
 extension GameProfile {
-    static func from(name: String, fullMeta: MinecraftMeta, directory: GameDirectory) -> GameProfile? {
+    static func from(name: String, fullMeta: MinecraftMeta, directory _: GameDirectory? = nil) -> GameProfile? {
         let versionString = fullMeta.mcVersion ?? fullMeta.id
 
         guard let gameVersion = GameVersion(type: fullMeta.type, version: versionString) else { return nil }
 
         let modLoader = ModLoader.fromFullMeta(fullMeta)
 
-        let profile: GameProfile = .init(name: name, gameVersion: gameVersion, modLoader: modLoader, gameDirectory: directory)
+        let profile: GameProfile = .init(name: name, gameVersion: gameVersion, modLoader: modLoader)
 
         return profile
     }

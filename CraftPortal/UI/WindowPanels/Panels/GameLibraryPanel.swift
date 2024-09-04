@@ -5,6 +5,7 @@
 //  Created by Larry Zeng on 8/26/24.
 //
 
+import SwiftData
 import SwiftUI
 
 struct DiscoverProfilesView: View {
@@ -13,6 +14,7 @@ struct DiscoverProfilesView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject private var globalSettings: GlobalSettings
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
 
     var currentGameDirectory: GameDirectory? {
         globalSettings.currentGameDirectory
@@ -39,12 +41,12 @@ struct DiscoverProfilesView: View {
             }
         }
         .padding()
-        .task {
-            await loadGameDirectoriesAsync()
+        .onAppear {
+            loadGameDirectoriesAsync()
         }
     }
 
-    func loadGameDirectoriesAsync() async {
+    func loadGameDirectoriesAsync() {
         guard let currentGameDirectory else { return }
 
         loading = true
@@ -53,26 +55,13 @@ struct DiscoverProfilesView: View {
             in: currentGameDirectory
         )
 
-        currentGameDirectory.addGames(profiles)
+        for profile in profiles {
+            modelContext.insert(profile)
+            profile.gameDirectory = currentGameDirectory
+        }
+
         loadedProfileCount = profiles.count
         loading = false
-    }
-
-    func loadGameDirectories() {
-        guard let currentGameDirectory else { return }
-
-        loading = true
-        DispatchQueue.global().async {
-            let profiles = GameDirectory.discoverProfiles(
-                in: currentGameDirectory
-            )
-
-            DispatchQueue.main.async {
-                currentGameDirectory.addGames(profiles)
-                self.loadedProfileCount = profiles.count
-                self.loading = false
-            }
-        }
     }
 }
 
@@ -112,12 +101,45 @@ struct DirectoryProfilePicture: View {
     }
 }
 
+struct DeleteProfileConfirmation: View {
+    let profile: GameProfile
+    @Environment(\.dismiss) private var dismiss
+    @State var showingDeleteFailed: Bool = false
+
+    var body: some View {
+        VStack {
+            Text("Are you sure to delete this profile")
+            Text(profile.name)
+            Text("under the directory")
+            Text(profile.gameDirectory.path)
+
+            HStack {
+                Button("Back", role: .cancel) {
+                    dismiss()
+                }
+
+                Button("Delete", role: .destructive) {
+                    // TODO: error handling
+                    try? profile.gameDirectory.deleteGame(profile)
+
+                    dismiss()
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding()
+    }
+}
+
 struct DirectoryProfileListingEntry: View {
     let profile: GameProfile
+    @State var showingPopover: Bool = false
+    @State var showingDeleteConfirmation: Bool = false
 
     var body: some View {
         HStack(spacing: 16) {
-            DirectoryProfilePicture(profilePictureName: .constant("Crafting_Table")) // TODO: bind this to data structure
+            DirectoryProfilePicture(
+                profilePictureName: .constant("Crafting_Table")) // TODO: bind this to data structure
 
             Text(profile.name)
                 .font(.headline)
@@ -128,23 +150,46 @@ struct DirectoryProfileListingEntry: View {
 
             HStack {
                 Button {
-                    // TODO: open saves
+                    showingPopover = true
                 } label: {
-                    Image(systemName: "flag.checkered")
+                    Image(systemName: "ellipsis.circle")
                 }
-                .help("Open saves folder")
+                .buttonStyle(.borderless)
+                .popover(isPresented: $showingPopover) {
+                    VStack(alignment: .leading) {
+                        Button {
+                            let path = profile.getSavesPath()
+                            NSWorkspace.shared.open(path.url)
+                        } label: {
+                            Image(systemName: "flag.checkered")
+                            Text("Open Saves Folder")
+                        }
+                        .help("Open saves folder")
+                        .buttonStyle(.borderless)
 
-                Button {
-                    // TODO: open profile directory
-                } label: {
-                    Image(systemName: "folder.badge.gearshape")
+                        Button {
+                            let path = profile.getProfilePath()
+                            NSWorkspace.shared.open(path.url)
+                        } label: {
+                            Image(systemName: "folder.badge.gearshape")
+                            Text("Open Game Folder")
+                        }
+                        .help("Open profile directory")
+                        .buttonStyle(.borderless)
+
+                        Button(role: .destructive) {
+                            showingDeleteConfirmation = true
+                        } label: {
+                            Image(systemName: "trash")
+                            Text("Delete Profile")
+                        }
+                        .help("Delete profile")
+                        .buttonStyle(.borderless)
+                    }
+                    .padding()
                 }
-                .help("Open profile directory")
-
-                Button {
-                    // TODO: trash profile
-                } label: {
-                    Image(systemName: "trash")
+                .sheet(isPresented: $showingDeleteConfirmation) {
+                    DeleteProfileConfirmation(profile: profile)
                 }
             }
         }
@@ -152,15 +197,28 @@ struct DirectoryProfileListingEntry: View {
 }
 
 struct DirectoryProfileListing: View {
-    @EnvironmentObject var appState: AppState
     @EnvironmentObject private var globalSettings: GlobalSettings
-    @Environment(\.modelContext) private var modelContext
+    @Query(filter: Predicate<GameProfile>.false) private var gameProfiles: [GameProfile]
+
+    init(directory: GameDirectory?) {
+        let descriptor: FetchDescriptor<GameProfile>
+
+        if let directory {
+            let id = Optional.some(directory.id)
+
+            descriptor = FetchDescriptor<GameProfile>(predicate: #Predicate {
+                id == $0._gameDirectory?.id
+            })
+        } else {
+            descriptor = FetchDescriptor<GameProfile>(predicate: Predicate<GameProfile>.false)
+        }
+
+        _gameProfiles = Query(descriptor)
+    }
 
     var body: some View {
         ScrollView {
-            ForEach(
-                globalSettings.currentGameDirectory?.gameProfiles ?? []
-            ) {
+            ForEach(gameProfiles) {
                 profile in
                 HStack(spacing: 16) {
                     selectedGameIndicator(for: profile)
@@ -197,6 +255,8 @@ struct DirectoryProfileListing: View {
 }
 
 struct GameDirectoryView: View {
+    @EnvironmentObject private var globalSettings: GlobalSettings
+
     @ViewBuilder
     var title: some View {
         HStack {
@@ -225,7 +285,7 @@ struct GameDirectoryView: View {
 
             Divider()
 
-            DirectoryProfileListing()
+            DirectoryProfileListing(directory: globalSettings.currentGameDirectory)
 
             Spacer()
         }

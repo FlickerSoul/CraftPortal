@@ -15,7 +15,7 @@ extension CraftPortalSchemaV1 {
     class GameDirectory: Identifiable, Codable, ObservableObject {
         @Attribute(.unique) var id: UUID
         @Attribute(.unique) var path: String
-        @Relationship(deleteRule: .cascade, inverse: \GameProfile.gameDirectory)
+        @Relationship(deleteRule: .cascade, inverse: \GameProfile._gameDirectory)
         var gameProfiles: [GameProfile] = []
         var selectedGame: GameProfile?
         var directoryType: GameDirectoryType
@@ -58,10 +58,21 @@ extension CraftPortalSchemaV1 {
             case directoryType
         }
 
-        func addGames(_ games: [GameProfile]) {
-            // TODO: we don't really need it??
+        func deleteGame(_ game: GameProfile) throws {
+            let pathToDelete = game.getProfileToDeletePath()
+
+            if selectedGame == game {
+                selectedGame = nil
+            }
+
             _$observationRegistrar.willSet(self, keyPath: \.gameProfiles)
-            gameProfiles.append(contentsOf: games)
+            gameProfiles.removeAll(where: { $0.id == game.id })
+
+            let fileManager = FileManager.default
+
+            if fileManager.fileExists(atPath: pathToDelete.string) {
+                try fileManager.removeItem(at: pathToDelete.url)
+            }
         }
 
         static let metaDirectoryName = "meta"
