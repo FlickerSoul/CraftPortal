@@ -36,20 +36,18 @@ extension CraftPortalSchemaV1 {
     class GlobalSettings: Codable, ObservableObject {
         var gameSettings: GameSettings
         var selectedJVM: SelectedJVM
+        @Relationship(deleteRule: .nullify)
         var currentGameDirectory: GameDirectory?
+        @Relationship(deleteRule: .nullify)
         var currentPlayerProfile: PlayerProfile?
 
         var currentGameProfile: GameProfile? {
             get {
-                access(
-                    keyPath: \.currentGameDirectory?.selectedGame
-                )
+                _$observationRegistrar.access(self, keyPath: \.currentGameDirectory?.selectedGame)
                 return currentGameDirectory?.selectedGame
             }
             set {
-                _$observationRegistrar.willSet(
-                    self, keyPath: \.currentGameDirectory?.selectedGame
-                )
+                _$observationRegistrar.willSet(self, keyPath: \.currentGameDirectory?.selectedGame)
                 currentGameDirectory?.selectedGame = newValue
             }
         }

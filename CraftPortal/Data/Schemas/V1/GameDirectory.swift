@@ -17,9 +17,9 @@ extension CraftPortalSchemaV1 {
         @Attribute(.unique) var path: String
         @Relationship(deleteRule: .cascade, inverse: \GameProfile._gameDirectory)
         var gameProfiles: [GameProfile] = []
+        @Relationship(deleteRule: .nullify)
         var selectedGame: GameProfile?
         var directoryType: GameDirectoryType
-        var belongsTo: GlobalSettings?
 
         init(
             id: UUID = UUID(),
