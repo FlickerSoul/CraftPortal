@@ -229,7 +229,7 @@ class LaunchManager {
             .authAccessToken: player.getAccessToken(),
             .clientId: ensureQuotes("clientid"), // TODO: hmmm
             .authXUID: ensureQuotes("authxuid"), // TODO: hmmm
-            .userType: player.userType,
+            .userType: player.lauchUserType,
             .versionType: profile.gameVersion.versionType,
             .resolutionWidth: resolutionSize.width,
             .resolutionHeight: resolutionSize.height,

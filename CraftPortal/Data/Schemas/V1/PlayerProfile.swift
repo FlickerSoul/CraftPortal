@@ -44,7 +44,7 @@ extension CraftPortalSchemaV1 {
             case accountType
         }
 
-        var userType: String {
+        var lauchUserType: String {
             return "msa"
         }
 

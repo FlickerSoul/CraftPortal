@@ -198,7 +198,8 @@ struct DirectoryProfileListingEntry: View {
 
 struct DirectoryProfileListing: View {
     @EnvironmentObject private var globalSettings: GlobalSettings
-    @Query(filter: Predicate<GameProfile>.false) private var gameProfiles: [GameProfile]
+    @Query(filter: Predicate<GameProfile>.false) private var gameProfiles:
+        [GameProfile]
 
     init(directory: GameDirectory?) {
         let descriptor: FetchDescriptor<GameProfile>
@@ -206,11 +207,13 @@ struct DirectoryProfileListing: View {
         if let directory {
             let id = Optional.some(directory.id)
 
-            descriptor = FetchDescriptor<GameProfile>(predicate: #Predicate {
-                id == $0._gameDirectory?.id
-            })
+            descriptor = FetchDescriptor<GameProfile>(
+                predicate: #Predicate {
+                    id == $0._gameDirectory?.id
+                })
         } else {
-            descriptor = FetchDescriptor<GameProfile>(predicate: Predicate<GameProfile>.false)
+            descriptor = FetchDescriptor<GameProfile>(
+                predicate: Predicate<GameProfile>.false)
         }
 
         _gameProfiles = Query(descriptor)
@@ -221,13 +224,15 @@ struct DirectoryProfileListing: View {
             ForEach(gameProfiles) {
                 profile in
                 HStack(spacing: 16) {
-                    selectedGameIndicator(for: profile)
-                        .hoverCursor()
-                        .onTapGesture {
-                            withAnimation(.easeInOut) {
-                                globalSettings.currentGameProfile = profile
-                            }
+                    SelectorIndicator(
+                        selected:
+                        profile == globalSettings.currentGameProfile
+                    )
+                    .onTapGesture {
+                        withAnimation(.easeInOut) {
+                            globalSettings.currentGameProfile = profile
                         }
+                    }
 
                     DirectoryProfileListingEntry(profile: profile)
                 }
@@ -235,22 +240,6 @@ struct DirectoryProfileListing: View {
             }
         }
         .padding()
-    }
-
-    @ViewBuilder
-    @inlinable
-    func selectedGameIndicator(for profile: GameProfile?) -> some View {
-        HStack {
-            Image(
-                systemName: profile
-                    == globalSettings.currentGameProfile
-                    ? "checkmark" : "circle"
-            )
-            .frame(width: 16, height: 16)
-            .contentTransition(.symbolEffect(.replace))
-
-            Divider()
-        }
     }
 }
 
@@ -285,7 +274,9 @@ struct GameDirectoryView: View {
 
             Divider()
 
-            DirectoryProfileListing(directory: globalSettings.currentGameDirectory)
+            DirectoryProfileListing(
+                directory: globalSettings.currentGameDirectory
+            )
 
             Spacer()
         }

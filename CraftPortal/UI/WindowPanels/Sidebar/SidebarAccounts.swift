@@ -10,37 +10,39 @@ import SwiftUI
 struct SidebarAccounts: View {
     @EnvironmentObject private var globalSettings: GlobalSettings
 
-    var emptyAccount: Bool {
-        globalSettings.currentPlayerProfile == nil
+    var body: some View {
+        SidebarItemChip(imageSource: noAccountImage) {
+            if let account = globalSettings.currentPlayerProfile {
+                accountDisplay(account)
+            } else {
+                noAccountDisplay
+            }
+        }
     }
 
-    var body: some View {
-        if emptyAccount {
-            noAccountDisplay
-        } else {
-            accountDisplay
-        }
+    var noAccountImage: ImageSource {
+        .asset(name: "NoAccountDefaultFace")
     }
 
     var noAccountDisplay: some View {
-        SidebarItemChip(imageSource: .asset(name: "NoAccountDefaultFace")) {
-            VStack(alignment: .leading) {
-                Text("No Accounts")
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                Text("Click here to add an account")
-                    .font(.subheadline)
-            }
+        VStack(alignment: .leading) {
+            Text("No Accounts")
+                .font(.headline)
+                .foregroundColor(.primary)
+            Text("Click here to add an account")
+                .font(.subheadline)
         }
     }
 
-    var accountDisplay: some View {
-        SidebarItemChip(imageSource: .asset(name: "NoAccountDefaultFace")) {
-            VStack(alignment: .leading) {
-                Text("Has Account")
-                    .font(.headline)
-                    .foregroundColor(.primary)
-            }
+    @ViewBuilder
+    @inlinable
+    func accountDisplay(_ player: PlayerProfile) -> some View {
+        VStack(alignment: .leading) {
+            Text(player.username)
+                .font(.headline)
+                .foregroundColor(.primary)
+            Text(player.playerType.string)
+                .font(.subheadline)
         }
     }
 }

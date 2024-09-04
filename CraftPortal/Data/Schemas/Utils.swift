@@ -107,6 +107,13 @@ enum GameVersion: Codable, FullVersion {
 enum UserAccountType: Codable {
     case Local
     case MSA
+
+    var string: String {
+        switch self {
+        case .Local: return "Local Account"
+        case .MSA: return "Microsoft Account"
+        }
+    }
 }
 
 /// An enum represeting the game directory type: how game directory is structured
