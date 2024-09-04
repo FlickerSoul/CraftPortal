@@ -159,19 +159,19 @@ class LaunchManager {
         return tempFileURL
     }
 
-    func executeScript(_ script: String) throws {
+    func executeScript(_ script: String, stdout: Pipe? = nil, stderr: Pipe? = nil, endCallback: (@Sendable (Process) -> Void)? = nil) throws {
         let script = try LaunchManager.createTemporaryBashScript(script)
 
         print("script path")
         print(script.path(percentEncoded: false))
 
-        let scriptTask = try NSUserScriptTask(url: script)
-        scriptTask.execute { error in
-            let error = error as? NSError
-            if let error {
-                print("launcher error: \(error)")
-            }
-        }
+        let process = Process()
+        process.executableURL = script
+        process.standardOutput = stdout
+        process.standardError = stderr
+        process.terminationHandler = endCallback
+
+        try process.run()
     }
 
     func composeLaunchScript(
@@ -217,36 +217,34 @@ class LaunchManager {
             }
         }
 
-        let argumentValues: LaunchArgValueCollection = {
-            let resolutionSize = gameSettings.resolution.toSizeStrings()
+        let resolutionSize = gameSettings.resolution.toSizeStrings()
 
-            return [
-                .authPlayerName: player.username,
-                .versionName: fullVersion,
-                .gameDirectory: ensureQuotes(profilePath.string),
-                .assetsRoot: ensureQuotes(assetsPath.string),
-                .assetsIndexName: metaConfig.assetIndex.id,
-                .authUUID: player.id.flatUUIDString,
-                .authAccessToken: player.getAccessToken(),
-                .clientId: ensureQuotes("clientid"), // TODO: hmmm
-                .authXUID: ensureQuotes("authxuid"), // TODO: hmmm
-                .userType: player.userType,
-                .versionType: profile.gameVersion.versionType,
-                .resolutionWidth: resolutionSize.width,
-                .resolutionHeight: resolutionSize.height,
-                .nativesDirectory: nativesPath.string, // the jvm args will be applied with quotes so we don't need it here
-                .launcherName: launcherName,
-                .launcherVersion: launcherVersion,
-                .classpath: ensureQuotes(
-                    composeClassPaths(
-                        from: metaConfig,
-                        withLibBase: libraryPath,
-                        withClientJar: clientJarPath,
-                        features: LaunchManager.defaultLaunchFeatures
-                    )
-                ),
-            ]
-        }()
+        let argumentValues: LaunchArgValueCollection = [
+            .authPlayerName: player.username,
+            .versionName: fullVersion,
+            .gameDirectory: ensureQuotes(profilePath.string),
+            .assetsRoot: ensureQuotes(assetsPath.string),
+            .assetsIndexName: metaConfig.assetIndex.id,
+            .authUUID: player.id.flatUUIDString,
+            .authAccessToken: player.getAccessToken(),
+            .clientId: ensureQuotes("clientid"), // TODO: hmmm
+            .authXUID: ensureQuotes("authxuid"), // TODO: hmmm
+            .userType: player.userType,
+            .versionType: profile.gameVersion.versionType,
+            .resolutionWidth: resolutionSize.width,
+            .resolutionHeight: resolutionSize.height,
+            .nativesDirectory: nativesPath.string, // the jvm args will be applied with quotes so we don't need it here
+            .launcherName: launcherName,
+            .launcherVersion: launcherVersion,
+            .classpath: ensureQuotes(
+                composeClassPaths(
+                    from: metaConfig,
+                    withLibBase: libraryPath,
+                    withClientJar: clientJarPath,
+                    features: LaunchManager.defaultLaunchFeatures
+                )
+            ),
+        ]
 
         let plainArgumentValues = argumentValues.plainArugments()
 
@@ -265,7 +263,8 @@ class LaunchManager {
         )
 
         let mainClass = metaConfig.mainClass
-        let javaLaunchScript = "\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
+        let cdGameProfileDir = "cd \(ensureQuotes(profilePath.string))\n"
+        let javaLaunchScript = "\(cdGameProfileDir)\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
 
         if case .normal = gameSettings.processPriority {
             return javaLaunchScript
