@@ -31,6 +31,12 @@ private extension String {
     }
 }
 
+private func decode<T: Decodable>(from data: Data, strategy: JSONDecoder.KeyDecodingStrategy) throws -> T {
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = strategy
+    return try decoder.decode(T.self, from: data)
+}
+
 class Authenticator {
     static let oauthDeviceCode = URL(
         string:
@@ -115,9 +121,7 @@ class Authenticator {
         ]).data(using: .utf8)
 
         let (data, _) = try await session.data(for: request)
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(DevicdeCodeResponse.self, from: data)
+        return try decode(from: data, strategy: .convertFromSnakeCase)
     }
 
     func getOAuthToken(deviceCode: String) async throws
@@ -135,9 +139,25 @@ class Authenticator {
         ]).data(using: .utf8)
 
         let (data, _) = try await session.data(for: request)
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(OAuthTokenResponse.self, from: data)
+        return try decode(from: data, strategy: .convertFromSnakeCase)
+    }
+
+    func refreshOAuthToken(refreshToken: String) async throws -> OAuthTokenResponse {
+        var request = URLRequest(url: Authenticator.oauth2Token)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = [
+            "Content-Type": "application/x-www-form-urlencoded",
+        ]
+        request.httpBody = Authenticator.encodeParameters(params: [
+            "grant_type": "refresh_token",
+            "client_id": Authenticator.clientID,
+            "refresh_token": refreshToken,
+            "scope": Authenticator.scope,
+        ]).data(using: .utf8)
+
+        let (data, _) = try await session.data(for: request)
+
+        return try decode(from: data, strategy: .convertFromSnakeCase)
     }
 
     func getXboxLiveToken(from accessToken: String) async throws
@@ -153,9 +173,7 @@ class Authenticator {
 
         let (data, _) = try await session.data(for: request)
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromPascalCase
-        return try decoder.decode(XboxLiveTokenResponse.self, from: data)
+        return try decode(from: data, strategy: .convertFromPascalCase)
     }
 
     func getXstsToken(from xblToken: String) async throws
@@ -170,9 +188,7 @@ class Authenticator {
         request.httpBody = Authenticator.getXstsAuthbody(from: xblToken)
         let (data, _) = try await session.data(for: request)
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromPascalCase
-        return try decoder.decode(XstsTokenResponse.self, from: data)
+        return try decode(from: data, strategy: .convertFromPascalCase)
     }
 
     func getMinecraftToken(from xstsToken: String, uhs: String) async throws
@@ -190,9 +206,7 @@ class Authenticator {
 
         let (data, _) = try await session.data(for: request)
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(MinecraftAuthResponse.self, from: data)
+        return try decode(from: data, strategy: .convertFromSnakeCase)
     }
 
     func getMinecraftUser(from minecraftToken: String) async throws
@@ -207,8 +221,6 @@ class Authenticator {
         ]
         let (data, _) = try await session.data(for: request)
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(MinecraftUserResponse.self, from: data)
+        return try decode(from: data, strategy: .convertFromSnakeCase)
     }
 }
