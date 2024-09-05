@@ -11,7 +11,6 @@ import SwiftUI
 struct DiscoverProfilesView: View {
     @State var loading: Bool = false
     @State var loadedProfileCount: Int = 0
-    @EnvironmentObject var appState: AppState
     @EnvironmentObject private var globalSettings: GlobalSettings
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext

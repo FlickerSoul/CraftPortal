@@ -410,7 +410,7 @@ struct LaunchScriptTests {
     ) throws {
         let launchManager = LaunchManager()
         let appState: AppState = .init()
-        launchManager.appState = appState
+        launchManager.setAppState(appState)
 
         switch expected {
         case let .Error(expectedError):

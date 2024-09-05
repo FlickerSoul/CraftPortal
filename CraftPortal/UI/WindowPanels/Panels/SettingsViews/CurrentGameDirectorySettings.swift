@@ -10,7 +10,6 @@ import SwiftUI
 
 struct CurrentGameDirecotryChooser: View {
     @State private var showingPopover = false
-    @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var globalSettings: GlobalSettings
     @Query private var gameDirectories: [GameDirectory]
     @Environment(\.modelContext) private var modelContext
@@ -82,7 +81,6 @@ struct CurrentGameDirecotryChooser: View {
 }
 
 struct AddGameDirectoryOption: View {
-    @EnvironmentObject private var appState: AppState
     @State private var selectedStyle: GameDirectoryType = .Profile
     @State private var setAsCurrent: Bool = true
     @State private var discoverProfile: Bool = true

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MemorySlider: View {
-    @EnvironmentObject var appState: AppState
     let memoryBinding: Binding<Double>
 
     var body: some View {

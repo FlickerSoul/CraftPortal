@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct ResolutionInput: View {
-    @EnvironmentObject private var appState: AppState
     let fullScreenBinding: Binding<Bool>
     let widthBinding: Binding<String>
     let heightBinding: Binding<String>

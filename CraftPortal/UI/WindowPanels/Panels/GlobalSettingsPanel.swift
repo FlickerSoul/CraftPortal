@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct GlobalSettingsPanel: View {
-    @EnvironmentObject var appState: AppState
     @EnvironmentObject private var globalSettings: GlobalSettings
 
     @ViewBuilder
@@ -41,12 +40,7 @@ struct GlobalSettingsPanel: View {
     }
 }
 
-//
-// #Preview {
-//    let appState = {
-//        let state = AppState()
-//        state.initializeState(globalSettings: .init(), )
-//        return state
-//    }()
-//    GlobalSettingsPanel().environmentObject(appState)
-// }
+#Preview {
+    let globalSettings: GlobalSettings = .init()
+    GlobalSettingsPanel().environmentObject(globalSettings)
+}

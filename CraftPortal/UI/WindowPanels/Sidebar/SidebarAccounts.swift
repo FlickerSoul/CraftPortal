@@ -49,6 +49,6 @@ struct SidebarAccounts: View {
 
 #Preview {
     SidebarAccounts()
-        .environmentObject(AppState())
+        .environmentObject(GlobalSettings())
         .frame(width: 400)
 }
