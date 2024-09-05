@@ -82,10 +82,11 @@ struct DiscoverProfilesButton: View {
 
 struct DirectoryProfilePicture: View {
     @State private var isHovered: Bool = false
-    @Binding var profilePictureName: String?
+    @State private var showProfilePickerPopover: Bool = false
+    @Binding var profilePictureName: String
 
     var body: some View {
-        Image(profilePictureName ?? "default")
+        Image(profilePictureName)
             .resizable()
             .scaledToFit()
             .frame(width: 32, height: 32)
@@ -95,7 +96,10 @@ struct DirectoryProfilePicture: View {
             .hoverCursor()
             .border(isHovered ? .gray : .clear)
             .onTapGesture {
-                // TODO: hook to change profile picture
+                showProfilePickerPopover = true
+            }
+            .popover(isPresented: $showProfilePickerPopover) {
+                ProfilePicturePicker(currentProfileName: $profilePictureName)
             }
     }
 }
@@ -131,14 +135,15 @@ struct DeleteProfileConfirmation: View {
 }
 
 struct DirectoryProfileListingEntry: View {
-    let profile: GameProfile
+    @Bindable var profile: GameProfile
     @State var showingPopover: Bool = false
     @State var showingDeleteConfirmation: Bool = false
 
     var body: some View {
         HStack(spacing: 16) {
             DirectoryProfilePicture(
-                profilePictureName: .constant("Crafting_Table")) // TODO: bind this to data structure
+                profilePictureName: $profile.profilePicture
+            )
 
             Text(profile.name)
                 .font(.headline)
@@ -202,6 +207,10 @@ struct DirectoryProfileListing: View {
 
     init(directory: GameDirectory?) {
         let descriptor: FetchDescriptor<GameProfile>
+        let sortDescriptors = [
+            SortDescriptor(\GameProfile.lastPlayed),
+            SortDescriptor(\GameProfile.name),
+        ]
 
         if let directory {
             let id = Optional.some(directory.id)
@@ -209,10 +218,14 @@ struct DirectoryProfileListing: View {
             descriptor = FetchDescriptor<GameProfile>(
                 predicate: #Predicate {
                     id == $0._gameDirectory?.id
-                })
+                },
+                sortBy: sortDescriptors
+            )
         } else {
             descriptor = FetchDescriptor<GameProfile>(
-                predicate: Predicate<GameProfile>.false)
+                predicate: Predicate<GameProfile>.false,
+                sortBy: sortDescriptors
+            )
         }
 
         _gameProfiles = Query(descriptor)
@@ -294,4 +307,11 @@ struct GameLibraryPanel: View {
 
 #Preview {
     GameLibraryPanel()
+        .environmentObject(GlobalSettings())
+        .modelContainer(
+            try! ModelContainer(
+                for: Schema(versionedSchema: LatestSchema.self),
+                configurations: .init(isStoredInMemoryOnly: true)
+            )
+        )
 }

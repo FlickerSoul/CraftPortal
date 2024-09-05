@@ -13,6 +13,8 @@ import SwiftData
 extension CraftPortalSchemaV1 {
     @Model
     class GameProfile: Identifiable, Codable, FullVersion, ObservableObject {
+        static let defaultProfilePicture = "Crafting_Table"
+
         #Unique<GameProfile>([\._gameDirectory, \.name])
 
         @Attribute(.unique) var id: UUID
@@ -21,6 +23,8 @@ extension CraftPortalSchemaV1 {
         var modLoader: ModLoader?
         var _gameDirectory: GameDirectory?
         var perGameSettingsOn: Bool
+        var lastPlayed: Date?
+        var profilePicture: String = defaultProfilePicture
 
         @Transient
         var gameDirectory: GameDirectory {

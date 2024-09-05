@@ -21,9 +21,17 @@ struct SidebarSelectedGame: View {
         return ""
     }
 
+    var imageSource: ImageSource {
+        if let game = globalSettings.currentGameProfile {
+            return .asset(name: game.profilePicture)
+        } else {
+            return .asset(name: "NoGameProfileDefaultIcon")
+        }
+    }
+
     var body: some View {
         SidebarItemChip(
-            imageSource: .asset(name: "NoGameProfileDefaultIcon")
+            imageSource: imageSource
         ) {
             VStack(alignment: .leading) {
                 if let game = globalSettings.currentGameProfile {

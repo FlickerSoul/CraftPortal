@@ -104,6 +104,8 @@ class LaunchManager {
                 throw LauncherError.noGameProfile
             }
 
+            profile.lastPlayed = Date.now
+
             guard let player = globalSettings.currentPlayerProfile else {
                 throw LauncherError.noPlayerProfile
             }

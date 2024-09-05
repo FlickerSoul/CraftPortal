@@ -44,6 +44,7 @@ struct SidebarItemChip<Content: View>: View {
         HStack(spacing: 16) {
             DynamicImageView(imageSource: imageSource)
                 .frame(width: 36, height: 36)
+            // TODO: fix icon size
 
             content()
 

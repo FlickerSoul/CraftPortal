@@ -93,6 +93,7 @@
 				Utils/ImageSource.swift,
 				Utils/MouseUtil.swift,
 				WindowPanels/Panels/AccountsPanel.swift,
+				WindowPanels/Panels/Components/ProfilePicturePicker.swift,
 				WindowPanels/Panels/Components/SelectorIndicator.swift,
 				WindowPanels/Panels/GameLibraryPanel.swift,
 				WindowPanels/Panels/GameSettingsPanel.swift,
