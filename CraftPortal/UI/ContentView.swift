@@ -39,16 +39,21 @@ struct ContentView: View {
                                 ))
                     }
 
-                    detailPanel
-                        .frame(height: geometry.size.height)
-                        .background(
-                            FrostGlassEffect(
-                                material: actualDisplaying == .Home
-                                    ? nil : .hudWindow,
-                                blendingMode: .withinWindow
+                    VStack {
+                        detailPanel
+                            .frame(
+                                width: geometry.size.width - 260,
+                                height: geometry.size.height
                             )
+                            .transition(panelTransition)
+                    }
+                    .background(
+                        FrostGlassEffect(
+                            material: actualDisplaying == .Home
+                                ? nil : .hudWindow,
+                            blendingMode: .withinWindow
                         )
-                        .transition(panelTransition)
+                    )
                 }
                 .frame(
                     width: geometry.size.width, height: geometry.size.height
@@ -68,7 +73,7 @@ struct ContentView: View {
                         )
                 }
             }
-            .animation(.easeIn(duration: 0.5), value: appState.initialized)
+            .animation(.easeIn(duration: 0.3), value: appState.initialized)
         }
         .background(
             Image("HomeBackground2")
@@ -117,8 +122,15 @@ struct ContentView: View {
 
 #Preview {
     let state = AppState()
+    let globalSettings = GlobalSettings()
 
     ContentView()
         .frame(width: 960, height: 540)
         .environmentObject(state)
+        .environmentObject(globalSettings)
+        .modelContainer(
+            try! ModelContainer(
+                for: Schema(versionedSchema: LatestSchema.self),
+                configurations: .init(isStoredInMemoryOnly: true)
+            ))
 }

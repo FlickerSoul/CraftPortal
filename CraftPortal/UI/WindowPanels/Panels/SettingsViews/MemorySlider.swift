@@ -27,7 +27,8 @@ struct MemorySlider: View {
             }
             Slider(
                 value: memoryBinding,
-                in: 0 ... Double(GameSettings.physicalMemeoryCap), step: 100.0
+                in: 0 ... Double(GameSettings.physicalMemeoryCap),
+                step: 1024
             ) // TODO: make a custom one, this is too ugly
 
             TextField(
