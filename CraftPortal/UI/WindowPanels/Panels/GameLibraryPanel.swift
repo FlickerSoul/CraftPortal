@@ -208,7 +208,7 @@ struct DirectoryProfileListing: View {
     init(directory: GameDirectory?) {
         let descriptor: FetchDescriptor<GameProfile>
         let sortDescriptors = [
-            SortDescriptor(\GameProfile.lastPlayed),
+            SortDescriptor(\GameProfile.lastPlayed, order: .reverse),
             SortDescriptor(\GameProfile.name),
         ]
 
