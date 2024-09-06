@@ -25,7 +25,7 @@ class KeychainManagerTests {
         var flag = false
 
         do {
-            let string = try KeychainManager.query(account: testUUID, label: testLabel)
+            _ = try KeychainManager.query(account: testUUID, label: testLabel)
         } catch {
             flag = true
         }
