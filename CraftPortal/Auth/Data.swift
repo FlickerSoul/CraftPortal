@@ -86,9 +86,40 @@ struct MinecraftSkin: Decodable {
     let alias: String
 }
 
-struct MinecraftUserResponse: Decodable {
+struct MinecraftUserSuccessResponse: Decodable {
     let id: String
     let name: String
     let skins: [MinecraftSkin]
     let capes: [String: String]
+}
+
+struct MinecraftUserFailureResponse: Decodable {
+    let errorType: String
+    let error: String
+    let errorMessage: String
+    let developerMessage: String
+}
+
+enum MinecraftUserResponse: Decodable {
+    case success(MinecraftUserSuccessResponse)
+    case failure(MinecraftUserFailureResponse)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+
+        if let tokenInfo = try? container.decode(MinecraftUserSuccessResponse.self) {
+            self = .success(tokenInfo)
+            return
+        }
+
+        if let tokenFailure = try? container.decode(MinecraftUserFailureResponse.self) {
+            self = .failure(tokenFailure)
+            return
+        }
+
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "Cannot decode MinecraftUserResponse"
+        )
+    }
 }

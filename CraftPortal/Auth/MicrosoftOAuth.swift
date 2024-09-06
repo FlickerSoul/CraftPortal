@@ -31,7 +31,7 @@ private extension String {
     }
 }
 
-private func decode<T: Decodable>(from data: Data, strategy: JSONDecoder.KeyDecodingStrategy) throws -> T {
+private func decode<T: Decodable>(from data: Data, strategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) throws -> T {
     let decoder = JSONDecoder()
     decoder.keyDecodingStrategy = strategy
     return try decoder.decode(T.self, from: data)
@@ -221,6 +221,6 @@ class Authenticator {
         ]
         let (data, _) = try await session.data(for: request)
 
-        return try decode(from: data, strategy: .convertFromSnakeCase)
+        return try decode(from: data)
     }
 }
