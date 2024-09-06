@@ -121,7 +121,7 @@ class LaunchManager {
                 player: player,
                 profile: profile,
                 javaPath: jvm.path,
-                gameSettings: globalSettings.gameSettings // TODO: per game settings loading
+                gameSettings: profile.perGameSettingsOn ? profile.gameSettings : globalSettings.gameSettings
             )
 
             print("launch script composed")

@@ -26,6 +26,9 @@ extension CraftPortalSchemaV1 {
         var lastPlayed: Date?
         var profilePicture: String = defaultProfilePicture
 
+        @Relationship(deleteRule: .cascade)
+        var gameSettings: GameSettings
+
         @Transient
         var gameDirectory: GameDirectory {
             get {
@@ -51,6 +54,7 @@ extension CraftPortalSchemaV1 {
             self.modLoader = modLoader
             _gameDirectory = gameDirectory
             self.perGameSettingsOn = perGameSettingsOn
+            gameSettings = .init()
         }
 
         required init(from decoder: Decoder) throws {
@@ -69,6 +73,9 @@ extension CraftPortalSchemaV1 {
             perGameSettingsOn = try container.decode(
                 Bool.self, forKey: .perGameSettingsOn
             )
+            gameSettings = try container.decode(
+                GameSettings.self, forKey: .gameSettings
+            )
         }
 
         func encode(to encoder: any Encoder) throws {
@@ -79,6 +86,7 @@ extension CraftPortalSchemaV1 {
             try container.encode(modLoader, forKey: .modLoader)
             try container.encode(gameDirectory, forKey: .gameDirectory)
             try container.encode(perGameSettingsOn, forKey: .perGameSettingsOn)
+            try container.encode(gameSettings, forKey: .gameSettings)
         }
 
         enum CodingKeys: String, CodingKey {
@@ -88,6 +96,7 @@ extension CraftPortalSchemaV1 {
             case modLoader
             case gameDirectory
             case perGameSettingsOn
+            case gameSettings
         }
 
         var fullVersion: String {
