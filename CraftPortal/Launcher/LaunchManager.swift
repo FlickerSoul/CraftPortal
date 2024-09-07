@@ -87,7 +87,7 @@ class LaunchManager {
             return
         }
 
-        guard let appState = appState else {
+        guard let appState = appState else { // TODO: replace this will jvm manager input
             print("cannot find app state")
             return
         }
