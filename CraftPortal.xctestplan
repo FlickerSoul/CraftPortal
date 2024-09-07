@@ -1,0 +1,47 @@
+{
+  "configurations" : [
+    {
+      "id" : "C812E1B8-473E-45EB-94D2-04BAA1ABB9C0",
+      "name" : "Local Testing Config",
+      "options" : {
+        "environmentVariableEntries" : [
+          {
+            "key" : "TEST_JVM_MANAGER",
+            "value" : "1"
+          }
+        ]
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "TEST_JVM_MANAGER",
+        "value" : "0"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:CraftPortal.xcodeproj",
+      "identifier" : "577CE1CF2C7B63080061257C",
+      "name" : "CraftPortal"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:CraftPortal.xcodeproj",
+        "identifier" : "577CE1EC2C7B63090061257C",
+        "name" : "CraftPortalUITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:CraftPortal.xcodeproj",
+        "identifier" : "577CE1E22C7B63090061257C",
+        "name" : "CraftPortalTests"
+      }
+    }
+  ],
+  "version" : 1
+}
