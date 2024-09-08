@@ -49,13 +49,13 @@ enum LauncherState: Equatable {
     case launching
 }
 
-enum LauncherError: Error {
+enum LauncherError: Error, Equatable {
     case noShellExecutable
     case launchFailed
-    case noJVM
+    case noValidJVM(expected: Int, actual: String)
     case noGameProfile
     case noPlayerProfile
-    case cannotCreateShellExecutable
+    case cannotCreateShellExecutable(reason: String)
     case cannotFindFullMetadata
 }
 
@@ -69,26 +69,21 @@ class LaunchManager {
         "has_custom_resolution": true,
     ]
 
-    weak var appState: AppState?
     private(set) var launcherState: LauncherState = .idle
 
-    func setAppState(_ appState: AppState) {
-        self.appState = appState
-    }
-
-    func toggleLauncherState(_ state: LauncherState) {
+    private func toggleLauncherState(_ state: LauncherState) {
         launcherState = state
     }
 
-    func launch(globalSettings: GlobalSettings, profile: GameProfile? = nil) {
+    func launch(
+        globalSettings: GlobalSettings,
+        appState: AppState,
+        profile: GameProfile? = nil,
+        pipe: Pipe? = nil
+    ) {
         // TODO: logging lauching failed
         if launcherState != .idle {
             print("laucher is not idle")
-            return
-        }
-
-        guard let appState = appState else { // TODO: replace this will jvm manager input
-            print("cannot find app state")
             return
         }
 
@@ -110,24 +105,29 @@ class LaunchManager {
                 throw LauncherError.noPlayerProfile
             }
 
-            guard
-                let jvm = appState.jvmManager.resolveJVM(
-                    for: globalSettings.selectedJVM)
-            else {
-                throw LauncherError.noJVM
-            }
-
             let script = try composeLaunchScript(
                 player: player,
                 profile: profile,
-                javaPath: jvm.path,
-                gameSettings: profile.perGameSettingsOn ? profile.gameSettings : globalSettings.gameSettings
+                selectedJVM: globalSettings.selectedJVM,
+                jvmManager: appState.jvmManager,
+                gameSettings: profile.perGameSettingsOn
+                    ? profile.gameSettings : globalSettings.gameSettings
             )
 
             print("launch script composed")
             print(script)
 
-            try executeScript(script)
+            try executeScript(script, stdout: pipe, stderr: pipe) { process in
+                if process.terminationStatus != 0 {
+                    DispatchQueue.main.async {
+                        appState.currentError = ErrorInfo(
+                            title: "Game Exited Abnormally",
+                            description:
+                            "The exist code was not 0 but \(process.terminationStatus). Please check the logs for more information."
+                        )
+                    }
+                }
+            }
 
             print("launch script executed")
         } catch let error as LauncherError {
@@ -155,13 +155,17 @@ class LaunchManager {
                 [.posixPermissions: 0o755], ofItemAtPath: tempFileURL.path
             )
         } catch {
-            throw LauncherError.cannotCreateShellExecutable
+            throw LauncherError.cannotCreateShellExecutable(
+                reason: error.localizedDescription)
         }
 
         return tempFileURL
     }
 
-    func executeScript(_ script: String, stdout: Pipe? = nil, stderr: Pipe? = nil, endCallback: (@Sendable (Process) -> Void)? = nil) throws {
+    func executeScript(
+        _ script: String, stdout: Pipe? = nil, stderr: Pipe? = nil,
+        endCallback: (@Sendable (Process) -> Void)? = nil
+    ) throws {
         let script = try LaunchManager.createTemporaryBashScript(script)
 
         print("script path")
@@ -171,35 +175,19 @@ class LaunchManager {
         process.executableURL = script
         process.standardOutput = stdout
         process.standardError = stderr
-        process.terminationHandler = endCallback
+        process.terminationHandler = { process in
+            if let endCallback {
+                endCallback(process)
+            }
+            process.terminationHandler = nil
+        }
 
         try process.run()
     }
 
-    func composeLaunchScript(
-        player: PlayerProfile, profile: GameProfile, javaPath: String,
-        gameSettings: GameSettings
-    ) throws
-        -> String
-    {
-        let javaPath = ensureQuotes(javaPath)
-
-        let gameDir = profile.gameDirectory
-        let fullVersion = profile.fullVersion
-
-        let metaPath: Path = gameDir.getMetaPath()
-
-        let libraryPath = metaPath / "libraries"
-        let assetsPath = metaPath / "assets"
-        let nativesPath = metaPath / "natives" / fullVersion
-
-        let clientVersionsDir = metaPath / "versions"
-        let clientLocation = clientVersionsDir / fullVersion
-        let clientJarPath = clientLocation / "\(fullVersion).jar"
-        let clientConfigPath = clientLocation / "\(fullVersion).json"
-
-        let profilePath: Path = profile.getProfilePath()
-
+    func getMinecraftMeta(
+        from clientConfigPath: Path, versionDir clientVersionsDir: Path
+    ) throws -> MinecraftMeta {
         let metadata = try loadClinetConfig(clientPath: clientConfigPath)
         let metaConfig: MinecraftMeta
 
@@ -217,6 +205,49 @@ class LaunchManager {
             } else {
                 throw LauncherError.cannotFindFullMetadata
             }
+        }
+
+        return metaConfig
+    }
+
+    func composeLaunchScript(
+        player: PlayerProfile,
+        profile: GameProfile,
+        selectedJVM: SelectedJVM,
+        jvmManager: JVMManager,
+        gameSettings: GameSettings
+    ) throws
+        -> String
+    {
+        let gameDir = profile.gameDirectory
+        let fullVersion = profile.fullVersion
+
+        let metaPath: Path = gameDir.getMetaPath()
+
+        let libraryPath = metaPath / "libraries"
+        let assetsPath = metaPath / "assets"
+        let nativesPath = metaPath / "natives" / fullVersion
+
+        let clientVersionsDir = metaPath / "versions"
+        let clientLocation = clientVersionsDir / fullVersion
+        let clientJarPath = clientLocation / "\(fullVersion).jar"
+        let clientConfigPath = clientLocation / "\(fullVersion).json"
+
+        let profilePath: Path = profile.getProfilePath()
+
+        let metaConfig = try getMinecraftMeta(
+            from: clientConfigPath, versionDir: clientVersionsDir
+        )
+
+        guard
+            let javaPath = jvmManager.resolveJVM(
+                for: selectedJVM, meta: metaConfig
+            )?.path
+        else {
+            throw LauncherError.noValidJVM(
+                expected: metaConfig.javaVersion.majorVersion,
+                actual: selectedJVM.formattedVersion
+            )
         }
 
         let resolutionSize = gameSettings.resolution.toSizeStrings()
@@ -266,7 +297,8 @@ class LaunchManager {
 
         let mainClass = metaConfig.mainClass
         let cdGameProfileDir = "cd \(ensureQuotes(profilePath.string))\n"
-        let javaLaunchScript = "\(cdGameProfileDir)\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
+        let javaLaunchScript =
+            "\(cdGameProfileDir)\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
 
         if case .normal = gameSettings.processPriority {
             return javaLaunchScript
@@ -446,6 +478,6 @@ class LaunchManager {
     }
 
     var launcherVersion: String {
-        return appState?.appVersion ?? "unknown"
+        return AppState.appVersion
     }
 }

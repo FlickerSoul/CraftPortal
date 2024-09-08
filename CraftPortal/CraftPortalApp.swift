@@ -35,6 +35,9 @@ struct RootView: View {
             }
             .environmentObject(appState)
             .environmentObject(globalSettings)
+            .sheet(item: $appState.currentError) { error in
+                ErrorSheetView(error: error)
+            }
         // It's guaranteed that settings has one thing
         // See the init section of main App below
     }

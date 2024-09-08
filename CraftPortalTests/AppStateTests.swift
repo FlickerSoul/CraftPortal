@@ -11,8 +11,7 @@ import Testing
 
 @Test
 func testAppVersion() {
-    let appState = AppState()
     let expectedVersion = "1.0 (1)"
 
-    #expect(appState.appVersion == expectedVersion)
+    #expect(AppState.appVersion == expectedVersion)
 }

@@ -104,7 +104,11 @@ extension CraftPortalSchemaV1 {
             case .Mangled:
                 return name
             case .Profile:
-                return gameVersion.fullVersion + (modLoader?.fullVersion ?? "")
+                var version = gameVersion.fullVersion
+                if let modVersion = modLoader?.fullVersion {
+                    version += "-" + modVersion
+                }
+                return version
             }
         }
 

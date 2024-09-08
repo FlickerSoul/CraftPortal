@@ -12,8 +12,9 @@ final class AppState: ObservableObject {
     private(set) var launchManager: LaunchManager
     @Published private(set) var jvmManager: JVMManager
     @Published private(set) var initialized: Bool = false
+    @Published var currentError: ErrorInfo? = nil
 
-    let appVersion = {
+    static let appVersion = {
         let version =
             Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
@@ -23,14 +24,12 @@ final class AppState: ObservableObject {
     init() {
         launchManager = LaunchManager()
         jvmManager = JVMManager()
-
-        launchManager.setAppState(self)
     }
 
     private static let LAUNCHED_BEFORE_FLAG_KEY: String =
         "CraftPortal.LAUNCHED_BEFORE"
 
-    static let isFirstLaunch = {
+    static let isFirstLaunch: Bool = {
         let result = UserDefaults.standard.bool(
             forKey: AppState.LAUNCHED_BEFORE_FLAG_KEY)
 

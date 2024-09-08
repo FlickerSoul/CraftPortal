@@ -66,7 +66,7 @@ struct MainPanel: View {
             if noGameSelected {
                 updatePanel(.GameLibrary)
             } else {
-                appState.launchManager.launch(globalSettings: globalSettings)
+                appState.launchManager.launch(globalSettings: globalSettings, appState: appState)
             }
         }
     }

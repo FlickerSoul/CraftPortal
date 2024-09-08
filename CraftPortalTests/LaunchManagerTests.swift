@@ -410,21 +410,23 @@ struct LaunchScriptTests {
     ) throws {
         let launchManager = LaunchManager()
         let appState: AppState = .init()
-        launchManager.setAppState(appState)
 
         switch expected {
         case let .Error(expectedError):
             #expect(throws: expectedError) {
                 _ = try launchManager.composeLaunchScript(
-                    player: player, profile: profile,
-                    javaPath: LaunchScriptTests.mockedJavaPath,
+                    player: player,
+                    profile: profile,
+                    selectedJVM: .manual(.init(path: "Path", version: "22.0.1")),
+                    jvmManager: appState.jvmManager,
                     gameSettings: .init(advanced: .init(jvm: .init(), workaround: .init()))
                 )
             }
         case let .Success(expectedScript):
             let composed = try launchManager.composeLaunchScript(
                 player: player, profile: profile,
-                javaPath: LaunchScriptTests.mockedJavaPath,
+                selectedJVM: .manual(.init(path: "Path", version: "22.0.1")),
+                jvmManager: appState.jvmManager,
                 gameSettings: gameSettings
             )
             let simplified = composed.replacingOccurrences(
