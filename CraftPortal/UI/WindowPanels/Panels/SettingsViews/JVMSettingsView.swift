@@ -35,13 +35,7 @@ struct JVMChooser: View {
         .hoverCursor()
         .popover(isPresented: $showingPopover) {
             VStack(alignment: .center) {
-                let jvmBinding = Binding<SelectedJVM> {
-                    globalSettings.selectedJVM
-                } set: { val in
-                    globalSettings.selectedJVM = val
-                }
-
-                Picker("Available JVMs", selection: jvmBinding) {
+                Picker("Available JVMs", selection: $globalSettings.selectedJVM) {
                     Text("Automatic").tag(SelectedJVM.automatic)
 
                     ForEach(

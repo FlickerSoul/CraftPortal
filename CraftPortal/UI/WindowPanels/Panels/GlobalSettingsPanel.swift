@@ -19,11 +19,6 @@ struct GlobalSettingsPanel: View {
     }
 
     var body: some View {
-        let gameSettingsBinding = Binding {
-            globalSettings.gameSettings
-        } set: { val in
-            return globalSettings.gameSettings = val
-        }
         VStack {
             title
 
@@ -32,7 +27,7 @@ struct GlobalSettingsPanel: View {
             CurrentGameDirectorySettings()
             Divider()
             GameSettingsView(
-                gameSettings: gameSettingsBinding
+                gameSettings: $globalSettings.gameSettings
             )
             Spacer()
         }
@@ -41,6 +36,6 @@ struct GlobalSettingsPanel: View {
 }
 
 #Preview {
-    let globalSettings: GlobalSettings = .init()
-    GlobalSettingsPanel().environmentObject(globalSettings)
+    GlobalSettingsPanel()
+        .environmentObject(GlobalSettings())
 }

@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MemorySlider: View {
-    let memoryBinding: Binding<Double>
+    @Binding var memoryBinding: Double
 
     var body: some View {
         let memoryTextBinding = Binding {
-            String(format: "%.0f", memoryBinding.wrappedValue)
+            String(format: "%.0f", memoryBinding)
         } set: { val in
             if let parsedValue = Double(val) {
-                memoryBinding.wrappedValue = parsedValue
+                memoryBinding = parsedValue
             }
         }
 
@@ -23,16 +23,16 @@ struct MemorySlider: View {
             VStack {
                 Text("Memory")
 
-                Text("\(String(format: "%.2f", memoryBinding.wrappedValue / 1024)) GB")
+                Text("\(String(format: "%.2f", memoryBinding / 1024)) GB")
             }
             Slider(
-                value: memoryBinding,
+                value: $memoryBinding,
                 in: 0 ... Double(GameSettings.physicalMemeoryCap),
                 step: 1024
             ) // TODO: make a custom one, this is too ugly
 
             TextField(
-                "\(UInt(memoryBinding.wrappedValue)) MB",
+                "\(UInt(memoryBinding)) MB",
                 text: memoryTextBinding
             )
             .frame(width: 64)

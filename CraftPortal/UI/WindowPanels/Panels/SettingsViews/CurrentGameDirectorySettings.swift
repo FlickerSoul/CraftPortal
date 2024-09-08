@@ -34,18 +34,10 @@ struct CurrentGameDirecotryChooser: View {
         }
         .hoverCursor()
         .popover(isPresented: $showingPopover) {
-            let binding = Binding {
-                globalSettings.currentGameDirectory
-            } set: { val in
-                globalSettings.currentGameDirectory = val
-                if modelContext.hasChanges {
-                    try? modelContext.save()
-                }
-            }
             VStack {
                 Picker(
                     "Available Directories",
-                    selection: binding
+                    selection: $globalSettings.currentGameDirectory
                 ) {
                     ForEach(gameDirectories) {
                         dir in

@@ -64,4 +64,5 @@ struct GameSettingsPanel: View {
 
 #Preview {
     GameSettingsPanel()
+        .environmentObject(GlobalSettings())
 }
