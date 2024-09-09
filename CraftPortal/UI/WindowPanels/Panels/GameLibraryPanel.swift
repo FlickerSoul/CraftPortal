@@ -107,6 +107,7 @@ struct DirectoryProfilePicture: View {
 struct DeleteProfileConfirmation: View {
     let profile: GameProfile
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var appState: AppState
     @State var showingDeleteFailed: Bool = false
 
     var body: some View {
@@ -122,8 +123,11 @@ struct DeleteProfileConfirmation: View {
                 }
 
                 Button("Delete", role: .destructive) {
-                    // TODO: error handling
-                    try? profile.gameDirectory.deleteGame(profile)
+                    do {
+                        try profile.gameDirectory.deleteGame(profile)
+                    } catch {
+                        appState.currentError = .init(title: "Failed to delete profile", description: error.localizedDescription)
+                    }
 
                     dismiss()
                 }

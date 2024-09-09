@@ -18,7 +18,7 @@ extension CraftPortalSchemaV1 {
         #Unique<GameProfile>([\._gameDirectory, \.name])
 
         @Attribute(.unique) var id: UUID
-        var name: String // TODO: how to do unique together...
+        var name: String
         var gameVersion: GameVersion
         var modLoader: ModLoader?
         var _gameDirectory: GameDirectory?
