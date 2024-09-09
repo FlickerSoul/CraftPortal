@@ -19,8 +19,17 @@ struct ErrorSheetView: View {
                 Text(error.description)
                     .font(.headline)
             }
-            Button("Close") {
-                dismiss()
+            HStack {
+                ForEach(error.callbacks, id: \.buttonName) { callback in
+                    Button(callback.buttonName) {
+                        callback.callback()
+                        dismiss()
+                    }
+                }
+
+                Button("Close") {
+                    dismiss()
+                }
             }
         }
         .padding()

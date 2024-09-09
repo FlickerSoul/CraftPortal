@@ -22,8 +22,9 @@ private struct LoadingView: View {
 struct ContentView: View {
     @State private var displaying: FunctionPanel = .Home
     @State private var actualDisplaying: FunctionPanel = .Home
-    @EnvironmentObject var appState: AppState
     @State private var panelTransition: AnyTransition = .push(from: .bottom)
+
+    var isInitialized: Bool
 
     var body: some View {
         GeometryReader { geometry in
@@ -59,7 +60,7 @@ struct ContentView: View {
                     width: geometry.size.width, height: geometry.size.height
                 )
 
-                if !appState.initialized {
+                if !isInitialized {
                     LoadingView()
                         .frame(
                             width: geometry.size.width,
@@ -73,7 +74,7 @@ struct ContentView: View {
                         )
                 }
             }
-            .animation(.easeIn(duration: 0.3), value: appState.initialized)
+            .animation(.easeIn(duration: 0.3), value: isInitialized)
         }
         .background(
             Image("HomeBackground2")
@@ -121,13 +122,11 @@ struct ContentView: View {
 }
 
 #Preview {
-    let state = AppState()
-    let globalSettings = GlobalSettings()
+    @Previewable @State var isInitialized: Bool = false
 
-    ContentView()
+    ContentView(isInitialized: isInitialized)
         .frame(width: 960, height: 540)
-        .environmentObject(state)
-        .environmentObject(globalSettings)
+        .environmentObject(GlobalSettings())
         .modelContainer(
             try! ModelContainer(
                 for: Schema(versionedSchema: LatestSchema.self),

@@ -28,14 +28,17 @@ struct RootView: View {
     }
 
     var body: some View {
-        ContentView()
+        ContentView(isInitialized: appState.initialized)
             .frame(width: 960, height: 540)
             .onAppear {
                 lauching()
             }
             .environmentObject(appState)
             .environmentObject(globalSettings)
-            .sheet(item: $appState.currentError) { error in
+            .sheet(
+                item: $appState.currentError,
+                onDismiss: { appState.currentError = nil }
+            ) { error in
                 ErrorSheetView(error: error)
             }
         // It's guaranteed that settings has one thing

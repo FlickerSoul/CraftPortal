@@ -200,17 +200,20 @@ class JVMManager {
         }
     }
 
-    func resolveJVM(for selected: SelectedJVM, meta: MinecraftMeta) -> JVMInformation? {
+    func resolveJVM(for selected: SelectedJVM, expected expectedMajor: Int) -> JVMInformation? {
         switch selected {
         case .automatic:
             return versions.sorted { lhs, rhs in
                 lhs.majorVersion > rhs.majorVersion
             }.filter { info in
-                info.majorVersion >= meta.javaVersion.majorVersion
+                info.majorVersion >= expectedMajor
             }
             .first
         case let .manual(version):
-            return version
+            if version.majorVersion >= expectedMajor {
+                return version
+            }
+            return nil
         }
     }
 }

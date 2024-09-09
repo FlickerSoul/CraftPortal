@@ -49,8 +49,24 @@ enum LauncherState: Equatable {
     case launching
 }
 
-enum LauncherError: Error, Equatable {
-    case noShellExecutable
+enum LauncherError: Error, Equatable, CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .launchFailed:
+            return "Launch failed"
+        case let .noValidJVM(expected: expected, actual: actual):
+            return "Expected JVM version \(expected), but found \(actual)"
+        case .noGameProfile:
+            return "No game profile selected"
+        case .noPlayerProfile:
+            return "No player profile selected"
+        case let .cannotCreateShellExecutable(reason: reason):
+            return "Cannot create shell executable: \(reason)"
+        case .cannotFindFullMetadata:
+            return "Cannot find full metadata"
+        }
+    }
+
     case launchFailed
     case noValidJVM(expected: Int, actual: String)
     case noGameProfile
@@ -69,25 +85,40 @@ class LaunchManager {
         "has_custom_resolution": true,
     ]
 
-    private(set) var launcherState: LauncherState = .idle
+    private(set) var launcherStates: [UUID: [Process]] = [:]
 
-    private func toggleLauncherState(_ state: LauncherState) {
-        launcherState = state
+    func registerProcess(for uuid: UUID, _ process: Process) {
+        launcherStates[uuid, default: []].append(process)
+    }
+
+    func removeProcess(for uuid: UUID, _ process: Process) {
+        launcherStates[uuid]?.removeAll(where: { $0 === process })
+    }
+
+    func hasProcessRunning(for uuid: UUID) -> Bool {
+        !launcherStates[uuid, default: []].isEmpty
     }
 
     func launch(
         globalSettings: GlobalSettings,
         appState: AppState,
         profile: GameProfile? = nil,
-        pipe: Pipe? = nil
+        pipe: Pipe? = nil,
+        multiLaunchOverride: Bool = false
     ) {
-        // TODO: logging lauching failed
-        if launcherState != .idle {
-            print("laucher is not idle")
+        guard let player = globalSettings.currentPlayerProfile else {
+            appState.currentError = .init(title: "No Player Profile", description: "Please select a player profile before launching the game.")
             return
         }
 
-        toggleLauncherState(.launching)
+        let playerId = player.id
+
+        if hasProcessRunning(for: playerId), !multiLaunchOverride {
+            appState.currentError = .init(title: "Already Launching", description: "A game is already being launched. You can continue if you wish to accept the risks.", callback: .init(buttonName: "Continue", callback: { [unowned self] in
+                self.launch(globalSettings: globalSettings, appState: appState, profile: profile, pipe: pipe, multiLaunchOverride: true)
+            }))
+            return
+        }
 
         print("start launching")
 
@@ -101,10 +132,6 @@ class LaunchManager {
 
             profile.lastPlayed = Date.now
 
-            guard let player = globalSettings.currentPlayerProfile else {
-                throw LauncherError.noPlayerProfile
-            }
-
             let script = try composeLaunchScript(
                 player: player,
                 profile: profile,
@@ -114,10 +141,7 @@ class LaunchManager {
                     ? profile.gameSettings : globalSettings.gameSettings
             )
 
-            print("launch script composed")
-            print(script)
-
-            try executeScript(script, stdout: pipe, stderr: pipe) { process in
+            try executeScript(script, for: playerId, stdout: pipe, stderr: pipe) { process in
                 if process.terminationStatus != 0 {
                     DispatchQueue.main.async {
                         appState.currentError = ErrorInfo(
@@ -131,13 +155,10 @@ class LaunchManager {
 
             print("launch script executed")
         } catch let error as LauncherError {
-            print("caught launcher error: \(error)")
+            appState.currentError = .init(title: "Experienced Launcher Error", description: error.description)
         } catch {
-            print("caught unknown error: \(error)")
+            appState.currentError = .init(title: "Experienced Unknown Error", description: error.localizedDescription)
         }
-
-        toggleLauncherState(.idle)
-        print("launcher stopped")
     }
 
     static func createTemporaryBashScript(_ script: String) throws -> URL {
@@ -163,7 +184,7 @@ class LaunchManager {
     }
 
     func executeScript(
-        _ script: String, stdout: Pipe? = nil, stderr: Pipe? = nil,
+        _ script: String, for uuid: UUID, stdout: Pipe? = nil, stderr: Pipe? = nil,
         endCallback: (@Sendable (Process) -> Void)? = nil
     ) throws {
         let script = try LaunchManager.createTemporaryBashScript(script)
@@ -172,17 +193,26 @@ class LaunchManager {
         print(script.path(percentEncoded: false))
 
         let process = Process()
+
         process.executableURL = script
         process.standardOutput = stdout
         process.standardError = stderr
-        process.terminationHandler = { process in
+        process.terminationHandler = { [unowned self] process in
             if let endCallback {
                 endCallback(process)
             }
             process.terminationHandler = nil
+            self.removeProcess(for: uuid, process)
         }
 
-        try process.run()
+        registerProcess(for: uuid, process)
+
+        do {
+            try process.run()
+        } catch {
+            removeProcess(for: uuid, process)
+            throw error
+        }
     }
 
     func getMinecraftMeta(
@@ -241,7 +271,7 @@ class LaunchManager {
 
         guard
             let javaPath = jvmManager.resolveJVM(
-                for: selectedJVM, meta: metaConfig
+                for: selectedJVM, expected: metaConfig.javaVersion.majorVersion
             )?.path
         else {
             throw LauncherError.noValidJVM(
