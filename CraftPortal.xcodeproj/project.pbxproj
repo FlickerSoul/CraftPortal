@@ -11,6 +11,7 @@
 		5720DA2B2C7CFCFF00A64071 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA2A2C7CFCFC00A64071 /* Utils.swift */; };
 		5720DA312C7D494400A64071 /* AppStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA302C7D493F00A64071 /* AppStateTests.swift */; };
 		5720DA332C7D6DF400A64071 /* LaunchManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */; };
+		573077922C94D52C00A40EF3 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 573077912C94D52C00A40EF3 /* Localizable.xcstrings */; };
 		57357F972C82050800F3B26F /* GameSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57357F962C82050300F3B26F /* GameSettingsTests.swift */; };
 		5750321F2C81206F00066D33 /* JVMManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750321E2C81206B00066D33 /* JVMManagerTests.swift */; };
 		5755FC442C94C2B800FECADC /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 5755FC432C94C2B800FECADC /* Logging */; };
@@ -47,6 +48,7 @@
 		5720DA2A2C7CFCFC00A64071 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		5720DA302C7D493F00A64071 /* AppStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateTests.swift; sourceTree = "<group>"; };
 		5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchManagerTests.swift; sourceTree = "<group>"; };
+		573077912C94D52C00A40EF3 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		57357F962C82050300F3B26F /* GameSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingsTests.swift; sourceTree = "<group>"; };
 		5750321E2C81206B00066D33 /* JVMManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JVMManagerTests.swift; sourceTree = "<group>"; };
 		575D907B2C8BBA8B00BB72B3 /* KeychainManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerTests.swift; sourceTree = "<group>"; };
@@ -129,7 +131,6 @@
 		5720D9C72C7CE66100A64071 /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 		5720D9C82C7CE66500A64071 /* Downloader */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Downloader; sourceTree = "<group>"; };
 		5720DA2C2C7D460300A64071 /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
-		5755FC472C94C4DD00FECADC /* Localization */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Localization; sourceTree = "<group>"; };
 		577CE2022C7B63EF0061257C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		577CE2042C7B64290061257C /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2062C7B67180061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
 		57B94D3C2C7CD959007EDEBD /* Launcher */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Launcher; sourceTree = "<group>"; };
@@ -186,7 +187,7 @@
 		577CE1D22C7B63080061257C /* CraftPortal */ = {
 			isa = PBXGroup;
 			children = (
-				5755FC472C94C4DD00FECADC /* Localization */,
+				573077912C94D52C00A40EF3 /* Localizable.xcstrings */,
 				57862B5E2C891A4200550B6B /* Info.plist */,
 				5720DA2C2C7D460300A64071 /* Utils */,
 				5720D9C82C7CE66500A64071 /* Downloader */,
@@ -254,7 +255,6 @@
 				5720D9C72C7CE66100A64071 /* Auth */,
 				5720D9C82C7CE66500A64071 /* Downloader */,
 				5720DA2C2C7D460300A64071 /* Utils */,
-				5755FC472C94C4DD00FECADC /* Localization */,
 				57B94D3C2C7CD959007EDEBD /* Launcher */,
 			);
 			name = CraftPortal;
@@ -353,6 +353,7 @@
 			files = (
 				577CE1DD2C7B63090061257C /* Preview Assets.xcassets in Resources */,
 				577CE1DA2C7B63090061257C /* Assets.xcassets in Resources */,
+				573077922C94D52C00A40EF3 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

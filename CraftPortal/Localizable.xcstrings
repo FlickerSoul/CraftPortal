@@ -1,0 +1,229 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@" : {
+
+    },
+    "%@ GB" : {
+
+    },
+    "%llu MB" : {
+
+    },
+    "Accounts" : {
+
+    },
+    "Add a JVM path to be used to launch the game." : {
+
+    },
+    "Add a microsoft account" : {
+
+    },
+    "Add a offline account" : {
+
+    },
+    "Add Directory" : {
+
+    },
+    "Add new games or mods" : {
+
+    },
+    "Advanced" : {
+
+    },
+    "Are you sure to delete this profile" : {
+
+    },
+    "Automatic" : {
+
+    },
+    "Available Directories" : {
+
+    },
+    "Available JVMs" : {
+
+    },
+    "Back" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Click here to add an account" : {
+
+    },
+    "Close" : {
+
+    },
+    "Contacting Microsoft..." : {
+
+    },
+    "Current Game Directory" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Delete profile" : {
+
+    },
+    "Delete Profile" : {
+
+    },
+    "Discover Game Profiles" : {
+
+    },
+    "Discover JVM paths that can be used to launch the game." : {
+
+    },
+    "Discover playable game profiles" : {
+
+    },
+    "Folder Style" : {
+
+    },
+    "Fullscreen" : {
+
+    },
+    "Game Library" : {
+
+    },
+    "Game Settings" : {
+
+    },
+    "Global Settings" : {
+
+    },
+    "Go To Game Library" : {
+
+    },
+    "Height" : {
+
+    },
+    "Home" : {
+
+    },
+    "I have logged in" : {
+
+    },
+    "Internal State Error. Please contact the developer." : {
+
+    },
+    "Java %@" : {
+
+    },
+    "Java version: %@" : {
+
+    },
+    "Launch Game" : {
+
+    },
+    "Loaded %lld profiles" : {
+
+    },
+    "Loading Your Minecraft Account" : {
+
+    },
+    "Loading..." : {
+
+    },
+    "Login Through Microsoft With Device Code" : {
+
+    },
+    "Manage Games" : {
+
+    },
+    "MB" : {
+
+    },
+    "Memory" : {
+
+    },
+    "No Accounts" : {
+
+    },
+    "No Game Directory Set" : {
+
+    },
+    "No Game Selected" : {
+
+    },
+    "None" : {
+
+    },
+    "Ok" : {
+
+    },
+    "Once you are logged in, click the button below to continue." : {
+
+    },
+    "Open [%@](%@) and enter the following code: " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Open [%1$@](%2$@) and enter the following code: "
+          }
+        }
+      }
+    },
+    "Open Game Folder" : {
+
+    },
+    "Open profile directory" : {
+
+    },
+    "Open saves folder" : {
+
+    },
+    "Open Saves Folder" : {
+
+    },
+    "Refresh Device Code" : {
+
+    },
+    "Resolution" : {
+
+    },
+    "Select a game directory to add to the list of game directories." : {
+
+    },
+    "The current game directory is not set. Please select a game directory first." : {
+
+    },
+    "There is an error loading java versions" : {
+
+    },
+    "Turn On Per Game Settings" : {
+
+    },
+    "under the directory" : {
+
+    },
+    "Use as Current Game Directory" : {
+
+    },
+    "Use as current JVM" : {
+
+    },
+    "username" : {
+
+    },
+    "Username: " : {
+
+    },
+    "uuid" : {
+
+    },
+    "UUID: " : {
+
+    },
+    "Width" : {
+
+    },
+    "x" : {
+
+    }
+  },
+  "version" : "1.0"
+}
