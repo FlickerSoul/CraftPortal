@@ -12,6 +12,7 @@ struct OAuthDeviceCodeView: View {
 
     @State private var failureMessage: String? = nil
     @State private var deviceCodeInfo: DeviceCodeResponse? = nil
+    @State private var loadingNewCode = false
     @EnvironmentObject private var appState: AppState
     @Environment(\.dismiss) private var dismiss
 
@@ -43,13 +44,6 @@ struct OAuthDeviceCodeView: View {
             Button("I have logged in") {
                 handleLogin(deviceCodeInfo)
             }
-
-            Button("Refresh Device Code") {
-                Task {
-                    await refreshDeviceCode()
-                }
-            }
-            .disabled(self.deviceCodeInfo == nil)
         }
     }
 
@@ -77,11 +71,22 @@ struct OAuthDeviceCodeView: View {
             Text(deviceCodeInfo.userCode)
                 .textSelection(.enabled)
                 .font(.headline)
-            Text(Image(systemName: "doc.on.doc"))
-                .hoverCursor()
-                .onTapGesture {
-                    copyText(deviceCodeInfo.userCode)
+            Button {
+                copyText(deviceCodeInfo.userCode)
+            } label: {
+                Image(systemName: "doc.on.doc")
+            }.buttonStyle(.borderless)
+
+            Button {
+                Task {
+                    await refreshDeviceCode()
                 }
+            } label: {
+                Image(systemName: "arrow.clockwise")
+                    .symbolEffect(.pulse, value: loadingNewCode)
+            }
+            .buttonStyle(.borderless)
+            .disabled(loadingNewCode)
         }
 
         if let failureMessage {
@@ -110,7 +115,9 @@ struct OAuthDeviceCodeView: View {
     }
 
     func refreshDeviceCode() async {
-        deviceCodeInfo = nil
+        withAnimation {
+            loadingNewCode = true
+        }
 
         do {
             deviceCodeInfo = try await loginManager.getDeviceCode()
@@ -120,6 +127,10 @@ struct OAuthDeviceCodeView: View {
                 description:
                 "Please check your network. Error: \(error.localizedDescription)"
             )
+        }
+
+        withAnimation {
+            loadingNewCode = false
         }
     }
 
