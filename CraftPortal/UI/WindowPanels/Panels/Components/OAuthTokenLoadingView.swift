@@ -15,7 +15,7 @@ struct OAuthTokenLoadingView: View {
 
     let loginManager: LoginManager
     let oAuthInfo: OAuthTokenInfo
-    let successCallback: () -> Void
+    let successCallback: (PlayerProfile) -> Void
 
     var body: some View {
         VStack {
@@ -26,7 +26,6 @@ struct OAuthTokenLoadingView: View {
         .padding()
         .task {
             await addAccount()
-            dismiss()
         }
     }
 
@@ -82,5 +81,7 @@ struct OAuthTokenLoadingView: View {
                 "The application cannot access keychain to save the account. Please try again. Error: \(error)"
             )
         }
+
+        successCallback(player)
     }
 }

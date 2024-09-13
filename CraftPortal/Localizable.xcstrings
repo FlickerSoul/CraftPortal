@@ -706,6 +706,22 @@
         }
       }
     },
+    "No" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不"
+          }
+        }
+      }
+    },
     "No Accounts" : {
       "localizations" : {
         "zh-Hans" : {
@@ -948,6 +964,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在此目錄下"
+          }
+        }
+      }
+    },
+    "Use %@ as the current account?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将 %@ 作为当前账号吗？"
           }
         }
       }

@@ -284,6 +284,7 @@ class LaunchManager {
         let javaPath = ensureQuotes(javaPathString)
 
         let resolutionSize = gameSettings.resolution.toSizeStrings()
+        let accessToken = try player.getAccessToken()
 
         let argumentValues: LaunchArgValueCollection = [
             .authPlayerName: player.username,
@@ -293,8 +294,8 @@ class LaunchManager {
             .assetsIndexName: metaConfig.assetIndex.id,
             .authUUID: player.id.flatUUIDString,
             .uuid: player.id.flatUUIDString,
-            .authAccessToken: player.getAccessToken(),
-            .accessToken: player.getAccessToken(),
+            .authAccessToken: accessToken,
+            .accessToken: accessToken,
             .clientId: ensureQuotes("clientid"), // --clientId ${clientid}    base64 encoded uuid from clientId.txt in .minecraft. Launcher seems to generate a new uuid on every install if the file is not present. (might be a random uuid every install?) @TODO find out more    Optional, send in Telemetry
             .authXUID: ensureQuotes("authxuid"), // --xuid ${auth_xuid}    signerId in the JWT payload returned by the api.minecraftservices.com/entitlements/mcstore endpoint    Optional, send in Telemetry
             .userType: player.lauchUserType,

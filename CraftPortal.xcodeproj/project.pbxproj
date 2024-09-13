@@ -101,6 +101,7 @@
 				Utils/ImageSource.swift,
 				Utils/MouseUtil.swift,
 				WindowPanels/Panels/AccountsPanel.swift,
+				WindowPanels/Panels/Components/AsCurrentPlayerView.swift,
 				WindowPanels/Panels/Components/MSAccountAdderView.swift,
 				WindowPanels/Panels/Components/OAuthDeviceCodeView.swift,
 				WindowPanels/Panels/Components/OAuthTokenLoadingView.swift,
