@@ -270,7 +270,7 @@ class LaunchManager {
         )
 
         guard
-            let javaPath = jvmManager.resolveJVM(
+            let javaPathString = jvmManager.resolveJVM(
                 for: selectedJVM, expected: metaConfig.javaVersion.majorVersion
             )?.path
         else {
@@ -279,6 +279,7 @@ class LaunchManager {
                 actual: selectedJVM.formattedVersion
             )
         }
+        let javaPath = ensureQuotes(javaPathString)
 
         let resolutionSize = gameSettings.resolution.toSizeStrings()
 

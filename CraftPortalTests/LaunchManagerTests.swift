@@ -400,12 +400,16 @@ struct LaunchScriptTests {
                 mockLocalPlayer,
                 mockedVinallaGameProfile,
                 mockedGameSettings,
+                SelectedJVM.manual(.init(path: "/Mocked/Java/Path/", version: "22.0.1")),
                 LaunchExpected.Success(expectedVanillaGameShellScript)
             ),
         ]
     )
     func launchScriptTest(
-        player: PlayerProfile, profile: GameProfile, gameSettings: GameSettings,
+        player: PlayerProfile,
+        profile: GameProfile,
+        gameSettings: GameSettings,
+        selectedJVM: SelectedJVM,
         expected: LaunchExpected
     ) throws {
         let launchManager = LaunchManager()
@@ -417,7 +421,7 @@ struct LaunchScriptTests {
                 _ = try launchManager.composeLaunchScript(
                     player: player,
                     profile: profile,
-                    selectedJVM: .manual(.init(path: "Path", version: "22.0.1")),
+                    selectedJVM: selectedJVM,
                     jvmManager: appState.jvmManager,
                     gameSettings: .init(advanced: .init(jvm: .init(), workaround: .init()))
                 )
@@ -425,7 +429,7 @@ struct LaunchScriptTests {
         case let .Success(expectedScript):
             let composed = try launchManager.composeLaunchScript(
                 player: player, profile: profile,
-                selectedJVM: .manual(.init(path: "Path", version: "22.0.1")),
+                selectedJVM: selectedJVM,
                 jvmManager: appState.jvmManager,
                 gameSettings: gameSettings
             )
