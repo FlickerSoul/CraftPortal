@@ -101,9 +101,9 @@ extension CraftPortalSchemaV1 {
 
         var fullVersion: String {
             switch gameDirectory.directoryType {
-            case .Mangled:
+            case .mangled:
                 return name
-            case .Profile:
+            case .isolated:
                 var version = gameVersion.fullVersion
                 if let modVersion = modLoader?.fullVersion {
                     version += "-" + modVersion
@@ -116,9 +116,9 @@ extension CraftPortalSchemaV1 {
 
         func getProfilePath() -> Path {
             switch gameDirectory.directoryType {
-            case .Mangled:
+            case .mangled:
                 return Path(gameDirectory.path)!
-            case .Profile:
+            case .isolated:
                 return Path(gameDirectory.path)!
                     / GameProfile.profileDirectoryName / name
             }
@@ -126,9 +126,9 @@ extension CraftPortalSchemaV1 {
 
         func getProfileToDeletePath() -> Path {
             switch gameDirectory.directoryType {
-            case .Mangled:
+            case .mangled:
                 return Path(gameDirectory.path)! / "versions" / name
-            case .Profile:
+            case .isolated:
                 return Path(gameDirectory.path)!
                     / GameProfile.profileDirectoryName / name
             }

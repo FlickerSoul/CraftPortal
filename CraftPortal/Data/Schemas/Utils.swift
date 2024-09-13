@@ -120,21 +120,21 @@ enum UserAccountType: Codable {
 }
 
 /// An enum represeting the game directory type: how game directory is structured
-enum GameDirectoryType: Int, Codable, CaseIterable, Equatable, Identifiable {
-    case Mangled
-    case Profile
+enum GameDirectoryStructureType: Int, Codable, CaseIterable, Equatable, Identifiable {
+    case mangled
+    case isolated
 
     var id: String {
         switch self {
-        case .Mangled: return "mangled"
-        case .Profile: return "profile"
+        case .mangled: return "mangled"
+        case .isolated: return "isolated"
         }
     }
 
     var localized: LocalizedStringKey {
         switch self {
-        case .Mangled: return "Mangled"
-        case .Profile: return "Profile"
+        case .mangled: return "Mangled"
+        case .isolated: return "Isolated"
         }
     }
 }

@@ -86,9 +86,9 @@ extension GameDirectory {
 
     static func discoverProfiles(in dir: GameDirectory) -> [GameProfile] {
         switch dir.directoryType {
-        case .Mangled:
+        case .mangled:
             return discoverMangledProfiles(in: dir)
-        case .Profile:
+        case .isolated:
             return discoverProfiledProfiles(in: dir)
         }
     }

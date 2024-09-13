@@ -19,12 +19,12 @@ extension CraftPortalSchemaV1 {
         var gameProfiles: [GameProfile] = []
         @Relationship(deleteRule: .nullify)
         var selectedGame: GameProfile?
-        var directoryType: GameDirectoryType
+        var directoryType: GameDirectoryStructureType
 
         init(
             id: UUID = UUID(),
             path: String,
-            directoryType: GameDirectoryType
+            directoryType: GameDirectoryStructureType
         ) {
             self.id = id
             self.path = path
@@ -39,7 +39,7 @@ extension CraftPortalSchemaV1 {
                 GameProfile.self, forKey: .selectedGame
             )
             directoryType = try container.decode(
-                GameDirectoryType.self, forKey: .directoryType
+                GameDirectoryStructureType.self, forKey: .directoryType
             )
         }
 
@@ -78,9 +78,9 @@ extension CraftPortalSchemaV1 {
         static let metaDirectoryName = "meta"
         func getMetaPath() -> Path {
             switch directoryType {
-            case .Mangled:
+            case .mangled:
                 return Path(path)!
-            case .Profile:
+            case .isolated:
                 return Path(path)! / GameDirectory.metaDirectoryName
             }
         }

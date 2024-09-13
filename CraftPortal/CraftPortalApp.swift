@@ -67,7 +67,7 @@ struct RootView: View {
                 {
                     let dir = GameDirectory(
                         path: minecraftPath.string,
-                        directoryType: .Mangled
+                        directoryType: .mangled
                     )
                     modelContext.insert(dir)
                 }
@@ -81,7 +81,7 @@ struct RootView: View {
                 {
                     let dir = GameDirectory(
                         path: applicationPath.string,
-                        directoryType: .Profile
+                        directoryType: .isolated
                     )
 
                     modelContext.insert(dir)

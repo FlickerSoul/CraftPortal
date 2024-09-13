@@ -465,7 +465,7 @@ extension LaunchScriptTests {
 
     static let mockedVanillaGameDirectory: GameDirectory = .init(
         path: mockedVanillaGamePath.string,
-        directoryType: .Profile
+        directoryType: .isolated
     )
 
     static let mockedVinallaGameProfile: GameProfile = .init(

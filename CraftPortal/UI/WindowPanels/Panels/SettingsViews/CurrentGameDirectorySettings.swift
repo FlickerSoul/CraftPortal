@@ -73,7 +73,7 @@ struct CurrentGameDirecotryChooser: View {
 }
 
 struct AddGameDirectoryOption: View {
-    @State private var selectedStyle: GameDirectoryType = .Profile
+    @State private var selectedStyle: GameDirectoryStructureType = .isolated
     @State private var setAsCurrent: Bool = true
     @State private var discoverProfile: Bool = true
     @Environment(\.dismiss) private var dismiss
@@ -86,7 +86,7 @@ struct AddGameDirectoryOption: View {
         VStack(spacing: 16) {
             VStack {
                 Picker("Folder Structure Style", selection: $selectedStyle) {
-                    ForEach(GameDirectoryType.allCases) { kase in
+                    ForEach(GameDirectoryStructureType.allCases) { kase in
                         Text(kase.id)
                             .tag(kase)
                     }
