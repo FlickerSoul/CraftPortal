@@ -13,6 +13,7 @@
 		5720DA332C7D6DF400A64071 /* LaunchManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5720DA322C7D6DEF00A64071 /* LaunchManagerTests.swift */; };
 		57357F972C82050800F3B26F /* GameSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57357F962C82050300F3B26F /* GameSettingsTests.swift */; };
 		5750321F2C81206F00066D33 /* JVMManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5750321E2C81206B00066D33 /* JVMManagerTests.swift */; };
+		5755FC442C94C2B800FECADC /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 5755FC432C94C2B800FECADC /* Logging */; };
 		575D907C2C8BBA8E00BB72B3 /* KeychainManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D907B2C8BBA8B00BB72B3 /* KeychainManagerTests.swift */; };
 		577744FA2C823CDB00633EB5 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 577744F92C823CDB00633EB5 /* Assets */; };
 		577CE1D42C7B63080061257C /* CraftPortalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577CE1D32C7B63080061257C /* CraftPortalApp.swift */; };
@@ -128,6 +129,7 @@
 		5720D9C72C7CE66100A64071 /* Auth */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Auth; sourceTree = "<group>"; };
 		5720D9C82C7CE66500A64071 /* Downloader */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Downloader; sourceTree = "<group>"; };
 		5720DA2C2C7D460300A64071 /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
+		5755FC472C94C4DD00FECADC /* Localization */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Localization; sourceTree = "<group>"; };
 		577CE2022C7B63EF0061257C /* Data */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2052C7B642D0061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Data; sourceTree = "<group>"; };
 		577CE2042C7B64290061257C /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (577CE2062C7B67180061257C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
 		57B94D3C2C7CD959007EDEBD /* Launcher */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Launcher; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5755FC442C94C2B800FECADC /* Logging in Frameworks */,
 				57B94D2F2C7CB251007EDEBD /* Path in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,6 +186,7 @@
 		577CE1D22C7B63080061257C /* CraftPortal */ = {
 			isa = PBXGroup;
 			children = (
+				5755FC472C94C4DD00FECADC /* Localization */,
 				57862B5E2C891A4200550B6B /* Info.plist */,
 				5720DA2C2C7D460300A64071 /* Utils */,
 				5720D9C82C7CE66500A64071 /* Downloader */,
@@ -250,6 +254,7 @@
 				5720D9C72C7CE66100A64071 /* Auth */,
 				5720D9C82C7CE66500A64071 /* Downloader */,
 				5720DA2C2C7D460300A64071 /* Utils */,
+				5755FC472C94C4DD00FECADC /* Localization */,
 				57B94D3C2C7CD959007EDEBD /* Launcher */,
 			);
 			name = CraftPortal;
@@ -323,10 +328,12 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 577CE1C72C7B63080061257C;
 			packageReferences = (
 				57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */,
+				5755FC422C94C2B800FECADC /* XCRemoteSwiftPackageReference "swift-log" */,
 			);
 			productRefGroup = 577CE1D12C7B63080061257C /* Products */;
 			projectDirPath = "";
@@ -474,6 +481,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -530,6 +538,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
@@ -705,6 +714,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5755FC422C94C2B800FECADC /* XCRemoteSwiftPackageReference "swift-log" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-log";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.1;
+			};
+		};
 		57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mxcl/Path.swift.git";
@@ -716,6 +733,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5755FC432C94C2B800FECADC /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5755FC422C94C2B800FECADC /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
+		};
 		57B94D2E2C7CB251007EDEBD /* Path */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 57B94D2D2C7CB251007EDEBD /* XCRemoteSwiftPackageReference "Path.swift" */;

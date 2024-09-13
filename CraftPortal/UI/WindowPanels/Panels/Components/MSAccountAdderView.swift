@@ -45,6 +45,7 @@ struct MSAccountAdderView: View {
     var deviceCodeStep: some View {
         OAuthDeviceCodeView(loginManager: loginManager) { response in
             oAuthInfo = response
+            GLOBAL_LOGGER.info("Received OAuth Token")
             nextStep()
         }
     }
@@ -68,9 +69,13 @@ struct MSAccountAdderView: View {
     }
 
     func nextStep() {
-        if let nextStep = accountAddingSteps?.nextStep {
-            accountAddingSteps = nextStep
+        GLOBAL_LOGGER.debug("Moving to from step \(accountAddingSteps!)")
+
+        if let accountAddingSteps, let nextStep = accountAddingSteps.nextStep {
+            GLOBAL_LOGGER.debug("Moving to next step \(nextStep)")
+            self.accountAddingSteps = nextStep
         } else {
+            GLOBAL_LOGGER.debug("Finished adding account")
             dismiss()
         }
     }

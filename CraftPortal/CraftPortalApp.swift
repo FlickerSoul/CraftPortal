@@ -138,7 +138,7 @@ struct CraftPortalApp: App {
                 context.insert(globalSettings)
             }
         } else {
-            print("cannot fetch settings")
+            GLOBAL_LOGGER.debug("Cannot fetch settings to start the app.")
         }
     }
 }

@@ -35,6 +35,7 @@ struct OAuthTokenLoadingView: View {
 
         do {
             info = try await loginManager.login(withOAuthToken: oAuthInfo)
+            GLOBAL_LOGGER.debug("Login info retrieved")
         } catch {
             appState.setError(
                 title: "Login Failed", description: error.localizedDescription
@@ -69,7 +70,11 @@ struct OAuthTokenLoadingView: View {
                 )
             )
 
+            GLOBAL_LOGGER.debug("Player credentials saved")
+
             modelContext.insert(player)
+
+            GLOBAL_LOGGER.debug("Player account saved")
         } catch {
             appState.setError(
                 title: "Cannot access keychain",

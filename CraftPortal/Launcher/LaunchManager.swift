@@ -120,7 +120,7 @@ class LaunchManager {
             return
         }
 
-        print("start launching")
+        GLOBAL_LOGGER.debug("Start launching game")
 
         do {
             guard
@@ -153,7 +153,7 @@ class LaunchManager {
                 }
             }
 
-            print("launch script executed")
+            GLOBAL_LOGGER.debug("Launch script executed")
         } catch let error as LauncherError {
             appState.setError(title: "Experienced Launcher Error", description: error.description)
         } catch {
@@ -189,8 +189,7 @@ class LaunchManager {
     ) throws {
         let script = try LaunchManager.createTemporaryBashScript(script)
 
-        print("script path")
-        print(script.path(percentEncoded: false))
+        GLOBAL_LOGGER.debug("Script path \(script.path(percentEncoded: false))")
 
         let process = Process()
 

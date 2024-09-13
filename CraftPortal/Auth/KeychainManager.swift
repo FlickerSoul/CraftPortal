@@ -110,7 +110,9 @@ struct KeychainManager {
 
         let status = SecItemAdd(secQuery as CFDictionary, nil)
 
-        if status != errSecSuccess {
+        if status == errSecSuccess {
+            GLOBAL_LOGGER.debug("Saved \(label) for \(account) to keychain")
+        } else {
             throw KeychainError.unknownSaveError(for: label, status: status)
         }
     }
@@ -133,6 +135,7 @@ struct KeychainManager {
         case errSecSuccess:
             if let data = dataTypeRef as? Data {
                 if let str = String(data: data, encoding: .utf8) {
+                    GLOBAL_LOGGER.debug("Query for \(label) for \(account) returned successfully")
                     return str
                 } else {
                     throw KeychainError.decodingError(for: label)
@@ -155,7 +158,9 @@ struct KeychainManager {
         ]
 
         let status = SecItemDelete(query as CFDictionary)
-        if status != errSecSuccess {
+        if status == errSecSuccess {
+            GLOBAL_LOGGER.debug("Deleted \(label) for \(account)")
+        } else {
             throw KeychainError.unknownDeleteError(for: label, status: status)
         }
     }
