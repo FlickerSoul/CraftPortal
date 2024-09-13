@@ -41,7 +41,7 @@ struct OAuthDeviceCodeView: View {
                 dismiss()
             }
 
-            Button("I have logged in") {
+            Button("I completed login") {
                 handleLogin(deviceCodeInfo)
             }
         }
@@ -94,7 +94,7 @@ struct OAuthDeviceCodeView: View {
         }
 
         Text(
-            "Once you are logged in, click the button below to continue."
+            "Once you completed login in the browser, click the button below to continue."
         )
     }
 

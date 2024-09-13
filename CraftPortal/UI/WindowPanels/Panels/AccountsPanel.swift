@@ -76,15 +76,15 @@ struct AddLocalAccountSheet: View {
 
         VStack {
             HStack {
-                Text("Username: ")
-                TextField("username", text: $username)
+                Text("Username")
+                TextField("Username", text: $username)
             }
 
             DisclosureGroup("Advanced", isExpanded: $advancedExpanded) {
                 HStack {
-                    Text("UUID: ")
+                    Text("UUID")
                     TextField(
-                        "uuid", text: uuidBinding,
+                        "UUID", text: uuidBinding,
                         prompt: Text(defaultNewUUID.uuidString)
                     )
                 }

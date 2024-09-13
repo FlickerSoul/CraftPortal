@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 protocol FullVersion {
     var fullVersion: String { get }
@@ -127,6 +128,13 @@ enum GameDirectoryType: Int, Codable, CaseIterable, Equatable, Identifiable {
         switch self {
         case .Mangled: return "mangled"
         case .Profile: return "profile"
+        }
+    }
+
+    var localized: LocalizedStringKey {
+        switch self {
+        case .Mangled: return "Mangled"
+        case .Profile: return "Profile"
         }
     }
 }

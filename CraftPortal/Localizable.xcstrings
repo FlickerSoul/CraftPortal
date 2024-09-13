@@ -2,160 +2,506 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%@" : {
-
+      "shouldTranslate" : false
     },
     "%@ GB" : {
-
+      "shouldTranslate" : false
     },
     "%llu MB" : {
-
+      "shouldTranslate" : false
     },
     "Accounts" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账户"
+          }
+        }
+      }
     },
     "Add a JVM path to be used to launch the game." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加用于游戏的 JVM 路径"
+          }
+        }
+      }
     },
     "Add a microsoft account" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加微软账户"
+          }
+        }
+      }
     },
     "Add a offline account" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加离线账户"
+          }
+        }
+      }
     },
     "Add Directory" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加目录"
+          }
+        }
+      }
     },
     "Add new games or mods" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "增加游戏或者 Mods"
+          }
+        }
+      }
     },
     "Advanced" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高级选项"
+          }
+        }
+      }
     },
     "Are you sure to delete this profile" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你确定想要删除此游戏吗"
+          }
+        }
+      }
     },
     "Automatic" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
     },
     "Available Directories" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已有的游戏目录"
+          }
+        }
+      }
     },
     "Available JVMs" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已有的 JVM"
+          }
+        }
+      }
     },
     "Back" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "后退"
+          }
+        }
+      }
     },
     "Cancel" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
     },
     "Click here to add an account" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点此添加游戏账户"
+          }
+        }
+      }
     },
     "Close" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        }
+      }
     },
     "Contacting Microsoft..." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在连接微软服务器..."
+          }
+        }
+      }
     },
     "Current Game Directory" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前游戏目录"
+          }
+        }
+      }
     },
     "Delete" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除"
+          }
+        }
+      }
     },
-    "Delete profile" : {
-
-    },
-    "Delete Profile" : {
-
+    "Delete Game Profile" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除游戏"
+          }
+        }
+      }
     },
     "Discover Game Profiles" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动添加已有的游戏"
+          }
+        }
+      }
     },
     "Discover JVM paths that can be used to launch the game." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动添加可用的 JVM"
+          }
+        }
+      }
     },
     "Discover playable game profiles" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动添加可用的游戏"
+          }
+        }
+      }
     },
-    "Folder Style" : {
-
+    "Folder Structure Style" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "游戏目录结构"
+          }
+        }
+      }
     },
     "Fullscreen" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全屏"
+          }
+        }
+      }
     },
     "Game Library" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "游戏目录"
+          }
+        }
+      }
     },
     "Game Settings" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "游戏设置"
+          }
+        }
+      }
     },
     "Global Settings" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全剧设置"
+          }
+        }
+      }
     },
     "Go To Game Library" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往游戏目录"
+          }
+        }
+      }
     },
     "Height" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏高"
+          }
+        }
+      }
     },
     "Home" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主页"
+          }
+        }
+      }
     },
-    "I have logged in" : {
-
+    "I completed login" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我已经登陆"
+          }
+        }
+      }
     },
     "Internal State Error. Please contact the developer." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内部状态错误。请联系开发者。"
+          }
+        }
+      }
     },
     "Java %@" : {
-
+      "shouldTranslate" : false
     },
     "Java version: %@" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Java 版本：%@"
+          }
+        }
+      }
     },
     "Launch Game" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始游戏"
+          }
+        }
+      }
     },
     "Loaded %lld profiles" : {
-
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Loaded %lld profile"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "Loaded %lld profiles"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "以加载 %lld 游戏"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Loading Your Minecraft Account" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在加载我的世界账户"
+          }
+        }
+      }
     },
     "Loading..." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载中…"
+          }
+        }
+      }
     },
     "Login Through Microsoft With Device Code" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通过设别码登陆"
+          }
+        }
+      }
     },
     "Manage Games" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理游戏"
+          }
+        }
+      }
+    },
+    "Mangled" : {
 
     },
     "MB" : {
-
+      "shouldTranslate" : false
     },
     "Memory" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内存"
+          }
+        }
+      }
     },
     "No Accounts" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有账户"
+          }
+        }
+      }
     },
-    "No Game Directory Set" : {
-
+    "No Game Directory Selected" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无选中的游戏目录"
+          }
+        }
+      }
     },
     "No Game Selected" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无选中的游戏"
+          }
+        }
+      }
     },
     "None" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无"
+          }
+        }
+      }
     },
     "Ok" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好的"
+          }
+        }
+      }
     },
-    "Once you are logged in, click the button below to continue." : {
-
+    "Once you completed login in the browser, click the button below to continue." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当你在网页里完成登陆后，点击下面的按钮以继续"
+          }
+        }
+      }
     },
     "Open [%@](%@) and enter the following code: " : {
       "localizations" : {
@@ -164,65 +510,143 @@
             "state" : "new",
             "value" : "Open [%1$@](%2$@) and enter the following code: "
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开网页 [%1$@](%2$@) 并且输入以下代码："
+          }
         }
       }
     },
     "Open Game Folder" : {
-
-    },
-    "Open profile directory" : {
-
-    },
-    "Open saves folder" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开游戏文件夹"
+          }
+        }
+      }
     },
     "Open Saves Folder" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开存档文件夹"
+          }
+        }
+      }
     },
-    "Refresh Device Code" : {
+    "Profile" : {
 
     },
     "Resolution" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分辨率"
+          }
+        }
+      }
     },
     "Select a game directory to add to the list of game directories." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择游戏目录并添加"
+          }
+        }
+      }
     },
     "The current game directory is not set. Please select a game directory first." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前游戏目录未设置。请先选择一个游戏目录。"
+          }
+        }
+      }
     },
     "There is an error loading java versions" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载 JVM 版本时遇到问题"
+          }
+        }
+      }
     },
     "Turn On Per Game Settings" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用以下游戏设置"
+          }
+        }
+      }
     },
     "under the directory" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在以下文件路径"
+          }
+        }
+      }
     },
     "Use as Current Game Directory" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作为当前游戏目录"
+          }
+        }
+      }
     },
     "Use as current JVM" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作为当前 JVM"
+          }
+        }
+      }
     },
-    "username" : {
-
+    "Username" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户名"
+          }
+        }
+      }
     },
-    "Username: " : {
-
-    },
-    "uuid" : {
-
-    },
-    "UUID: " : {
-
+    "UUID" : {
+      "shouldTranslate" : false
     },
     "Width" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏宽"
+          }
+        }
+      }
     },
     "x" : {
-
+      "shouldTranslate" : false
     }
   },
   "version" : "1.0"

@@ -25,7 +25,7 @@ struct CurrentGameDirecotryChooser: View {
                     Text(currentDir.path)
                         .font(.footnote)
                 } else {
-                    Text("No Game Directory Set")
+                    Text("No Game Directory Selected")
                 }
             }
         }
@@ -85,7 +85,7 @@ struct AddGameDirectoryOption: View {
     var body: some View {
         VStack(spacing: 16) {
             VStack {
-                Picker("Folder Style", selection: $selectedStyle) {
+                Picker("Folder Structure Style", selection: $selectedStyle) {
                     ForEach(GameDirectoryType.allCases) { kase in
                         Text(kase.id)
                             .tag(kase)

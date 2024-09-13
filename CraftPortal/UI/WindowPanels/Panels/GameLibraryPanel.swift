@@ -172,7 +172,6 @@ struct DirectoryProfileListingEntry: View {
                             Image(systemName: "flag.checkered")
                             Text("Open Saves Folder")
                         }
-                        .help("Open saves folder")
                         .buttonStyle(.borderless)
 
                         Button {
@@ -182,16 +181,14 @@ struct DirectoryProfileListingEntry: View {
                             Image(systemName: "folder.badge.gearshape")
                             Text("Open Game Folder")
                         }
-                        .help("Open profile directory")
                         .buttonStyle(.borderless)
 
                         Button(role: .destructive) {
                             showingDeleteConfirmation = true
                         } label: {
                             Image(systemName: "trash")
-                            Text("Delete Profile")
+                            Text("Delete Game Profile")
                         }
-                        .help("Delete profile")
                         .buttonStyle(.borderless)
                     }
                     .padding()
