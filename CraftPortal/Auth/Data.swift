@@ -101,6 +101,17 @@ struct MinecraftAuthResponse: Decodable {
     let expiresIn: Int
 }
 
+struct MinecraftProductItem: Decodable {
+    let name: String
+    let signature: String
+}
+
+struct MinecraftProductResponse: Decodable {
+    let signature: String
+    let keyId: String
+    let items: [MinecraftProductItem]
+}
+
 enum MinecraftSkinState: String, Decodable {
     case inactive = "INACTIVE"
     case active = "ACTIVE"

@@ -9,4 +9,5 @@ enum LoginError: Error {
     case failedToDecodeResponse(response: String?, message: String)
     case noMinecraft(response: MinecraftUserFailureResponse)
     case cannotParsePlayerUUID(String)
+    case noMinecraftProduct(response: MinecraftProductResponse)
 }

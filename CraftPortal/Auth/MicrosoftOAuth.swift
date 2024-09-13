@@ -55,6 +55,7 @@ class Authenticator {
     static let minecraftAuth = URL(
         string:
         "https://api.minecraftservices.com/authentication/login_with_xbox")!
+    static let minecraftProduct = URL(string: "https://api.minecraftservices.com/entitlements/mcstore")!
     static let minecraftProfile = URL(
         string: "https://api.minecraftservices.com/minecraft/profile")!
 
@@ -211,6 +212,18 @@ class Authenticator {
         let (data, _) = try await session.data(for: request)
 
         return try decode(from: data, strategy: .convertFromSnakeCase, errorMessage: "Cannot decode Minecraft token. Please contact the developer.")
+    }
+
+    func getMinecraftProduct(from minecraftToken: String) async throws -> MinecraftProductResponse {
+        var request = URLRequest(url: Authenticator.minecraftProduct)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(minecraftToken)",
+        ]
+        let (data, _) = try await session.data(for: request)
+
+        return try decode(from: data, errorMessage: "Cannot decode Minecraft product details. Please contact the developer.")
     }
 
     func getMinecraftUser(from minecraftToken: String) async throws

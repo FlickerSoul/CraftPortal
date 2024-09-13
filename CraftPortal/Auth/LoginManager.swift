@@ -36,6 +36,12 @@ class LoginManager {
         let minecraftAuth = try await authenticator.getMinecraftToken(
             from: xsts.token, uhs: xsts.uhs
         )
+
+        let product = try await authenticator.getMinecraftProduct(from: minecraftAuth.accessToken)
+        if product.items.isEmpty {
+            throw LoginError.noMinecraftProduct(response: product)
+        }
+
         let user = try await authenticator.getMinecraftUser(
             from: minecraftAuth.accessToken)
 
