@@ -17,6 +17,12 @@
             "state" : "translated",
             "value" : "账户"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳戶"
+          }
         }
       }
     },
@@ -26,6 +32,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "添加用于游戏的 JVM 路径"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增一個 JVM 路徑來啟動遊戲。"
           }
         }
       }
@@ -37,6 +49,12 @@
             "state" : "translated",
             "value" : "添加微软账户"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增 Microsoft 帳戶"
+          }
         }
       }
     },
@@ -46,6 +64,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "添加离线账户"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增離線帳戶"
           }
         }
       }
@@ -57,6 +81,12 @@
             "state" : "translated",
             "value" : "添加目录"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增目錄"
+          }
         }
       }
     },
@@ -66,6 +96,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "增加游戏或者 Mods"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新增遊戲或模組"
           }
         }
       }
@@ -77,6 +113,12 @@
             "state" : "translated",
             "value" : "高级选项"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "進階"
+          }
         }
       }
     },
@@ -86,6 +128,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你确定想要删除此游戏吗"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您確定要刪除此檔案嗎？"
           }
         }
       }
@@ -97,6 +145,12 @@
             "state" : "translated",
             "value" : "自动"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動"
+          }
         }
       }
     },
@@ -106,6 +160,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已有的游戏目录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可用目錄"
           }
         }
       }
@@ -117,6 +177,12 @@
             "state" : "translated",
             "value" : "已有的 JVM"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可用的 JVM"
+          }
         }
       }
     },
@@ -127,12 +193,24 @@
             "state" : "translated",
             "value" : "后退"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "返回"
+          }
         }
       }
     },
     "Cancel" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "取消"
@@ -147,6 +225,12 @@
             "state" : "translated",
             "value" : "点此添加游戏账户"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "點擊此處新增帳戶"
+          }
         }
       }
     },
@@ -156,6 +240,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "关闭"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "關閉"
           }
         }
       }
@@ -167,6 +257,12 @@
             "state" : "translated",
             "value" : "正在连接微软服务器..."
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在聯絡 Microsoft…"
+          }
         }
       }
     },
@@ -176,6 +272,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "当前游戏目录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "當前遊戲目錄"
           }
         }
       }
@@ -187,6 +289,12 @@
             "state" : "translated",
             "value" : "删除"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刪除"
+          }
         }
       }
     },
@@ -196,6 +304,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "删除游戏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刪除遊戲檔案"
           }
         }
       }
@@ -207,6 +321,12 @@
             "state" : "translated",
             "value" : "自动添加已有的游戏"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動檢測遊戲檔案"
+          }
         }
       }
     },
@@ -216,6 +336,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "自动添加可用的 JVM"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動檢測可用的 JVM 路徑"
           }
         }
       }
@@ -227,6 +353,12 @@
             "state" : "translated",
             "value" : "自动添加可用的游戏"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動檢測可玩的遊戲檔案"
+          }
         }
       }
     },
@@ -236,6 +368,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "游戏目录结构"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目錄結構樣式"
           }
         }
       }
@@ -247,6 +385,12 @@
             "state" : "translated",
             "value" : "全屏"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全螢幕"
+          }
         }
       }
     },
@@ -256,6 +400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "游戏目录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "遊戲資料庫"
           }
         }
       }
@@ -267,6 +417,12 @@
             "state" : "translated",
             "value" : "游戏设置"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "遊戲設定"
+          }
         }
       }
     },
@@ -276,6 +432,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全剧设置"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全域設定"
           }
         }
       }
@@ -287,6 +449,12 @@
             "state" : "translated",
             "value" : "前往游戏目录"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往遊戲資料庫"
+          }
         }
       }
     },
@@ -296,6 +464,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "屏高"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高度"
           }
         }
       }
@@ -307,6 +481,12 @@
             "state" : "translated",
             "value" : "主页"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主頁"
+          }
         }
       }
     },
@@ -317,6 +497,12 @@
             "state" : "translated",
             "value" : "我已经登陆"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我已完成登錄"
+          }
         }
       }
     },
@@ -326,6 +512,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "内部状态错误。请联系开发者。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "內部狀態錯誤。請聯絡開發者。"
           }
         }
       }
@@ -350,6 +542,12 @@
             "state" : "translated",
             "value" : "Java 版本：%@"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Java 版本：%@"
+          }
         }
       }
     },
@@ -359,6 +557,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "开始游戏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "啟動遊戲"
           }
         }
       }
@@ -389,7 +593,19 @@
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "以加载 %lld 游戏"
+                  "value" : "已加载 %lld 游戏"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hant" : {
+          "variations" : {
+            "plural" : {
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "已載入 %lld 個檔案"
                 }
               }
             }
@@ -404,6 +620,12 @@
             "state" : "translated",
             "value" : "正在加载我的世界账户"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在載入 Minecraft 帳戶"
+          }
         }
       }
     },
@@ -413,6 +635,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加载中…"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "載入中…"
           }
         }
       }
@@ -424,6 +652,12 @@
             "state" : "translated",
             "value" : "通过设别码登陆"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "透過裝置代碼登入"
+          }
         }
       }
     },
@@ -433,6 +667,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "管理游戏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理遊戲"
           }
         }
       }
@@ -457,6 +697,12 @@
             "state" : "translated",
             "value" : "内存"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "記憶體"
+          }
         }
       }
     },
@@ -466,6 +712,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有账户"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有帳戶"
           }
         }
       }
@@ -477,6 +729,12 @@
             "state" : "translated",
             "value" : "无选中的游戏目录"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未選取遊戲目錄"
+          }
         }
       }
     },
@@ -486,6 +744,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无选中的游戏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未選取遊戲"
           }
         }
       }
@@ -497,12 +761,24 @@
             "state" : "translated",
             "value" : "无"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無"
+          }
         }
       }
     },
     "Ok" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好的"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "好的"
@@ -516,6 +792,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "当你在网页里完成登陆后，点击下面的按钮以继续"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "當您在瀏覽器中完成登錄後，請點擊下方按鈕繼續。"
           }
         }
       }
@@ -533,6 +815,12 @@
             "state" : "translated",
             "value" : "打开网页 [%1$@](%2$@) 并且输入以下代码："
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開[%1$@](%2$@)並輸入以下代碼："
+          }
         }
       }
     },
@@ -542,6 +830,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开游戏文件夹"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開遊戲資料夾"
           }
         }
       }
@@ -553,6 +847,12 @@
             "state" : "translated",
             "value" : "打开存档文件夹"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開存檔資料夾"
+          }
         }
       }
     },
@@ -562,6 +862,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分辨率"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解析度"
           }
         }
       }
@@ -573,6 +879,12 @@
             "state" : "translated",
             "value" : "选择游戏目录并添加"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇遊戲目錄以添加至列表"
+          }
         }
       }
     },
@@ -582,6 +894,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "当前游戏目录未设置。请先选择一个游戏目录。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目前的遊戲目錄未設定。請先選取遊戲目錄。"
           }
         }
       }
@@ -593,6 +911,12 @@
             "state" : "translated",
             "value" : "加载 JVM 版本时遇到问题"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "載入 JVM 版本時發生錯誤"
+          }
         }
       }
     },
@@ -602,6 +926,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用以下游戏设置"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "啟用每遊戲設定"
           }
         }
       }
@@ -613,6 +943,12 @@
             "state" : "translated",
             "value" : "在以下文件路径"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在此目錄下"
+          }
         }
       }
     },
@@ -622,6 +958,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "作为当前游戏目录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作為當前遊戲目錄"
           }
         }
       }
@@ -633,6 +975,12 @@
             "state" : "translated",
             "value" : "作为当前 JVM"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "作為當前 JVM"
+          }
         }
       }
     },
@@ -642,6 +990,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "用户名"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用戶名"
           }
         }
       }
@@ -655,6 +1009,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "屏宽"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "寬度"
           }
         }
       }
