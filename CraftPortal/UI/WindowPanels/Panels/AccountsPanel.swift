@@ -100,7 +100,7 @@ struct AddLocalAccountSheet: View {
                 Button {
                     let user = PlayerProfile(
                         id: uuid ?? defaultNewUUID, username: username,
-                        playerType: .Local
+                        playerType: .local
                     )
 
                     modelContext.insert(user)

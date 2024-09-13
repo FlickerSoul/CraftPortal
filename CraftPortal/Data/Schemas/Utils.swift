@@ -108,12 +108,12 @@ enum GameVersion: Codable, FullVersion {
 
 /// An enum representing the user profile type
 enum UserAccountType: Codable {
-    case Local
+    case local
     case MSA(expires: Date)
 
     var string: String {
         switch self {
-        case .Local: return "Local Account"
+        case .local: return "Local Account"
         case .MSA: return "Microsoft Account"
         }
     }

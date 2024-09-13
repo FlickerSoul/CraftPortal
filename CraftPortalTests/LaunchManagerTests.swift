@@ -458,7 +458,7 @@ extension LaunchScriptTests {
 extension LaunchScriptTests {
     static let mockLocalPlayer: PlayerProfile = .init(
         id: mockLocalPlayerId, username: "fake_username",
-        playerType: .Local
+        playerType: .local
     )
     static let mockedVanillaGamePath =
         Path(assetFolderPath)! / "ProfiledVanillaGame"

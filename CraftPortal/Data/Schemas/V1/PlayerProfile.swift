@@ -50,7 +50,7 @@ extension CraftPortalSchemaV1 {
 
         func getAccessToken() throws -> String {
             switch playerType {
-            case .Local:
+            case .local:
                 return id.flatUUIDString
             case let .MSA(expires: date):
                 if date < Date.now - 60 {
