@@ -9,10 +9,27 @@ import Foundation
 enum KeychainError: Error {
     case invalidData(for: String)
     case decodingError(for: String)
-    case unknownError(for: String, status: OSStatus)
+    case unknownQueryError(for: String, status: OSStatus)
+    case unknownSaveError(for: String, status: OSStatus)
+    case unknownDeleteError(for: String, status: OSStatus)
+
+    var description: String {
+        switch self {
+        case let .invalidData(for: key):
+            return "Invalid data for key \(key)"
+        case let .decodingError(for: key):
+            return "Decoding error for key \(key)"
+        case let .unknownSaveError(for: key, status):
+            return "Unknown save error for key \(key): \(status)"
+        case let .unknownDeleteError(for: key, status: status):
+            return "Unknown delete error for key \(key): \(status)"
+        case let .unknownQueryError(for: key, status: status):
+            return "Unknown query error for key \(key): \(status)"
+        }
+    }
 }
 
-struct EssentialCredentials {
+struct EssentialCredentials: Equatable {
     let oAuthAccessToken: String
     let oAuthRefreshToken: String
     let minecraftToken: String
@@ -27,24 +44,45 @@ struct KeychainManager {
     static let minecraftTokenKey: String = "MinecraftToken"
 
     static func saveFull(
-        account: UUID, oAuthAccessToken: String, oAuthRefreshToken: String,
-        minecraftToken: String
+        account: UUID, credential: EssentialCredentials
     ) throws {
-        try save(account: account, token: oAuthAccessToken, label: oAuthAccessTokenKey)
-        try save(account: account, token: oAuthRefreshToken, label: oAuthRefreshTokenKey)
-        try save(account: account, token: minecraftToken, label: minecraftTokenKey)
+        try save(
+            account: account,
+            token: credential.oAuthAccessToken,
+            label: oAuthAccessTokenKey
+        )
+        try save(
+            account: account,
+            token: credential.oAuthRefreshToken,
+            label: oAuthRefreshTokenKey
+        )
+        try save(
+            account: account,
+            token: credential.minecraftToken,
+            label: minecraftTokenKey
+        )
     }
 
     static func queryFull(account: UUID) throws -> EssentialCredentials {
-        let oAuthAccessToken = try query(account: account, label: oAuthAccessTokenKey)
-        let oAuthRefreshToken = try query(account: account, label: oAuthRefreshTokenKey)
-        let minecraftToken = try query(account: account, label: minecraftTokenKey)
+        let oAuthAccessToken = try query(
+            account: account, label: oAuthAccessTokenKey
+        )
+        let oAuthRefreshToken = try query(
+            account: account, label: oAuthRefreshTokenKey
+        )
+        let minecraftToken = try query(
+            account: account, label: minecraftTokenKey
+        )
 
         return EssentialCredentials(
             oAuthAccessToken: oAuthAccessToken,
             oAuthRefreshToken: oAuthRefreshToken,
             minecraftToken: minecraftToken
         )
+    }
+
+    static func accountToKey(account: UUID, label: String) -> String {
+        return "\(account.uuidString).\(label)"
     }
 
     static func deleteFull(account: UUID) {
@@ -58,36 +96,41 @@ struct KeychainManager {
             throw KeychainError.invalidData(for: label)
         }
 
-        let query: [String: Any] = [
+        let key = accountToKey(account: account, label: label)
+
+        let secQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
+            kSecAttrAccount as String: key,
             kSecAttrLabel as String: label,
             kSecValueData as String: data,
         ]
 
-        SecItemDelete(query as CFDictionary)
+        SecItemDelete(secQuery as CFDictionary)
 
-        let status = SecItemAdd(query as CFDictionary, nil)
+        let status = SecItemAdd(secQuery as CFDictionary, nil)
 
         if status != errSecSuccess {
-            throw KeychainError.unknownError(for: label, status: status)
+            throw KeychainError.unknownSaveError(for: label, status: status)
         }
     }
 
     static func query(account: UUID, label: String) throws -> String {
+        let key = accountToKey(account: account, label: label)
+
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
+            kSecAttrAccount as String: key,
             kSecAttrLabel as String: label,
-            kSecReturnData as String: kCFBooleanTrue!,
+            kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
         ]
 
-        var dataTypeRef: AnyObject? = nil
+        var dataTypeRef: CFTypeRef? = nil
         let status = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
-        if status == errSecSuccess {
+        switch status {
+        case errSecSuccess:
             if let data = dataTypeRef as? Data {
                 if let str = String(data: data, encoding: .utf8) {
                     return str
@@ -97,22 +140,32 @@ struct KeychainManager {
             } else {
                 throw KeychainError.invalidData(for: label)
             }
-        } else {
-            throw KeychainError.unknownError(for: label, status: status)
+        case _:
+            throw KeychainError.unknownQueryError(for: label, status: status)
         }
     }
 
     static func delete(account: UUID, label: String) throws {
+        let key = accountToKey(account: account, label: label)
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
+            kSecAttrAccount as String: key,
             kSecAttrLabel as String: label,
         ]
 
         let status = SecItemDelete(query as CFDictionary)
         if status != errSecSuccess {
-            throw KeychainError.unknownError(for: label, status: status)
+            throw KeychainError.unknownDeleteError(for: label, status: status)
         }
+    }
+
+    static func deleteAll() {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+        ]
+
+        let status = SecItemDelete(query as CFDictionary)
     }
 }
