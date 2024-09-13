@@ -31,10 +31,14 @@ private extension String {
     }
 }
 
-private func decode<T: Decodable>(from data: Data, strategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) throws -> T {
+private func decode<T: Decodable>(from data: Data, strategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys, errorMessage: String) throws -> T {
     let decoder = JSONDecoder()
     decoder.keyDecodingStrategy = strategy
-    return try decoder.decode(T.self, from: data)
+    do {
+        return try decoder.decode(T.self, from: data)
+    } catch {
+        throw LoginError.failedToDecodeResponse(response: String(data: data, encoding: .utf8), message: errorMessage)
+    }
 }
 
 class Authenticator {
@@ -109,7 +113,7 @@ class Authenticator {
         self.session = session
     }
 
-    func getDeviceCode() async throws -> DevicdeCodeResponse {
+    func getDeviceCode() async throws -> DeviceCodeResponse {
         var request = URLRequest(url: Authenticator.oauthDeviceCode)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = [
@@ -121,7 +125,7 @@ class Authenticator {
         ]).data(using: .utf8)
 
         let (data, _) = try await session.data(for: request)
-        return try decode(from: data, strategy: .convertFromSnakeCase)
+        return try decode(from: data, strategy: .convertFromSnakeCase, errorMessage: "Cannot decode device code response. Pleaese contact the developer.")
     }
 
     func getOAuthToken(deviceCode: String) async throws
@@ -139,7 +143,7 @@ class Authenticator {
         ]).data(using: .utf8)
 
         let (data, _) = try await session.data(for: request)
-        return try decode(from: data, strategy: .convertFromSnakeCase)
+        return try decode(from: data, strategy: .convertFromSnakeCase, errorMessage: "Cannot decode OAuth token response. Pleaese contact the developer.")
     }
 
     func refreshOAuthToken(refreshToken: String) async throws -> OAuthTokenResponse {
@@ -157,7 +161,7 @@ class Authenticator {
 
         let (data, _) = try await session.data(for: request)
 
-        return try decode(from: data, strategy: .convertFromSnakeCase)
+        return try decode(from: data, strategy: .convertFromSnakeCase, errorMessage: "Cannot refresh OAuth token. Please try again. If this error persists, please contact the developer.")
     }
 
     func getXboxLiveToken(from accessToken: String) async throws
@@ -173,7 +177,7 @@ class Authenticator {
 
         let (data, _) = try await session.data(for: request)
 
-        return try decode(from: data, strategy: .convertFromPascalCase)
+        return try decode(from: data, strategy: .convertFromPascalCase, errorMessage: "Cannot decode Xbox Live token. Pleaase contact the developer.")
     }
 
     func getXstsToken(from xblToken: String) async throws
@@ -188,7 +192,7 @@ class Authenticator {
         request.httpBody = Authenticator.getXstsAuthbody(from: xblToken)
         let (data, _) = try await session.data(for: request)
 
-        return try decode(from: data, strategy: .convertFromPascalCase)
+        return try decode(from: data, strategy: .convertFromPascalCase, errorMessage: "Cannot decode XSTS token. It is possible you have not registered your XBox Live account. Please contact the developer if you think this is an error.")
     }
 
     func getMinecraftToken(from xstsToken: String, uhs: String) async throws
@@ -206,7 +210,7 @@ class Authenticator {
 
         let (data, _) = try await session.data(for: request)
 
-        return try decode(from: data, strategy: .convertFromSnakeCase)
+        return try decode(from: data, strategy: .convertFromSnakeCase, errorMessage: "Cannot decode Minecraft token. Please contact the developer.")
     }
 
     func getMinecraftUser(from minecraftToken: String) async throws
@@ -221,6 +225,6 @@ class Authenticator {
         ]
         let (data, _) = try await session.data(for: request)
 
-        return try decode(from: data)
+        return try decode(from: data, errorMessage: "Cannot decode Minecraft player details. Please contact the developer.")
     }
 }

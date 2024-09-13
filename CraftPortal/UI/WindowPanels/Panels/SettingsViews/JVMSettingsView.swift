@@ -41,7 +41,7 @@ struct JVMChooser: View {
                     ForEach(
                         appState.jvmManager.sequentialVersions
                     ) { jvm in
-                        VStack(alignment: .center) {
+                        VStack(alignment: .leading) {
                             Text(jvm.version)
                                 .font(.headline)
                             Text(jvm.path)

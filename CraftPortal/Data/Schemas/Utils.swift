@@ -5,6 +5,8 @@
 //  Created by Larry Zeng on 8/31/24.
 //
 
+import Foundation
+
 protocol FullVersion {
     var fullVersion: String { get }
 }
@@ -106,7 +108,7 @@ enum GameVersion: Codable, FullVersion {
 /// An enum representing the user profile type
 enum UserAccountType: Codable {
     case Local
-    case MSA
+    case MSA(expires: Date)
 
     var string: String {
         switch self {

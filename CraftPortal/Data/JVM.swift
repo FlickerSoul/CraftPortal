@@ -126,8 +126,9 @@ struct JVMInformation: Codable, Equatable, Hashable, Identifiable {
 
             let versionNumberIndex = versionIndex + 1
             let version = String(components[versionNumberIndex])
+            let validVersion = version.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: .init(charactersIn: "\""))
 
-            return .init(path: path.string, version: version)
+            return .init(path: path.string, version: validVersion)
         }
 
         return nil

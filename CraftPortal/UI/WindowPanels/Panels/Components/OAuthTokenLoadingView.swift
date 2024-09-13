@@ -1,0 +1,81 @@
+//
+//  OAuthTokenLoadingView.swift
+//  CraftPortal
+//
+//  Created by Larry Zeng on 9/13/24.
+//
+import SwiftUI
+
+struct OAuthTokenLoadingView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var appState: AppState
+
+    @State private var userInfo: MinecraftUserSuccessResponse? = nil
+
+    let loginManager: LoginManager
+    let oAuthInfo: OAuthTokenInfo
+    let successCallback: () -> Void
+
+    var body: some View {
+        VStack {
+            Text("Loading Your Minecraft Account")
+            ProgressView()
+                .progressViewStyle(.circular)
+        }
+        .padding()
+        .task {
+            await addAccount()
+            dismiss()
+        }
+    }
+
+    private func addAccount() async {
+        let info: AccountInfo
+
+        do {
+            info = try await loginManager.login(withOAuthToken: oAuthInfo)
+        } catch {
+            appState.setError(
+                title: "Login Failed", description: error.localizedDescription
+            )
+            return
+        }
+
+        let idString = info.minecraftUser.id
+        guard let uuid = UUID(flatUUIDString: idString) else {
+            appState.setError(
+                title: "Cannnot Parse Player UUID",
+                description:
+                "Cannot parse player UUID (\(idString)) from response"
+            )
+            return
+        }
+
+        let expiresSeconds = info.minecraftCredential.expiresIn
+
+        let player = PlayerProfile(
+            id: uuid, username: info.minecraftUser.name,
+            playerType: .MSA(expires: Date.now + Double(expiresSeconds))
+        )
+
+        do {
+            try KeychainManager.saveFull(
+                account: uuid,
+                credential: .init(
+                    oAuthAccessToken: oAuthInfo.accessToken,
+                    oAuthRefreshToken: oAuthInfo.refreshToken,
+                    minecraftToken: info.minecraftCredential.accessToken
+                )
+            )
+
+            modelContext.insert(player)
+        } catch {
+            appState.setError(
+                title: "Cannot access keychain",
+                description:
+                "The application cannot access keychain to save the account. Please try again. Error: \(error)"
+            )
+        }
+    }
+}

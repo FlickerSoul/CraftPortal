@@ -5,7 +5,7 @@
 //  Created by Larry Zeng on 9/5/24.
 //
 
-struct DevicdeCodeResponse: Decodable {
+struct DeviceCodeResponse: Decodable {
     let deviceCode: String
     let userCode: String
     let verificationUri: String
@@ -24,6 +24,25 @@ enum OTokenFailureError: String, Decodable {
     case declined = "authorization_declined"
     case badDeviceCode = "bad_verification_code"
     case expiredCode = "expired_token"
+
+    var description: String {
+        rawValue.split(separator: "_").map {
+            String($0.first?.uppercased() ?? "") + $0[1...]
+        }.joined(separator: " ")
+    }
+
+    var detailedDescription: String {
+        switch self {
+        case .pending:
+            "You have not logged into your microsoft account. Please try again."
+        case .declined:
+            "You have declined logging in. Please refresh the device code and try again."
+        case .badDeviceCode:
+            "An internal error has occured. Please try again."
+        case .expiredCode:
+            "The device code has expired. Please refresh the device code and try again."
+        }
+    }
 }
 
 struct OTokenFailure: Decodable {
@@ -69,6 +88,10 @@ struct XstsTokenResponse: Decodable {
     let notAfter: String
     let token: String
     let displayClaims: XboxLiveTokenClaims
+
+    var uhs: String {
+        displayClaims.xui.first!["uhs"] ?? ""
+    }
 }
 
 struct MinecraftAuthResponse: Decodable {
@@ -78,19 +101,32 @@ struct MinecraftAuthResponse: Decodable {
     let expiresIn: Int
 }
 
+enum MinecraftSkinState: String, Decodable {
+    case inactive = "INACTIVE"
+    case active = "ACTIVE"
+}
+
 struct MinecraftSkin: Decodable {
     let id: String
-    let state: String
+    let state: MinecraftSkinState
     let url: String
+    let textureKey: String
     let variant: String
-    let alias: String
+    let alias: String?
+}
+
+struct MinecraftCape: Decodable {
+    let id: String
+    let state: MinecraftSkinState
+    let url: String
+    let alias: String?
 }
 
 struct MinecraftUserSuccessResponse: Decodable {
     let id: String
     let name: String
     let skins: [MinecraftSkin]
-    let capes: [String: String]
+    let capes: [MinecraftCape]
 }
 
 struct MinecraftUserFailureResponse: Decodable {

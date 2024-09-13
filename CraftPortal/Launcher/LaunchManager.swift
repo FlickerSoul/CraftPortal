@@ -107,14 +107,14 @@ class LaunchManager {
         multiLaunchOverride: Bool = false
     ) {
         guard let player = globalSettings.currentPlayerProfile else {
-            appState.currentError = .init(title: "No Player Profile", description: "Please select a player profile before launching the game.")
+            appState.setError(title: "No Player Profile", description: "Please select a player profile before launching the game.")
             return
         }
 
         let playerId = player.id
 
         if hasProcessRunning(for: playerId), !multiLaunchOverride {
-            appState.currentError = .init(title: "Already Launching", description: "A game is already being launched. You can continue if you wish to accept the risks.", callback: .init(buttonName: "Continue", callback: { [unowned self] in
+            appState.setError(title: "Already Launching", description: "A game is already being launched. You can continue if you wish to accept the risks.", callback: .init(buttonName: "Continue", callback: { [unowned self] in
                 self.launch(globalSettings: globalSettings, appState: appState, profile: profile, pipe: pipe, multiLaunchOverride: true)
             }))
             return
@@ -144,7 +144,7 @@ class LaunchManager {
             try executeScript(script, for: playerId, stdout: pipe, stderr: pipe) { process in
                 if process.terminationStatus != 0 {
                     DispatchQueue.main.async {
-                        appState.currentError = ErrorInfo(
+                        appState.setError(
                             title: "Game Exited Abnormally",
                             description:
                             "The exist code was not 0 but \(process.terminationStatus). Please check the logs for more information."
@@ -155,9 +155,9 @@ class LaunchManager {
 
             print("launch script executed")
         } catch let error as LauncherError {
-            appState.currentError = .init(title: "Experienced Launcher Error", description: error.description)
+            appState.setError(title: "Experienced Launcher Error", description: error.description)
         } catch {
-            appState.currentError = .init(title: "Experienced Unknown Error", description: error.localizedDescription)
+            appState.setError(title: "Experienced Unknown Error", description: error.localizedDescription)
         }
     }
 

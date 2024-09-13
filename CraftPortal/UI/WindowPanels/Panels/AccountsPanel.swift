@@ -18,10 +18,12 @@ struct AccountsListing: View {
         ScrollView {
             ForEach(players) { player in
                 HStack {
-                    SelectorIndicator(selected: player == globalSettings.currentPlayerProfile)
-                        .onTapGesture {
-                            globalSettings.currentPlayerProfile = player
-                        }
+                    SelectorIndicator(
+                        selected: player == globalSettings.currentPlayerProfile
+                    )
+                    .onTapGesture {
+                        globalSettings.currentPlayerProfile = player
+                    }
 
                     Text(player.username)
                         .font(.headline)
@@ -51,9 +53,7 @@ struct AccountsListing: View {
     }
 
     private func copyUUID(_ uuid: UUID) {
-        let clipboard = NSPasteboard.general
-        clipboard.clearContents()
-        clipboard.setString(uuid.uuidString, forType: .string)
+        copyText(uuid.uuidString)
     }
 }
 
@@ -119,6 +119,7 @@ struct AddLocalAccountSheet: View {
 
 struct AccountsPanel: View {
     @State private var showAddingLocalAccount: Bool = false
+    @State private var showAddingMSAccount: Bool = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -130,11 +131,14 @@ struct AccountsPanel: View {
 
                 HStack {
                     Button {
-                        // TODO: add msa account
+                        showAddingMSAccount = true
                     } label: {
                         Image(systemName: "m.square")
                     }
                     .help("Add a microsoft account")
+                    .sheet(isPresented: $showAddingMSAccount) {
+                        MSAccountAdderView()
+                    }
 
                     Button {
                         showAddingLocalAccount = true

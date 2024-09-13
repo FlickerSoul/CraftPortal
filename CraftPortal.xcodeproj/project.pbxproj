@@ -90,6 +90,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ContentView.swift,
+				Utils/Copy.swift,
 				Utils/ErrorSheetView.swift,
 				Utils/FileChooser.swift,
 				Utils/FrostGlassEffect.swift,
@@ -97,6 +98,9 @@
 				Utils/ImageSource.swift,
 				Utils/MouseUtil.swift,
 				WindowPanels/Panels/AccountsPanel.swift,
+				WindowPanels/Panels/Components/MSAccountAdderView.swift,
+				WindowPanels/Panels/Components/OAuthDeviceCodeView.swift,
+				WindowPanels/Panels/Components/OAuthTokenLoadingView.swift,
 				WindowPanels/Panels/Components/ProfilePicturePicker.swift,
 				WindowPanels/Panels/Components/SelectorIndicator.swift,
 				WindowPanels/Panels/GameLibraryPanel.swift,

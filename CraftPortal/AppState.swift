@@ -50,4 +50,8 @@ final class AppState: ObservableObject {
     func finishInitialization() {
         initialized = true
     }
+
+    func setError(title: String, description: String, callback: ErrorCallback? = nil) {
+        currentError = .init(title: title, description: description, callback: callback)
+    }
 }
