@@ -52,11 +52,9 @@ struct OAuthTokenLoadingView: View {
             return
         }
 
-        let expiresSeconds = info.minecraftCredential.expiresIn
-
         let player = PlayerProfile(
             id: uuid, username: info.minecraftUser.name,
-            playerType: .MSA(expires: Date.now + Double(expiresSeconds))
+            playerType: .MSA(expires: Date.now + info.minecraftCredential.expiresIn)
         )
 
         do {

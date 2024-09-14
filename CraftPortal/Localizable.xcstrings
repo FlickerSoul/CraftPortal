@@ -266,6 +266,9 @@
         }
       }
     },
+    "Continue" : {
+
+    },
     "Current Game Directory" : {
       "localizations" : {
         "zh-Hans" : {
@@ -920,6 +923,9 @@
         }
       }
     },
+    "There are already games lauched under the user name '%@'. Continue lauching new game intances may cause trouble for existing game plays. We are not responsible for any loss caused by this" : {
+
+    },
     "There is an error loading java versions" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1028,6 +1034,9 @@
     },
     "UUID" : {
       "shouldTranslate" : false
+    },
+    "Warning" : {
+
     },
     "Width" : {
       "localizations" : {

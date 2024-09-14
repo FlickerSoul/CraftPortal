@@ -29,14 +29,19 @@ class LoginManager {
             deviceCode: deviceCode)
     }
 
-    func refresh(with refreshToken: String, for uuid: UUID) async throws {
+    func refresh(with refreshToken: String, for uuid: UUID) async throws -> (EssentialCredentials, Date) {
         let response = try await authenticator.refreshOAuthToken(refreshToken: refreshToken)
+
         if case let .success(succ) = response {
             let accountInfo = try await login(withOAuthToken: succ)
 
             let credential: EssentialCredentials = .init(oAuthAccessToken: succ.accessToken, oAuthRefreshToken: succ.refreshToken, minecraftToken: accountInfo.minecraftCredential.accessToken)
 
             try KeychainManager.saveFull(account: uuid, credential: credential)
+
+            return (credential, Date.now + succ.expiresIn)
+        } else {
+            throw LoginError.failToRefreshLoginToken
         }
     }
 

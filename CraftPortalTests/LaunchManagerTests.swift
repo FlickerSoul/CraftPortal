@@ -34,7 +34,7 @@ struct ClassPathTests {
             withClientJar: Path(clientJar)!, features: [:]
         )
 
-        #expect(loadedCP == expectedCP)
+        #expect(loadedCP.joined(separator: ":") == expectedCP)
     }
 }
 
@@ -411,27 +411,31 @@ struct LaunchScriptTests {
         gameSettings: GameSettings,
         selectedJVM: SelectedJVM,
         expected: LaunchExpected
-    ) throws {
+    ) async throws {
         let launchManager = LaunchManager()
         let appState: AppState = .init()
 
         switch expected {
         case let .Error(expectedError):
-            #expect(throws: expectedError) {
-                _ = try launchManager.composeLaunchScript(
+            await #expect(throws: expectedError) {
+                _ = try await launchManager.composeLaunchScript(
                     player: player,
                     profile: profile,
                     selectedJVM: selectedJVM,
                     jvmManager: appState.jvmManager,
-                    gameSettings: .init(advanced: .init(jvm: .init(), workaround: .init()))
+                    gameSettings: .init(advanced: .init(jvm: .init(), workaround: .init())),
+                    notifier: { _ in },
+                    verify: false
                 )
             }
         case let .Success(expectedScript):
-            let composed = try launchManager.composeLaunchScript(
+            let composed = try await launchManager.composeLaunchScript(
                 player: player, profile: profile,
                 selectedJVM: selectedJVM,
                 jvmManager: appState.jvmManager,
-                gameSettings: gameSettings
+                gameSettings: gameSettings,
+                notifier: { _ in },
+                verify: false
             )
             let simplified = composed.replacingOccurrences(
                 of: LaunchScriptTests.assetFolderPath, with: ""

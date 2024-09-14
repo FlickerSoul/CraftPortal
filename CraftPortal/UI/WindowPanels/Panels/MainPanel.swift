@@ -12,8 +12,9 @@ import SwiftUICore
 
 struct MainPanel: View {
     @EnvironmentObject private var globalSettings: GlobalSettings
-    @EnvironmentObject var appState: AppState
-    var updatePanel: (FunctionPanel) -> Void
+    @State private var showLauchingLoading = false
+
+    let updatePanel: (FunctionPanel) -> Void
 
     var noGameSelected: Bool {
         globalSettings.currentGameProfile == nil
@@ -62,11 +63,17 @@ struct MainPanel: View {
             }
         }
         .hoverCursor()
+        .sheet(
+            isPresented: $showLauchingLoading,
+            content: {
+                LaunchStatusSheet()
+            }
+        )
         .onTapGesture {
             if noGameSelected {
                 updatePanel(.GameLibrary)
             } else {
-                appState.launchManager.launch(globalSettings: globalSettings, appState: appState)
+                self.showLauchingLoading = true
             }
         }
     }
@@ -75,7 +82,6 @@ struct MainPanel: View {
 #Preview("no game profile") {
     VStack {
         MainPanel { _ in }
-            .environmentObject(AppState())
     }
     .background(Image("HomeBackground2"))
 }

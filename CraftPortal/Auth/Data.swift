@@ -14,7 +14,7 @@ struct DeviceCodeResponse: Decodable {
 struct OAuthTokenInfo: Decodable {
     let tokenType: String
     let scope: String
-    let expiresIn: Int
+    let expiresIn: Double
     let accessToken: String
     let refreshToken: String
 }
@@ -98,7 +98,7 @@ struct MinecraftAuthResponse: Decodable {
     let username: String
     let accessToken: String
     let tokenType: String
-    let expiresIn: Int
+    let expiresIn: Double
 }
 
 struct MinecraftProductItem: Decodable {

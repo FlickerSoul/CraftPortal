@@ -10,4 +10,5 @@ enum LoginError: Error {
     case noMinecraft(response: MinecraftUserFailureResponse)
     case cannotParsePlayerUUID(String)
     case noMinecraftProduct(response: MinecraftProductResponse)
+    case failToRefreshLoginToken
 }

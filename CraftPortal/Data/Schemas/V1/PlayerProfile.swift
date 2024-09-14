@@ -48,15 +48,20 @@ extension CraftPortalSchemaV1 {
             return "msa"
         }
 
-        func getAccessToken() throws -> String {
+        func getAccessToken() async throws -> String {
             switch playerType {
             case .local:
                 return id.flatUUIDString
             case let .MSA(expires: date):
                 if date < Date.now - 60 {
-//                    let refreshToken  = try KeychainManager.query(account: id , label: KeychainManager.oAuthRefreshTokenKey)
-//                    LoginManager().refresh(with: refreshToken, for: id)
-                    // TODO: fix this
+                    let refreshToken = try KeychainManager.query(account: id, label: KeychainManager.oAuthRefreshTokenKey)
+                    let (credential, date) = try await LoginManager().refresh(with: refreshToken, for: id)
+                    do {
+                        try KeychainManager.saveFull(account: id, credential: credential)
+                        playerType = .MSA(expires: date)
+                    } catch {
+                        throw error
+                    }
                 }
 
                 return try KeychainManager.query(account: id, label: KeychainManager.minecraftTokenKey)

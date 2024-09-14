@@ -6,6 +6,7 @@
 //
 import Foundation
 import Path
+import SwiftData
 
 enum LaunchArguments: String, Equatable, Hashable {
     case authPlayerName = "auth_player_name"
@@ -66,6 +67,8 @@ enum LauncherError: Error, Equatable, CustomStringConvertible {
             return "Cannot create shell executable: \(reason)"
         case .cannotFindFullMetadata:
             return "Cannot find full metadata"
+        case let .verifyFailed(path):
+            return "Verification of \(path) failed"
         }
     }
 
@@ -75,6 +78,7 @@ enum LauncherError: Error, Equatable, CustomStringConvertible {
     case noPlayerProfile
     case cannotCreateShellExecutable(reason: String)
     case cannotFindFullMetadata
+    case verifyFailed(path: String)
 }
 
 private func ensureQuotes(_ value: String) -> String {
@@ -87,6 +91,8 @@ class LaunchManager {
         "has_custom_resolution": true,
     ]
 
+    typealias LaunchSubTask = String
+
     private(set) var launcherStates: [UUID: [Process]] = [:]
 
     func registerProcess(for uuid: UUID, _ process: Process) {
@@ -97,31 +103,31 @@ class LaunchManager {
         launcherStates[uuid]?.removeAll(where: { $0 === process })
     }
 
-    func hasProcessRunning(for uuid: UUID) -> Bool {
-        !launcherStates[uuid, default: []].isEmpty
+    func noProcessRunning(for uuid: UUID) -> Bool {
+        launcherStates[uuid, default: []].isEmpty
     }
 
+    // TODO: maybe not mainactor
+    @MainActor
     func launch(
         globalSettings: GlobalSettings,
         appState: AppState,
+        taskNotifier notify: @MainActor @escaping (LaunchSubTask) -> Void,
         profile: GameProfile? = nil,
-        pipe: Pipe? = nil,
-        multiLaunchOverride: Bool = false
-    ) {
+        pipe: Pipe? = nil
+    ) async {
         guard let player = globalSettings.currentPlayerProfile else {
-            appState.setError(title: "No Player Profile", description: "Please select a player profile before launching the game.")
+            appState.setError(
+                title: "No Player Profile",
+                description:
+                "Please select a player profile before launching the game."
+            )
             return
         }
 
         let playerId = player.id
 
-        if hasProcessRunning(for: playerId), !multiLaunchOverride {
-            appState.setError(title: "Already Launching", description: "A game is already being launched. You can continue if you wish to accept the risks.", callback: .init(buttonName: "Continue", callback: { [unowned self] in
-                self.launch(globalSettings: globalSettings, appState: appState, profile: profile, pipe: pipe, multiLaunchOverride: true)
-            }))
-            return
-        }
-
+        notify("Player check passed")
         GLOBAL_LOGGER.debug("Start launching game")
 
         do {
@@ -134,32 +140,43 @@ class LaunchManager {
 
             profile.lastPlayed = Date.now
 
-            let script = try composeLaunchScript(
+            notify("Profile check passed")
+
+            let script = try await composeLaunchScript(
                 player: player,
                 profile: profile,
                 selectedJVM: globalSettings.selectedJVM,
                 jvmManager: appState.jvmManager,
                 gameSettings: profile.perGameSettingsOn
-                    ? profile.gameSettings : globalSettings.gameSettings
+                    ? profile.gameSettings : globalSettings.gameSettings,
+                notifier: notify
             )
+
+            notify("Launch script generated")
 
             try executeScript(script, for: playerId, stdout: pipe, stderr: pipe) { process in
                 if process.terminationStatus != 0 {
-                    DispatchQueue.main.async {
-                        appState.setError(
-                            title: "Game Exited Abnormally",
-                            description:
-                            "The exist code was not 0 but \(process.terminationStatus). Please check the logs for more information."
-                        )
-                    }
+                    appState.setError(
+                        title: "Game Exited Abnormally",
+                        description:
+                        "The exist code was not 0 but \(process.terminationStatus). Please check the logs for more information."
+                    )
                 }
             }
 
+            notify("Launch script executed")
+
             GLOBAL_LOGGER.debug("Launch script executed")
         } catch let error as LauncherError {
-            appState.setError(title: "Experienced Launcher Error", description: error.description)
+            appState.setError(
+                title: "Experienced Launcher Error",
+                description: error.description
+            )
         } catch {
-            appState.setError(title: "Experienced Unknown Error", description: error.localizedDescription)
+            appState.setError(
+                title: "Experienced Unknown Error",
+                description: error.localizedDescription
+            )
         }
     }
 
@@ -186,7 +203,8 @@ class LaunchManager {
     }
 
     func executeScript(
-        _ script: String, for uuid: UUID, stdout: Pipe? = nil, stderr: Pipe? = nil,
+        _ script: String, for uuid: UUID, stdout: Pipe? = nil,
+        stderr: Pipe? = nil,
         endCallback: (@Sendable (Process) -> Void)? = nil
     ) throws {
         let script = try LaunchManager.createTemporaryBashScript(script)
@@ -241,16 +259,19 @@ class LaunchManager {
         return metaConfig
     }
 
+    @MainActor
     func composeLaunchScript(
         player: PlayerProfile,
         profile: GameProfile,
         selectedJVM: SelectedJVM,
         jvmManager: JVMManager,
-        gameSettings: GameSettings
-    ) throws
+        gameSettings: GameSettings,
+        notifier notify: @MainActor @escaping (LaunchSubTask) -> Void,
+        verify: Bool = true
+    ) async throws
         -> String
     {
-        // TODO: restructure this pipeline
+        // TODO: restructure this pipeline, this is too ugly
         let gameDir = profile.gameDirectory
         let fullVersion = profile.fullVersion
 
@@ -271,6 +292,8 @@ class LaunchManager {
             from: clientConfigPath, versionDir: clientVersionsDir
         )
 
+        notify("Minecraft metadata loaded")
+
         guard
             let javaPathString = jvmManager.resolveJVM(
                 for: selectedJVM, expected: metaConfig.javaVersion.majorVersion
@@ -281,10 +304,30 @@ class LaunchManager {
                 actual: selectedJVM.formattedVersion
             )
         }
+
+        notify("Java version verified")
+
         let javaPath = ensureQuotes(javaPathString)
 
         let resolutionSize = gameSettings.resolution.toSizeStrings()
-        let accessToken = try player.getAccessToken()
+
+        let accessToken = try await player.getAccessToken()
+
+        let classPaths = composeClassPaths(
+            from: metaConfig,
+            withLibBase: libraryPath,
+            withClientJar: clientJarPath,
+            features: LaunchManager.defaultLaunchFeatures
+        )
+
+        if verify {
+            try await verifyPaths(classPaths)
+            notify("Class paths verified")
+            try await verifyPath(profilePath.string)
+            notify("Game profile verified")
+            try await verifyPath(assetsPath.string)
+            notify("Assets directory verified")
+        }
 
         let argumentValues: LaunchArgValueCollection = [
             .authPlayerName: player.username,
@@ -303,15 +346,10 @@ class LaunchManager {
             .resolutionWidth: resolutionSize.width,
             .resolutionHeight: resolutionSize.height,
             .nativesDirectory: nativesPath.string, // the jvm args will be applied with quotes so we don't need it here
-            .launcherName: launcherName,
-            .launcherVersion: launcherVersion,
+            .launcherName: LaunchManager.launcherName,
+            .launcherVersion: LaunchManager.launcherVersion,
             .classpath: ensureQuotes(
-                composeClassPaths(
-                    from: metaConfig,
-                    withLibBase: libraryPath,
-                    withClientJar: clientJarPath,
-                    features: LaunchManager.defaultLaunchFeatures
-                )
+                classPaths.joined(separator: ":")
             ),
         ]
 
@@ -344,6 +382,18 @@ class LaunchManager {
         }
     }
 
+    func verifyPaths(_ paths: [String]) async throws {
+        for path in paths {
+            try await verifyPath(path)
+        }
+    }
+
+    func verifyPath(_ path: String) async throws {
+        if !FileManager.default.fileExists(atPath: path) {
+            throw LauncherError.verifyFailed(path: path)
+        }
+    }
+
     func loadClinetConfig(clientPath: Path) throws -> MinecraftMetadata {
         let data = try Data(contentsOf: clientPath.url.absoluteURL)
         return try JSONDecoder().decode(MinecraftMetadata.self, from: data)
@@ -354,7 +404,7 @@ class LaunchManager {
         withLibBase libBase: Path,
         withClientJar clientJar: Path,
         features: LaunchFeatureCollection
-    ) -> String {
+    ) -> [String] {
         var classPath: [String] = []
 
         for lib in meta.libraries {
@@ -398,7 +448,7 @@ class LaunchManager {
 
         classPath.append(clientJar.string)
 
-        return classPath.joined(separator: ":")
+        return classPath
     }
 
     func processStringArgument(
@@ -509,11 +559,7 @@ class LaunchManager {
         return results
     }
 
-    var launcherName: String {
-        return "CraftPortal"
-    }
+    static let launcherName: String = "CraftPortal"
 
-    var launcherVersion: String {
-        return AppState.appVersion
-    }
+    static let launcherVersion: String = AppState.appVersion
 }
