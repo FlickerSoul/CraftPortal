@@ -138,9 +138,6 @@
         }
       }
     },
-    "Assets directory verified" : {
-
-    },
     "Automatic" : {
       "localizations" : {
         "zh-Hans" : {
@@ -221,14 +218,25 @@
         }
       }
     },
-    "Checking game profile" : {
-
+    "Check game profile" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查游戏内容"
+          }
+        }
+      }
     },
-    "Checking player information" : {
-
-    },
-    "Class paths verified" : {
-
+    "Check player information" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查玩家信息"
+          }
+        }
+      }
     },
     "Click here to add an account" : {
       "localizations" : {
@@ -279,7 +287,14 @@
       }
     },
     "Continue" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续"
+          }
+        }
+      }
     },
     "Current Game Directory" : {
       "localizations" : {
@@ -377,8 +392,15 @@
         }
       }
     },
-    "Executing launch script" : {
-
+    "Execute launch script" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "执行启动脚本"
+          }
+        }
+      }
     },
     "Folder Structure Style" : {
       "localizations" : {
@@ -428,9 +450,6 @@
         }
       }
     },
-    "Game profile verified" : {
-
-    },
     "Game Settings" : {
       "localizations" : {
         "zh-Hans" : {
@@ -447,8 +466,15 @@
         }
       }
     },
-    "Generating launch script" : {
-
+    "Generate launch script" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生成启动脚本"
+          }
+        }
+      }
     },
     "Global Settings" : {
       "localizations" : {
@@ -494,6 +520,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "高度"
+          }
+        }
+      }
+    },
+    "Hide Logs" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏日志"
           }
         }
       }
@@ -591,6 +627,16 @@
         }
       }
     },
+    "Load Minecraft Metadata" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载游戏元数据"
+          }
+        }
+      }
+    },
     "Loaded %lld profiles" : {
       "localizations" : {
         "en" : {
@@ -636,9 +682,6 @@
           }
         }
       }
-    },
-    "Loading Minecraft Metadata" : {
-
     },
     "Loading Your Minecraft Account" : {
       "localizations" : {
@@ -931,6 +974,16 @@
         }
       }
     },
+    "Show Logs" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现实日志"
+          }
+        }
+      }
+    },
     "The current game directory is not set. Please select a game directory first." : {
       "localizations" : {
         "zh-Hans" : {
@@ -948,7 +1001,14 @@
       }
     },
     "There are already games lauched under the user name '%@'. Continue lauching new game intances may cause trouble for existing game plays. We are not responsible for any loss caused by this" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该玩家 (%@) 已经存在于游戏中。开启新游戏可能对已存在的游戏造成影响。我们对因此造成的损失不会负任何责任。"
+          }
+        }
+      }
     },
     "There is an error loading java versions" : {
       "localizations" : {
@@ -1059,11 +1119,55 @@
     "UUID" : {
       "shouldTranslate" : false
     },
-    "Verifying Java Version" : {
-
+    "Verify assets directory" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证游戏资产文件"
+          }
+        }
+      }
+    },
+    "Verify game profile" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证游戏本体"
+          }
+        }
+      }
+    },
+    "Verify Java Version" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证 Java 版本"
+          }
+        }
+      }
+    },
+    "Verify libraries" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "验证所需代码库"
+          }
+        }
+      }
     },
     "Warning" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "警告"
+          }
+        }
+      }
     },
     "Width" : {
       "localizations" : {

@@ -114,7 +114,7 @@ class LaunchManager {
         profile: GameProfile? = nil,
         pipe: Pipe? = nil
     ) async {
-        notify(.step(.init(name: "Checking player information")))
+        notify(.step(.init(name: "Check player information")))
 
         guard let player = globalSettings.currentPlayerProfile else {
             appState.setError(
@@ -130,7 +130,7 @@ class LaunchManager {
         GLOBAL_LOGGER.debug("Start launching game")
 
         do {
-            notify(.step(.init(name: "Checking game profile")))
+            notify(.step(.init(name: "Check game profile")))
 
             guard
                 let profile = profile
@@ -141,7 +141,7 @@ class LaunchManager {
 
             profile.lastPlayed = Date.now
 
-            notify(.step(.init(name: "Generating launch script")))
+            notify(.step(.init(name: "Generate launch script")))
 
             let script = try await composeLaunchScript(
                 player: player,
@@ -153,7 +153,7 @@ class LaunchManager {
                 notifier: notify
             )
 
-            notify(.step(.init(name: "Executing launch script")))
+            notify(.step(.init(name: "Execute launch script")))
 
             try executeScript(script, for: playerId, stdout: pipe, stderr: pipe) { process in
                 if process.terminationStatus != 0 {
@@ -166,6 +166,7 @@ class LaunchManager {
             }
 
             GLOBAL_LOGGER.debug("Launch script executed")
+
             notify(.success)
         } catch let error as LauncherError {
             notify(.failed)
@@ -290,12 +291,12 @@ class LaunchManager {
 
         let profilePath: Path = profile.getProfilePath()
 
-        notify(.step(.init(name: "Loading Minecraft Metadata")))
+        notify(.step(.init(name: "Load Minecraft Metadata")))
         let metaConfig = try getMinecraftMeta(
             from: clientConfigPath, versionDir: clientVersionsDir
         )
 
-        notify(.step(.init(name: "Verifying Java Version")))
+        notify(.step(.init(name: "Verify Java Version")))
         guard
             let javaPathString = jvmManager.resolveJVM(
                 for: selectedJVM, expected: metaConfig.javaVersion.majorVersion
@@ -321,11 +322,11 @@ class LaunchManager {
         )
 
         if verify {
-            notify(.step(.init(name: "Class paths verified")))
+            notify(.step(.init(name: "Verify libraries")))
             try await verifyPaths(classPaths)
-            notify(.step(.init(name: "Game profile verified")))
+            notify(.step(.init(name: "Verify game profile")))
             try await verifyPath(profilePath.string)
-            notify(.step(.init(name: "Assets directory verified")))
+            notify(.step(.init(name: "Verify assets directory")))
             try await verifyPath(assetsPath.string)
         }
 

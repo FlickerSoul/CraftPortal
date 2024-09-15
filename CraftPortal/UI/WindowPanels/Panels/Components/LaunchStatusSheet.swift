@@ -48,66 +48,108 @@ private enum LaunchStatus: Equatable {
 }
 
 private struct LaunchStatusLoadingView: View {
+    @Environment(\.openWindow) private var openWindow
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var globalSettings: GlobalSettings
     @EnvironmentObject private var appState: AppState
 
     @State private var taskDone: [LaunchSubTaskItem] = []
     @State private var status: LaunchStatus? = nil
+    @State private var logs: [String] = []
 
-    let pipe: Pipe = .init()
+    @State private var showLogs: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading) {
-            if taskDone.isEmpty {
-                ProgressView()
-                    .progressViewStyle(.linear)
-            } else {
-                ScrollView {
-                    ForEach(Array(taskDone.enumerated()), id: \.0) {
-                        index, task in
-                        VStack {
-                            HStack(alignment: .center) {
-                                Image(
-                                    systemName: status == .failed
-                                        ? "xmark.circle" : task.icon
-                                )
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 16, height: 16)
+        VStack {
+            HStack {
+                progress
+                    .transition(.identity)
 
-                                Divider()
-
-                                Text(task.name)
-
-                                Spacer()
-                            }
-
-                            if status == nil && index == taskDone.count - 1 {
-                                ProgressView()
-                                    .progressViewStyle(.linear)
-                            }
-                        }
+                Group {
+                    if showLogs {
+                        log
                     }
                 }
+                .transition(
+                    .asymmetric(
+                        insertion: .push(from: .top),
+                        removal: .push(from: .bottom)
+                    ))
             }
 
             HStack(alignment: .center) {
                 Button("Ok") {
                     dismiss()
                 }
+
+                Button(showLogs ? "Hide Logs" : "Show Logs") {
+                    withAnimation {
+                        showLogs.toggle()
+                    }
+                }
             }
         }
         .task {
-            await appState.launchManager.launch(
-                globalSettings: globalSettings,
-                appState: appState,
-                taskNotifier: addTask
-            )
+            await launch()
         }
     }
 
-    func addTask(_ task: LaunchSubTask) {
+    @ViewBuilder
+    private var log: some View {
+        ScrollViewReader { proxy in
+            ScrollView([.horizontal, .vertical]) {
+                LazyVStack(alignment: .leading) {
+                    ForEach(Array(logs.enumerated()), id: \.0) { _, log in
+                        Text(log)
+                        Divider()
+                    }
+                }
+            }
+            .onChange(of: logs.count) { _, newValue in
+                proxy.scrollTo(newValue - 1)
+            }
+        }
+        .defaultScrollAnchor(.bottom)
+    }
+
+    @ViewBuilder
+    private var progress: some View {
+        if taskDone.isEmpty {
+            ProgressView()
+                .progressViewStyle(.linear)
+        } else {
+            ScrollView {
+                ForEach(Array(taskDone.enumerated()), id: \.0) {
+                    index, task in
+                    VStack {
+                        HStack(alignment: .center) {
+                            Image(
+                                systemName: status == .failed
+                                    && index == taskDone.count - 1
+                                    ? "xmark.circle" : task.icon
+                            )
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 16, height: 16)
+
+                            Divider()
+
+                            Text(task.name)
+
+                            Spacer()
+                        }
+
+                        if status == nil && index == taskDone.count - 1 {
+                            ProgressView()
+                                .progressViewStyle(.linear)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func addTask(_ task: LaunchSubTask) {
         switch task {
         case .success:
             status = .success
@@ -116,6 +158,32 @@ private struct LaunchStatusLoadingView: View {
         case let .step(item):
             taskDone.append(item)
         }
+    }
+
+    private func launch() async {
+        let pipe = Pipe()
+
+        pipe.fileHandleForReading.readabilityHandler = { handle in
+            guard
+                let output = String(
+                    data: handle.availableData, encoding: .utf8
+                ),
+                !output.isEmpty
+            else { return }
+
+            DispatchQueue.main.async {
+                logs.append(
+                    output.trimmingCharacters(in: .whitespacesAndNewlines)
+                )
+            }
+        }
+
+        await appState.launchManager.launch(
+            globalSettings: globalSettings,
+            appState: appState,
+            taskNotifier: addTask,
+            pipe: pipe
+        )
     }
 }
 
