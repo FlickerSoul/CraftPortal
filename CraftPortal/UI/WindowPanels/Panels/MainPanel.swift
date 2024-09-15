@@ -74,28 +74,36 @@ struct MainPanel: View {
                 }
             }
         )
-        .sheet(isPresented: $showLaunch, content: {
-            LaunchStatusInfoView(inWindow: false)
-        })
+        .sheet(
+            isPresented: $showLaunch,
+            content: {
+                LaunchStatusInfoView(inWindow: false)
+            }
+        )
         .onTapGesture {
-            if noGameSelected {
-                updatePanel(.GameLibrary)
-            } else {
-                if let uuid = globalSettings.currentPlayerProfile?.id, !appState.launchManager.noProcessRunning(for: uuid) {
+            if let profile = globalSettings.currentGameProfile {
+                if let uuid = globalSettings.currentPlayerProfile?.id,
+                   !appState.launchManager.noProcessRunning(for: uuid)
+                {
                     showLaunchWarning = true
                     return
                 }
 
-                if globalSettings.gameSettings.showLogs {
+                let showLogs =
+                    profile.perGameSettingsOn
+                        ? profile.gameSettings.showLogs
+                        : globalSettings.gameSettings.showLogs
+
+                if showLogs {
                     openWindow(id: "launch-logs")
                 } else {
                     showLaunch = true
                 }
+            } else {
+                updatePanel(.GameLibrary)
             }
         }
     }
-
-    private func tryLaunch() {}
 }
 
 #Preview("no game profile") {

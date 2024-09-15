@@ -10,6 +10,8 @@ struct ShowLogsToggle: View {
     let showLogs: Binding<Bool>
 
     var body: some View {
-        Toggle("Show Logs", isOn: showLogs)
+        HStack {
+            Toggle("Show Logs", isOn: showLogs)
+        }.padding()
     }
 }

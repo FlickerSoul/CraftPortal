@@ -1,5 +1,5 @@
 //
-//  LaunchStatusLoadingView.swift
+//  LaunchStatusInfoView.swift
 //  CraftPortal
 //
 //  Created by Larry Zeng on 9/15/24.
@@ -114,23 +114,21 @@ struct LaunchStatusInfoView: View {
             Text("Logs")
                 .font(.title)
 
-            GeometryReader { _ in
-                ScrollViewReader { proxy in
-                    ScrollView([.horizontal, .vertical]) {
-                        ForEach(Array(logs.enumerated()), id: \.0) {
-                            _, log in
-                            VStack(alignment: .leading) {
-                                Text(log)
-                                Divider()
-                            }
+            ScrollViewReader { proxy in
+                ScrollView([.horizontal, .vertical]) {
+                    ForEach(Array(logs.enumerated()), id: \.0) {
+                        _, log in
+                        VStack(alignment: .leading) {
+                            Text(log)
+                            Divider()
                         }
                     }
-                    .onChange(of: logs.count) { _, newValue in
-                        proxy.scrollTo(newValue - 1)
-                    }
                 }
-                .defaultScrollAnchor(.bottom)
+                .onChange(of: logs.count) { _, newValue in
+                    proxy.scrollTo(newValue - 1)
+                }
             }
+            .defaultScrollAnchor(.bottom)
         }
     }
 
