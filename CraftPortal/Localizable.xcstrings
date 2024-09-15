@@ -617,7 +617,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全剧设置"
+            "value" : "全局设置"
           }
         },
         "zh-Hant" : {
@@ -881,6 +881,16 @@
         }
       }
     },
+    "Local Account" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本地账号"
+          }
+        }
+      }
+    },
     "Login Failed" : {
       "localizations" : {
         "zh-Hans" : {
@@ -958,6 +968,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "記憶體"
+          }
+        }
+      }
+    },
+    "Microsoft Account" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "微软账号"
           }
         }
       }

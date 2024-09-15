@@ -111,7 +111,7 @@ enum UserAccountType: Codable {
     case local
     case MSA(expires: Date)
 
-    var string: String {
+    var localizedStringKey: LocalizedStringKey {
         switch self {
         case .local: return "Local Account"
         case .MSA: return "Microsoft Account"

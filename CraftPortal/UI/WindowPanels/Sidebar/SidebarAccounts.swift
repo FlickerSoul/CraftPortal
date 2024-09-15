@@ -41,7 +41,7 @@ struct SidebarAccounts: View {
             Text(player.username)
                 .font(.headline)
                 .foregroundColor(.primary)
-            Text(player.playerType.string)
+            Text(player.playerType.localizedStringKey)
                 .font(.subheadline)
         }
     }
