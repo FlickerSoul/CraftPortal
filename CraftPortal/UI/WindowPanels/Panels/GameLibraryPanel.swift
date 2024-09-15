@@ -200,6 +200,29 @@ struct DirectoryProfileListingEntry: View {
         .popover(isPresented: $showingPopover) {
             VStack(alignment: .leading) {
                 Button {
+                    let panel = NSSavePanel()
+                    panel.canCreateDirectories = true
+                    panel.title = "Save Launch Script"
+                    panel.begin { response in
+                        if response == .OK {
+                            // TODO: save launch script
+                        }
+                    }
+                } label: {
+                    Image(systemName: "")
+                    Text("Export Launch Script")
+                }
+
+                Button {
+                    // TODO: copy launch script
+                } label: {
+                    Image(systemName: "doc.on.doc")
+                    Text("Copy Launch Script")
+                }
+
+                Divider()
+
+                Button {
                     let path = profile.getSavesPath()
                     NSWorkspace.shared.open(path.url)
                 } label: {
@@ -216,6 +239,8 @@ struct DirectoryProfileListingEntry: View {
                     Text("Open Game Folder")
                 }
                 .buttonStyle(.borderless)
+
+                Divider()
 
                 Button(role: .destructive) {
                     showingDeleteConfirmation = true

@@ -192,8 +192,6 @@ class LaunchManager {
 
         let tempFileURL = tempDirectory.appendingPathComponent(fileName)
 
-        let script = "#!/bin/bash\n\(script)\n"
-
         do {
             try script.write(to: tempFileURL, atomically: true, encoding: .utf8)
             try FileManager.default.setAttributes(
@@ -377,12 +375,18 @@ class LaunchManager {
         let javaLaunchScript =
             "\(cdGameProfileDir)\(javaPath) \(jvmArgs) \(mainClass) \(gameArgs)"
 
-        if case .normal = gameSettings.processPriority {
-            return javaLaunchScript
+        return composeFinalScript(javaLaunchScript, settings: gameSettings)
+    }
+
+    func composeFinalScript(_ javaLaunchScript: String, settings: GameSettings) -> String {
+        let script: String
+        if case .normal = settings.processPriority {
+            script = javaLaunchScript
         } else {
-            return
-                "nice -n \(gameSettings.processPriority.rawValue) \(javaLaunchScript)"
+            script =
+                "nice -n \(settings.processPriority.rawValue) \(javaLaunchScript)"
         }
+        return "#!/bin/bash\n\(script)\n"
     }
 
     func verifyPaths(_ paths: [String]) async throws {

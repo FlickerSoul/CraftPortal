@@ -376,6 +376,16 @@
         }
       }
     },
+    "Copy Launch Script" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制启动脚本"
+          }
+        }
+      }
+    },
     "Current Game Directory" : {
       "localizations" : {
         "zh-Hans" : {
@@ -514,6 +524,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "出现未知错误"
+          }
+        }
+      }
+    },
+    "Export Launch Script" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出启动脚本"
           }
         }
       }
