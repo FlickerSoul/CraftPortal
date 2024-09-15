@@ -65,44 +65,14 @@ struct MainPanel: View {
                 }
             }
         }
-        .hoverCursor()
-        .sheet(
-            isPresented: $showLaunchWarning, // TODO: decouple this
-            content: {
-                if let profile = globalSettings.currentPlayerProfile {
-                    LaunchStatusMultiInstanceWarning(username: profile.username)
-                }
-            }
-        )
-        .sheet(
-            isPresented: $showLaunch,
-            content: {
-                LaunchStatusInfoView(inWindow: false)
-            }
-        )
-        .onTapGesture {
-            if let profile = globalSettings.currentGameProfile {
-                if let uuid = globalSettings.currentPlayerProfile?.id,
-                   !appState.launchManager.noProcessRunning(for: uuid)
-                {
-                    showLaunchWarning = true
-                    return
-                }
-
-                let showLogs =
-                    profile.perGameSettingsOn
-                        ? profile.gameSettings.showLogs
-                        : globalSettings.gameSettings.showLogs
-
-                if showLogs {
-                    openWindow(id: "launch-logs")
-                } else {
-                    showLaunch = true
-                }
-            } else {
+        .asLaunchButton(
+            appState: appState, globalSettings: globalSettings,
+            openWindow: openWindow, showLaunchWarning: $showLaunchWarning,
+            showLaunch: $showLaunch,
+            failedCallback: {
                 updatePanel(.GameLibrary)
             }
-        }
+        )
     }
 }
 

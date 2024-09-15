@@ -126,7 +126,10 @@ struct DeleteProfileConfirmation: View {
                     do {
                         try profile.gameDirectory.deleteGame(profile)
                     } catch {
-                        appState.setError(title: "Failed to delete profile", description: error.localizedDescription)
+                        appState.setError(
+                            title: "Failed to delete profile",
+                            description: error.localizedDescription
+                        )
                     }
 
                     dismiss()
@@ -135,6 +138,26 @@ struct DeleteProfileConfirmation: View {
             }
         }
         .padding()
+    }
+}
+
+struct ProfileLaunchButton: View {
+    let profile: GameProfile
+
+    @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var globalSettings: GlobalSettings
+    @Environment(\.openWindow) private var openWindow
+
+    @State var showLaunchWarning: Bool = false
+    @State var showLaunch: Bool = false
+
+    var body: some View {
+        Image(systemName: "restart.circle")
+            .asLaunchButton(
+                appState: appState, globalSettings: globalSettings,
+                openWindow: openWindow, showLaunchWarning: $showLaunchWarning,
+                showLaunch: $showLaunch, gameProfile: profile
+            )
     }
 }
 
@@ -157,46 +180,54 @@ struct DirectoryProfileListingEntry: View {
             Spacer(minLength: 32)
 
             HStack {
+                ProfileLaunchButton(profile: profile)
+                    .help("Launch this game")
+
+                moreActions
+            }
+        }
+    }
+
+    @ViewBuilder
+    var moreActions: some View {
+        Button {
+            showingPopover = true
+        } label: {
+            Image(systemName: "ellipsis.circle")
+        }
+        .buttonStyle(.borderless)
+        .popover(isPresented: $showingPopover) {
+            VStack(alignment: .leading) {
                 Button {
-                    showingPopover = true
+                    let path = profile.getSavesPath()
+                    NSWorkspace.shared.open(path.url)
                 } label: {
-                    Image(systemName: "ellipsis.circle")
+                    Image(systemName: "flag.checkered")
+                    Text("Open Saves Folder")
                 }
                 .buttonStyle(.borderless)
-                .popover(isPresented: $showingPopover) {
-                    VStack(alignment: .leading) {
-                        Button {
-                            let path = profile.getSavesPath()
-                            NSWorkspace.shared.open(path.url)
-                        } label: {
-                            Image(systemName: "flag.checkered")
-                            Text("Open Saves Folder")
-                        }
-                        .buttonStyle(.borderless)
 
-                        Button {
-                            let path = profile.getProfilePath()
-                            NSWorkspace.shared.open(path.url)
-                        } label: {
-                            Image(systemName: "folder.badge.gearshape")
-                            Text("Open Game Folder")
-                        }
-                        .buttonStyle(.borderless)
+                Button {
+                    let path = profile.getProfilePath()
+                    NSWorkspace.shared.open(path.url)
+                } label: {
+                    Image(systemName: "folder.badge.gearshape")
+                    Text("Open Game Folder")
+                }
+                .buttonStyle(.borderless)
 
-                        Button(role: .destructive) {
-                            showingDeleteConfirmation = true
-                        } label: {
-                            Image(systemName: "trash")
-                            Text("Delete Game Profile")
-                        }
-                        .buttonStyle(.borderless)
-                    }
-                    .padding()
+                Button(role: .destructive) {
+                    showingDeleteConfirmation = true
+                } label: {
+                    Image(systemName: "trash")
+                    Text("Delete Game Profile")
                 }
-                .sheet(isPresented: $showingDeleteConfirmation) {
-                    DeleteProfileConfirmation(profile: profile)
-                }
+                .buttonStyle(.borderless)
             }
+            .padding()
+        }
+        .sheet(isPresented: $showingDeleteConfirmation) {
+            DeleteProfileConfirmation(profile: profile)
         }
     }
 }

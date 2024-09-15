@@ -627,6 +627,16 @@
         }
       }
     },
+    "Launch this game" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动此游戏"
+          }
+        }
+      }
+    },
     "Load Minecraft Metadata" : {
       "localizations" : {
         "zh-Hans" : {

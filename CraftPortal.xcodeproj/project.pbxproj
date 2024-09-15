@@ -102,6 +102,7 @@
 				Utils/MouseUtil.swift,
 				WindowPanels/Panels/AccountsPanel.swift,
 				WindowPanels/Panels/Components/AsCurrentPlayerView.swift,
+				WindowPanels/Panels/Components/LaunchButtonModifier.swift,
 				WindowPanels/Panels/Components/LaunchStatusInfoView.swift,
 				WindowPanels/Panels/Components/LaunchStatusMultiInstanceWarning.swift,
 				WindowPanels/Panels/Components/MSAccountAdderView.swift,
