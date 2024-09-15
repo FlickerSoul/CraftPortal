@@ -209,7 +209,7 @@ struct DirectoryProfileListingEntry: View {
                         }
                     }
                 } label: {
-                    Image(systemName: "")
+                    Image(systemName: "square.and.arrow.up")
                     Text("Export Launch Script")
                 }
 
@@ -229,7 +229,6 @@ struct DirectoryProfileListingEntry: View {
                     Image(systemName: "flag.checkered")
                     Text("Open Saves Folder")
                 }
-                .buttonStyle(.borderless)
 
                 Button {
                     let path = profile.getProfilePath()
@@ -238,7 +237,6 @@ struct DirectoryProfileListingEntry: View {
                     Image(systemName: "folder.badge.gearshape")
                     Text("Open Game Folder")
                 }
-                .buttonStyle(.borderless)
 
                 Divider()
 
@@ -248,8 +246,8 @@ struct DirectoryProfileListingEntry: View {
                     Image(systemName: "trash")
                     Text("Delete Game Profile")
                 }
-                .buttonStyle(.borderless)
             }
+            .buttonStyle(.borderless)
             .padding()
         }
         .sheet(isPresented: $showingDeleteConfirmation) {
