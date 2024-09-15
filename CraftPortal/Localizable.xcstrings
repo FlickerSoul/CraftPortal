@@ -138,6 +138,9 @@
         }
       }
     },
+    "Assets directory verified" : {
+
+    },
     "Automatic" : {
       "localizations" : {
         "zh-Hans" : {
@@ -217,6 +220,15 @@
           }
         }
       }
+    },
+    "Checking game profile" : {
+
+    },
+    "Checking player information" : {
+
+    },
+    "Class paths verified" : {
+
     },
     "Click here to add an account" : {
       "localizations" : {
@@ -365,6 +377,9 @@
         }
       }
     },
+    "Executing launch script" : {
+
+    },
     "Folder Structure Style" : {
       "localizations" : {
         "zh-Hans" : {
@@ -413,6 +428,9 @@
         }
       }
     },
+    "Game profile verified" : {
+
+    },
     "Game Settings" : {
       "localizations" : {
         "zh-Hans" : {
@@ -428,6 +446,9 @@
           }
         }
       }
+    },
+    "Generating launch script" : {
+
     },
     "Global Settings" : {
       "localizations" : {
@@ -615,6 +636,9 @@
           }
         }
       }
+    },
+    "Loading Minecraft Metadata" : {
+
     },
     "Loading Your Minecraft Account" : {
       "localizations" : {
@@ -1034,6 +1058,9 @@
     },
     "UUID" : {
       "shouldTranslate" : false
+    },
+    "Verifying Java Version" : {
+
     },
     "Warning" : {
 

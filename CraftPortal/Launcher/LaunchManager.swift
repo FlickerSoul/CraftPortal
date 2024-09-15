@@ -91,8 +91,6 @@ class LaunchManager {
         "has_custom_resolution": true,
     ]
 
-    typealias LaunchSubTask = String
-
     private(set) var launcherStates: [UUID: [Process]] = [:]
 
     func registerProcess(for uuid: UUID, _ process: Process) {
@@ -116,6 +114,8 @@ class LaunchManager {
         profile: GameProfile? = nil,
         pipe: Pipe? = nil
     ) async {
+        notify(.step(.init(name: "Checking player information")))
+
         guard let player = globalSettings.currentPlayerProfile else {
             appState.setError(
                 title: "No Player Profile",
@@ -127,10 +127,11 @@ class LaunchManager {
 
         let playerId = player.id
 
-        notify("Player check passed")
         GLOBAL_LOGGER.debug("Start launching game")
 
         do {
+            notify(.step(.init(name: "Checking game profile")))
+
             guard
                 let profile = profile
                 ?? globalSettings.currentGameProfile
@@ -140,7 +141,7 @@ class LaunchManager {
 
             profile.lastPlayed = Date.now
 
-            notify("Profile check passed")
+            notify(.step(.init(name: "Generating launch script")))
 
             let script = try await composeLaunchScript(
                 player: player,
@@ -152,7 +153,7 @@ class LaunchManager {
                 notifier: notify
             )
 
-            notify("Launch script generated")
+            notify(.step(.init(name: "Executing launch script")))
 
             try executeScript(script, for: playerId, stdout: pipe, stderr: pipe) { process in
                 if process.terminationStatus != 0 {
@@ -164,15 +165,16 @@ class LaunchManager {
                 }
             }
 
-            notify("Launch script executed")
-
             GLOBAL_LOGGER.debug("Launch script executed")
+            notify(.success)
         } catch let error as LauncherError {
+            notify(.failed)
             appState.setError(
                 title: "Experienced Launcher Error",
                 description: error.description
             )
         } catch {
+            notify(.failed)
             appState.setError(
                 title: "Experienced Unknown Error",
                 description: error.localizedDescription
@@ -288,12 +290,12 @@ class LaunchManager {
 
         let profilePath: Path = profile.getProfilePath()
 
+        notify(.step(.init(name: "Loading Minecraft Metadata")))
         let metaConfig = try getMinecraftMeta(
             from: clientConfigPath, versionDir: clientVersionsDir
         )
 
-        notify("Minecraft metadata loaded")
-
+        notify(.step(.init(name: "Verifying Java Version")))
         guard
             let javaPathString = jvmManager.resolveJVM(
                 for: selectedJVM, expected: metaConfig.javaVersion.majorVersion
@@ -304,8 +306,6 @@ class LaunchManager {
                 actual: selectedJVM.formattedVersion
             )
         }
-
-        notify("Java version verified")
 
         let javaPath = ensureQuotes(javaPathString)
 
@@ -321,12 +321,12 @@ class LaunchManager {
         )
 
         if verify {
+            notify(.step(.init(name: "Class paths verified")))
             try await verifyPaths(classPaths)
-            notify("Class paths verified")
+            notify(.step(.init(name: "Game profile verified")))
             try await verifyPath(profilePath.string)
-            notify("Game profile verified")
+            notify(.step(.init(name: "Assets directory verified")))
             try await verifyPath(assetsPath.string)
-            notify("Assets directory verified")
         }
 
         let argumentValues: LaunchArgValueCollection = [

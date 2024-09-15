@@ -42,38 +42,60 @@ private struct LaunchStatusMultiInstanceWarning: View {
     LaunchStatusMultiInstanceWarning(username: "user_name", override: $override)
 }
 
+private enum LaunchStatus: Equatable {
+    case success
+    case failed
+}
+
 private struct LaunchStatusLoadingView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var globalSettings: GlobalSettings
     @EnvironmentObject private var appState: AppState
 
-    @State private var taskDone: [LaunchManager.LaunchSubTask] = []
+    @State private var taskDone: [LaunchSubTaskItem] = []
+    @State private var status: LaunchStatus? = nil
 
     let pipe: Pipe = .init()
 
     var body: some View {
         VStack(alignment: .leading) {
-            ScrollView {
-                ForEach(taskDone, id: \.self) { task in
-                    HStack(alignment: .center) {
-                        Image(systemName: "checkmark.circle")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 16, height: 16)
+            if taskDone.isEmpty {
+                ProgressView()
+                    .progressViewStyle(.linear)
+            } else {
+                ScrollView {
+                    ForEach(Array(taskDone.enumerated()), id: \.0) {
+                        index, task in
+                        VStack {
+                            HStack(alignment: .center) {
+                                Image(
+                                    systemName: status == .failed
+                                        ? "xmark.circle" : task.icon
+                                )
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 16, height: 16)
 
-                        Divider()
+                                Divider()
 
-                        Text(task)
+                                Text(task.name)
 
-                        Spacer()
+                                Spacer()
+                            }
+
+                            if status == nil && index == taskDone.count - 1 {
+                                ProgressView()
+                                    .progressViewStyle(.linear)
+                            }
+                        }
                     }
                 }
             }
 
-            ProgressView().progressViewStyle(.circular)
-
-            Button("Ok") {
-                dismiss()
+            HStack(alignment: .center) {
+                Button("Ok") {
+                    dismiss()
+                }
             }
         }
         .task {
@@ -85,8 +107,15 @@ private struct LaunchStatusLoadingView: View {
         }
     }
 
-    func addTask(_ task: LaunchManager.LaunchSubTask) {
-        taskDone.append(task)
+    func addTask(_ task: LaunchSubTask) {
+        switch task {
+        case .success:
+            status = .success
+        case .failed:
+            status = .failed
+        case let .step(item):
+            taskDone.append(item)
+        }
     }
 }
 
