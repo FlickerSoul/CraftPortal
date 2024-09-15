@@ -7,6 +7,7 @@
 import Foundation
 import Path
 import SwiftData
+import struct SwiftUICore.LocalizedStringKey
 
 final class AppState: ObservableObject {
     private(set) var launchManager: LaunchManager
@@ -51,7 +52,7 @@ final class AppState: ObservableObject {
         initialized = true
     }
 
-    func setError(title: String, description: String, callback: ErrorCallback? = nil) {
+    func setError(title: LocalizedStringKey, description: LocalizedStringKey, callback: ErrorCallback? = nil) {
         currentError = .init(title: title, description: description, callback: callback)
     }
 }

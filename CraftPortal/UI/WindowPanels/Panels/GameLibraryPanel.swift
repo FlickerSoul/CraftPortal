@@ -127,8 +127,9 @@ struct DeleteProfileConfirmation: View {
                         try profile.gameDirectory.deleteGame(profile)
                     } catch {
                         appState.setError(
-                            title: "Failed to delete profile",
-                            description: error.localizedDescription
+                            title: "Failed to delete game profile",
+                            description: LocalizedStringKey(
+                                error.localizedDescription)
                         )
                     }
 

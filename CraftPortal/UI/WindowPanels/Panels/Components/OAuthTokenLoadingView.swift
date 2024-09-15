@@ -37,7 +37,8 @@ struct OAuthTokenLoadingView: View {
             GLOBAL_LOGGER.debug("Login info retrieved")
         } catch {
             appState.setError(
-                title: "Login Failed", description: error.localizedDescription
+                title: "Login Failed",
+                description: LocalizedStringKey(error.localizedDescription)
             )
             return
         }
@@ -54,7 +55,8 @@ struct OAuthTokenLoadingView: View {
 
         let player = PlayerProfile(
             id: uuid, username: info.minecraftUser.name,
-            playerType: .MSA(expires: Date.now + info.minecraftCredential.expiresIn)
+            playerType: .MSA(
+                expires: Date.now + info.minecraftCredential.expiresIn)
         )
 
         do {
@@ -76,7 +78,7 @@ struct OAuthTokenLoadingView: View {
             appState.setError(
                 title: "Cannot access keychain",
                 description:
-                "The application cannot access keychain to save the account. Please try again. Error: \(error)"
+                "The application cannot access keychain to save the account. Please try again. Error: \(error.localizedDescription)"
             )
         }
 

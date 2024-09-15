@@ -5,20 +5,21 @@
 //  Created by Larry Zeng on 9/8/24.
 //
 import Foundation
+import SwiftUICore
 
 struct ErrorCallback {
-    let buttonName: String
+    let buttonName: LocalizedStringKey
     let callback: () -> Void
 }
 
 /// Error information used to display prompts to users
 struct ErrorInfo: Identifiable {
     let id: UUID = .init()
-    let title: String
-    let description: String
+    let title: LocalizedStringKey
+    let description: LocalizedStringKey
     var callbacks: [ErrorCallback] = []
 
-    init(title: String, description: String, callback: ErrorCallback? = nil) {
+    init(title: LocalizedStringKey, description: LocalizedStringKey, callback: ErrorCallback? = nil) {
         self.title = title
         self.description = description
         if let callback {

@@ -8,6 +8,8 @@ import Foundation
 import Path
 import SwiftData
 
+import struct SwiftUICore.LocalizedStringKey
+
 enum LaunchArguments: String, Equatable, Hashable {
     case authPlayerName = "auth_player_name"
     case versionName = "version_name"
@@ -52,8 +54,8 @@ enum LauncherState: Equatable {
     case launching
 }
 
-enum LauncherError: Error, Equatable, CustomStringConvertible {
-    var description: String {
+enum LauncherError: Error, Equatable {
+    var localizedStringKey: LocalizedStringKey {
         switch self {
         case .launchFailed:
             return "Launch failed"
@@ -68,7 +70,7 @@ enum LauncherError: Error, Equatable, CustomStringConvertible {
         case .cannotFindFullMetadata:
             return "Cannot find full metadata"
         case let .verifyFailed(path):
-            return "Verification of \(path) failed"
+            return "Verification of path \(path) failed"
         }
     }
 
@@ -172,13 +174,13 @@ class LaunchManager {
             notify(.failed)
             appState.setError(
                 title: "Experienced Launcher Error",
-                description: error.description
+                description: error.localizedStringKey
             )
         } catch {
             notify(.failed)
             appState.setError(
                 title: "Experienced Unknown Error",
-                description: error.localizedDescription
+                description: LocalizedStringKey(error.localizedDescription)
             )
         }
     }

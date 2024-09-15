@@ -20,7 +20,7 @@ struct ErrorSheetView: View {
                     .font(.headline)
             }
             HStack {
-                ForEach(error.callbacks, id: \.buttonName) { callback in
+                ForEach(Array(error.callbacks.enumerated()), id: \.0) { _, callback in
                     Button(callback.buttonName) {
                         callback.callback()
                         dismiss()

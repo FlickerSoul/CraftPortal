@@ -109,7 +109,9 @@ struct OAuthDeviceCodeView: View {
         }
     }
 
-    func dismissAndEmitError(title: String, description: String) {
+    func dismissAndEmitError(
+        title: LocalizedStringKey, description: LocalizedStringKey
+    ) {
         dismiss()
         appState.setError(title: title, description: description)
     }
@@ -150,8 +152,8 @@ struct OAuthDeviceCodeView: View {
                 }
             } catch {
                 dismissAndEmitError(
-                    title: "Cannot verify your response",
-                    description: error.localizedDescription
+                    title: "Cannot verify your login response",
+                    description: LocalizedStringKey(error.localizedDescription)
                 )
             }
         }

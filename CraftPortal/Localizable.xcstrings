@@ -218,6 +218,86 @@
         }
       }
     },
+    "Cannnot Parse Player UUID" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取玩家的UUID"
+          }
+        }
+      }
+    },
+    "Cannot access keychain" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法访问系统 Keychain"
+          }
+        }
+      }
+    },
+    "Cannot create shell executable: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法生成可执行脚本：%@"
+          }
+        }
+      }
+    },
+    "Cannot find a game profile or backup action when lauching. This is an internal error. Please contact the developer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无可启动游戏。这是一个内部错误。请联系开发者。"
+          }
+        }
+      }
+    },
+    "Cannot find full metadata" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取游戏元数据"
+          }
+        }
+      }
+    },
+    "Cannot load login" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法登陆"
+          }
+        }
+      }
+    },
+    "Cannot parse player UUID (%@) from response" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法从网络回复中读取UUID (%@)"
+          }
+        }
+      }
+    },
+    "Cannot verify your login response" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证你的登陆请求"
+          }
+        }
+      }
+    },
     "Check game profile" : {
       "localizations" : {
         "zh-Hans" : {
@@ -402,6 +482,52 @@
         }
       }
     },
+    "Expected JVM version %lld, but found %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Expected JVM version %1$lld, but found %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要 JVM 版本 %1$lld，但当前版本为 %2$@"
+          }
+        }
+      }
+    },
+    "Experienced Launcher Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "出现启动器错误"
+          }
+        }
+      }
+    },
+    "Experienced Unknown Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "出现未知错误"
+          }
+        }
+      }
+    },
+    "Failed to delete game profile" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法删除游戏"
+          }
+        }
+      }
+    },
     "Folder Structure Style" : {
       "localizations" : {
         "zh-Hans" : {
@@ -430,6 +556,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全螢幕"
+          }
+        }
+      }
+    },
+    "Game Exited Abnormally" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "游戏退出状态异常"
           }
         }
       }
@@ -566,6 +702,16 @@
         }
       }
     },
+    "Internal State Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内部错误"
+          }
+        }
+      }
+    },
     "Internal State Error. Please contact the developer." : {
       "localizations" : {
         "zh-Hans" : {
@@ -607,6 +753,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Java 版本：%@"
+          }
+        }
+      }
+    },
+    "Launch failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动失败"
           }
         }
       }
@@ -721,6 +877,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "載入中…"
+          }
+        }
+      }
+    },
+    "Login Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登陆失败"
           }
         }
       }
@@ -844,6 +1010,16 @@
         }
       }
     },
+    "No game profile selected" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有选中的游戏"
+          }
+        }
+      }
+    },
     "No Game Selected" : {
       "localizations" : {
         "zh-Hans" : {
@@ -856,6 +1032,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未選取遊戲"
+          }
+        }
+      }
+    },
+    "No Player Profile" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有玩家信息"
+          }
+        }
+      }
+    },
+    "No player profile selected" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有选中的玩家"
           }
         }
       }
@@ -962,6 +1158,26 @@
         }
       }
     },
+    "Please check your network. Error: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查你的网络。错误内容：%@"
+          }
+        }
+      }
+    },
+    "Please select a player profile before launching the game." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在开始前先选择一个玩家"
+          }
+        }
+      }
+    },
     "Resolution" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1004,6 +1220,16 @@
         }
       }
     },
+    "The application cannot access keychain to save the account. Please try again. Error: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动器无法访问 Keychain 以保存登陆的账户。请重新尝试。错误内容：%@"
+          }
+        }
+      }
+    },
     "The current game directory is not set. Please select a game directory first." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1016,6 +1242,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "目前的遊戲目錄未設定。請先選取遊戲目錄。"
+          }
+        }
+      }
+    },
+    "The exist code was not 0 but %d. Please check the logs for more information." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "程序退出码不为0 （%d）。请检查日志以获取更多信息。"
           }
         }
       }
@@ -1138,6 +1374,16 @@
     },
     "UUID" : {
       "shouldTranslate" : false
+    },
+    "Verification of path %@ failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "路径（%@)验证失败"
+          }
+        }
+      }
     },
     "Verify assets directory" : {
       "localizations" : {
