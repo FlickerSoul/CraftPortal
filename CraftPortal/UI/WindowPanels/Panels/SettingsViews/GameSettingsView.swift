@@ -71,6 +71,8 @@ struct GameSettingsView: View {
             MemorySlider(memoryBinding: memoryBinding)
             Divider()
             ResolutionInput(fullScreenBinding: fullScreenBinding, widthBinding: widthBinding, heightBinding: heightBinding)
+            Divider()
+            ShowLogsToggle(showLogs: $gameSettings.showLogs)
         }
     }
 }

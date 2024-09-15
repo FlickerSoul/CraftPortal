@@ -11,35 +11,40 @@ import SwiftData
 import struct Path.Path
 import protocol SwiftUI.App
 import struct SwiftUI.Environment
+import struct SwiftUI.EnvironmentObject
 import protocol SwiftUI.Scene
 import struct SwiftUI.StateObject
 import protocol SwiftUI.View
+import struct SwiftUI.ViewBuilder
 import struct SwiftUI.WindowGroup
 
 let APP_NAME = "CraftPortalLauncher"
 
-struct RootView: View {
-    @StateObject var appState: AppState = .init()
-    @Query private var settings: [GlobalSettings]
+struct RootView<Content: View>: View {
     @Environment(\.modelContext) private var modelContext
+    @Query private var settings: [GlobalSettings]
+    @EnvironmentObject private var appState: AppState
+
+    let performLaunch: Bool
+    @ViewBuilder var content: () -> Content
 
     var globalSettings: GlobalSettings {
         settings.first!
     }
 
     var body: some View {
-        ContentView(isInitialized: appState.initialized)
-            .frame(width: 960, height: 540)
-            .onAppear {
-                lauching()
-            }
-            .environmentObject(appState)
+        content()
             .environmentObject(globalSettings)
             .sheet(
                 item: $appState.currentError,
                 onDismiss: { appState.currentError = nil }
             ) { error in
                 ErrorSheetView(error: error)
+            }
+            .onAppear {
+                if performLaunch {
+                    lauching()
+                }
             }
         // It's guaranteed that settings has one thing
         // See the init section of main App below
@@ -104,6 +109,8 @@ struct RootView: View {
 
 @main
 struct CraftPortalApp: App {
+    @StateObject var appState: AppState = .init()
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema(versionedSchema: LatestSchema.self)
 
@@ -122,10 +129,29 @@ struct CraftPortalApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(performLaunch: true) {
+                ContentView(isInitialized: appState.initialized)
+                    .frame(width: 960, height: 540)
+                    .sheet(
+                        item: $appState.currentError,
+                        onDismiss: { appState.currentError = nil }
+                    ) { error in
+                        ErrorSheetView(error: error)
+                    }
+            }
         }
         .windowResizability(.contentSize)
         .modelContainer(sharedModelContainer)
+        .environmentObject(appState)
+
+        WindowGroup(id: "launch-logs") {
+            RootView(performLaunch: false) {
+                LaunchStatusInfoView(inWindow: true)
+                    .background(FrostGlassEffect(material: .sidebar, blendingMode: .behindWindow))
+            }
+        }
+        .modelContainer(sharedModelContainer)
+        .environmentObject(appState)
     }
 
     init() {

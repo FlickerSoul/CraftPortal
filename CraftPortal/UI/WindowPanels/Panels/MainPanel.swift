@@ -11,8 +11,11 @@ import SwiftUI
 import SwiftUICore
 
 struct MainPanel: View {
+    @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var globalSettings: GlobalSettings
-    @State private var showLauchingLoading = false
+    @Environment(\.openWindow) private var openWindow
+    @State private var showLaunchWarning = false
+    @State private var showLaunch = false
 
     let updatePanel: (FunctionPanel) -> Void
 
@@ -64,19 +67,35 @@ struct MainPanel: View {
         }
         .hoverCursor()
         .sheet(
-            isPresented: $showLauchingLoading,
+            isPresented: $showLaunchWarning, // TODO: decouple this
             content: {
-                LaunchStatusSheet()
+                if let profile = globalSettings.currentPlayerProfile {
+                    LaunchStatusMultiInstanceWarning(username: profile.username)
+                }
             }
         )
+        .sheet(isPresented: $showLaunch, content: {
+            LaunchStatusInfoView(inWindow: false)
+        })
         .onTapGesture {
             if noGameSelected {
                 updatePanel(.GameLibrary)
             } else {
-                self.showLauchingLoading = true
+                if let uuid = globalSettings.currentPlayerProfile?.id, !appState.launchManager.noProcessRunning(for: uuid) {
+                    showLaunchWarning = true
+                    return
+                }
+
+                if globalSettings.gameSettings.showLogs {
+                    openWindow(id: "launch-logs")
+                } else {
+                    showLaunch = true
+                }
             }
         }
     }
+
+    private func tryLaunch() {}
 }
 
 #Preview("no game profile") {

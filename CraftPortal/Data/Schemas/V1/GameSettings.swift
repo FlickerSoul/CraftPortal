@@ -46,17 +46,20 @@ extension CraftPortalSchemaV1 {
     @Model
     class GameSettings: Codable, ObservableObject {
         var dynamicMemory: UInt
+        var showLogs: Bool = true
         var resolution: Resolution
         var processPriority: ProcessPriority
         var advanced: AdvancedSettings
 
         init(
             dynamicMemory: UInt? = nil,
+            showLogs: Bool = false,
             resolution: Resolution? = nil,
             processPriority: ProcessPriority = .normal,
             advanced: AdvancedSettings = .init()
         ) {
             self.dynamicMemory = dynamicMemory ?? GameSettings.getDynamicMemory()
+            self.showLogs = showLogs
             self.resolution = resolution ?? GameSettings.getResolution()
             self.processPriority = processPriority
             self.advanced = advanced
@@ -81,6 +84,7 @@ extension CraftPortalSchemaV1 {
 
         enum CodingKeys: String, CodingKey {
             case _dynamicMemory = "dynamicMemory"
+            case _showLogs = "showLogs"
             case _resolution = "resolution"
             case _processPriority = "processPriority"
             case _advanced = "advanced"
@@ -89,6 +93,7 @@ extension CraftPortalSchemaV1 {
         required init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             dynamicMemory = try container.decode(UInt.self, forKey: ._dynamicMemory)
+            showLogs = try container.decode(Bool.self, forKey: ._showLogs)
             resolution = try container.decode(Resolution.self, forKey: ._resolution)
             processPriority = try container.decode(ProcessPriority.self, forKey: ._processPriority)
             advanced = try container.decode(AdvancedSettings.self, forKey: ._advanced)
@@ -97,6 +102,7 @@ extension CraftPortalSchemaV1 {
         func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(dynamicMemory, forKey: ._dynamicMemory)
+            try container.encode(showLogs, forKey: ._showLogs)
             try container.encode(resolution, forKey: ._resolution)
             try container.encode(processPriority, forKey: ._processPriority)
             try container.encode(advanced, forKey: ._advanced)

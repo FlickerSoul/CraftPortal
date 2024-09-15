@@ -731,6 +731,16 @@
         }
       }
     },
+    "Logs" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日志"
+          }
+        }
+      }
+    },
     "Manage Games" : {
       "localizations" : {
         "zh-Hans" : {

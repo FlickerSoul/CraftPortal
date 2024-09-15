@@ -1,53 +1,17 @@
 //
-//  LaunchStatusSheet.swift
+//  LaunchStatusLoadingView.swift
 //  CraftPortal
 //
-//  Created by Larry Zeng on 9/14/24.
+//  Created by Larry Zeng on 9/15/24.
 //
-
 import SwiftUI
-
-private struct LaunchStatusMultiInstanceWarning: View {
-    @Environment(\.dismiss) private var dismiss
-
-    let username: String
-    @Binding var override: Bool
-
-    var body: some View {
-        VStack {
-            Text("Warning")
-                .font(.title)
-
-            Text(
-                "There are already games lauched under the user name '\(username)'. Continue lauching new game intances may cause trouble for existing game plays. We are not responsible for any loss caused by this"
-            )
-            .font(.headline)
-
-            HStack {
-                Button("Cancel", role: .cancel) {
-                    dismiss()
-                }
-
-                Button("Continue", role: .destructive) {
-                    override = true
-                }
-            }
-        }
-    }
-}
-
-#Preview("Multi Instance Warning") {
-    @Previewable @State var override = false
-
-    LaunchStatusMultiInstanceWarning(username: "user_name", override: $override)
-}
 
 private enum LaunchStatus: Equatable {
     case success
     case failed
 }
 
-private struct LaunchStatusLoadingView: View {
+struct LaunchStatusInfoView: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var globalSettings: GlobalSettings
@@ -59,14 +23,17 @@ private struct LaunchStatusLoadingView: View {
 
     @State private var showLogs: Bool = false
 
+    let inWindow: Bool
+
     var body: some View {
         VStack {
             HStack {
                 progress
                     .transition(.identity)
+                    .frame(width: 200)
 
                 Group {
-                    if showLogs {
+                    if showLogs || inWindow {
                         log
                     }
                 }
@@ -77,6 +44,17 @@ private struct LaunchStatusLoadingView: View {
                     ))
             }
 
+            controls
+        }
+        .padding()
+        .task {
+            await launch()
+        }
+    }
+
+    @ViewBuilder
+    private var controls: some View {
+        if !inWindow {
             HStack(alignment: .center) {
                 Button("Ok") {
                     dismiss()
@@ -89,40 +67,21 @@ private struct LaunchStatusLoadingView: View {
                 }
             }
         }
-        .task {
-            await launch()
-        }
-    }
-
-    @ViewBuilder
-    private var log: some View {
-        ScrollViewReader { proxy in
-            ScrollView([.horizontal, .vertical]) {
-                LazyVStack(alignment: .leading) {
-                    ForEach(Array(logs.enumerated()), id: \.0) { _, log in
-                        Text(log)
-                        Divider()
-                    }
-                }
-            }
-            .onChange(of: logs.count) { _, newValue in
-                proxy.scrollTo(newValue - 1)
-            }
-        }
-        .defaultScrollAnchor(.bottom)
     }
 
     @ViewBuilder
     private var progress: some View {
         if taskDone.isEmpty {
-            ProgressView()
-                .progressViewStyle(.linear)
+            VStack(alignment: .center) {
+                ProgressView()
+                    .progressViewStyle(.linear)
+            }
         } else {
             ScrollView {
                 ForEach(Array(taskDone.enumerated()), id: \.0) {
                     index, task in
                     VStack {
-                        HStack(alignment: .center) {
+                        HStack {
                             Image(
                                 systemName: status == .failed
                                     && index == taskDone.count - 1
@@ -145,6 +104,32 @@ private struct LaunchStatusLoadingView: View {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var log: some View {
+        VStack(alignment: .leading) {
+            Text("Logs")
+                .font(.title)
+
+            GeometryReader { _ in
+                ScrollViewReader { proxy in
+                    ScrollView([.horizontal, .vertical]) {
+                        ForEach(Array(logs.enumerated()), id: \.0) {
+                            _, log in
+                            VStack(alignment: .leading) {
+                                Text(log)
+                                Divider()
+                            }
+                        }
+                    }
+                    .onChange(of: logs.count) { _, newValue in
+                        proxy.scrollTo(newValue - 1)
+                    }
+                }
+                .defaultScrollAnchor(.bottom)
             }
         }
     }
@@ -188,60 +173,8 @@ private struct LaunchStatusLoadingView: View {
 }
 
 #Preview("Launch Loading View") {
-    LaunchStatusLoadingView()
+    @Previewable @State var inWindow = false
+    LaunchStatusInfoView(inWindow: inWindow)
         .environmentObject(GlobalSettings())
         .environmentObject(AppState())
-}
-
-struct LaunchStatusSheet: View {
-    @EnvironmentObject private var globalSettings: GlobalSettings
-    @EnvironmentObject private var appState: AppState
-    @Environment(\.dismiss) private var dismiss
-
-    @State private var multiInstanceOverride: Bool = false
-
-    @State private var noInstance: Bool = false
-
-    var body: some View {
-        Group {
-            if let player = globalSettings.currentPlayerProfile {
-                if noInstance || multiInstanceOverride {
-                    LaunchStatusLoadingView()
-                } else {
-                    LaunchStatusMultiInstanceWarning(
-                        username: player.username,
-                        override: $multiInstanceOverride
-                    )
-                }
-            } else {
-                noPlayerError
-            }
-        }
-        .onAppear {
-            noInstance = {
-                if let uuid = globalSettings.currentPlayerProfile?.id {
-                    return appState.launchManager.noProcessRunning(for: uuid)
-                }
-
-                return false
-
-            }()
-        }
-        .padding()
-    }
-
-    @ViewBuilder
-    private var noPlayerError: some View {
-        ErrorSheetView(
-            error: .init(
-                title: "Internal State Error",
-                description: "Cannot launch game without a player profiel."
-            )
-        )
-    }
-}
-
-#Preview("Launch Status Sheet") {
-    LaunchStatusSheet()
-        .environmentObject(GlobalSettings())
 }
