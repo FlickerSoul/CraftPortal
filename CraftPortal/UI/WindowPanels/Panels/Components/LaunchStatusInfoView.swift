@@ -34,6 +34,7 @@ struct LaunchStatusInfoView: View {
 
                 Group {
                     if showLogs || inWindow {
+                        Divider()
                         log
                     }
                 }
