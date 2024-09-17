@@ -68,7 +68,7 @@ private struct LaunchButtonModifier: ViewModifier {
                             : globalSettings.gameSettings.showLogs
 
                     if showLogs {
-                        openWindow(id: "launch-logs")
+                        openWindow(id: "launch-logs", value: profile.id)
                     } else {
                         showLaunch = true
                     }

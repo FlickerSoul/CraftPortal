@@ -144,9 +144,9 @@ struct CraftPortalApp: App {
         .modelContainer(sharedModelContainer)
         .environmentObject(appState)
 
-        WindowGroup(id: "launch-logs") {
+        WindowGroup(id: "launch-logs", for: UUID.self) { id in
             RootView(performLaunch: false) {
-                LaunchStatusInfoView(inWindow: true)
+                LaunchStatusInfoView(inWindow: true, profileId: id.wrappedValue)
                     .background(FrostGlassEffect(material: .sidebar, blendingMode: .behindWindow))
             }
         }

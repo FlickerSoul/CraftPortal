@@ -4,6 +4,7 @@
 //
 //  Created by Larry Zeng on 9/15/24.
 //
+import SwiftData
 import SwiftUI
 
 private enum LaunchStatus: Equatable {
@@ -14,6 +15,7 @@ private enum LaunchStatus: Equatable {
 struct LaunchStatusInfoView: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var globalSettings: GlobalSettings
     @EnvironmentObject private var appState: AppState
 
@@ -24,6 +26,12 @@ struct LaunchStatusInfoView: View {
     @State private var showLogs: Bool = false
 
     let inWindow: Bool
+    let profileId: UUID?
+
+    init(inWindow: Bool, profileId: UUID? = nil) {
+        self.inWindow = inWindow
+        self.profileId = profileId
+    }
 
     var body: some View {
         VStack {
@@ -162,10 +170,24 @@ struct LaunchStatusInfoView: View {
             }
         }
 
+        var profile: GameProfile? = nil
+
+        if let profileId {
+            let context = ModelContext(modelContext.container)
+            let fetched = try? context.fetch(FetchDescriptor<GameProfile>(predicate: #Predicate { item in
+                item.id == profileId
+            }))
+
+            if let fetched, let fetchedProfile = fetched.first {
+                profile = fetchedProfile
+            }
+        }
+
         await appState.launchManager.launch(
             globalSettings: globalSettings,
             appState: appState,
             taskNotifier: addTask,
+            profile: profile,
             pipe: pipe
         )
     }
