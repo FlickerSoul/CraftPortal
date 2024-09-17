@@ -4,13 +4,9 @@
 //
 //  Created by Larry Zeng on 9/15/24.
 //
+import Combine
 import SwiftData
 import SwiftUI
-
-private enum LaunchStatus: Equatable {
-    case success
-    case failed
-}
 
 struct LaunchStatusInfoView: View {
     @Environment(\.openWindow) private var openWindow
@@ -19,18 +15,18 @@ struct LaunchStatusInfoView: View {
     @EnvironmentObject private var globalSettings: GlobalSettings
     @EnvironmentObject private var appState: AppState
 
-    @State private var taskDone: [LaunchSubTaskItem] = []
-    @State private var status: LaunchStatus? = nil
-    @State private var logs: [String] = []
+    private let viewModel: LaunchStatusViewModel
 
-    @State private var showLogs: Bool = false
+    private let inWindow: Bool
+    private let profileId: UUID?
 
-    let inWindow: Bool
-    let profileId: UUID?
-
-    init(inWindow: Bool, profileId: UUID? = nil) {
+    init(
+        inWindow: Bool, profileId: UUID? = nil,
+        viewModel: LaunchStatusViewModel = .init()
+    ) {
         self.inWindow = inWindow
         self.profileId = profileId
+        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -41,7 +37,7 @@ struct LaunchStatusInfoView: View {
                     .frame(width: 200)
 
                 Group {
-                    if showLogs || inWindow {
+                    if viewModel.showLogs || inWindow {
                         Divider()
                         log
                     }
@@ -69,9 +65,9 @@ struct LaunchStatusInfoView: View {
                     dismiss()
                 }
 
-                Button(showLogs ? "Hide Logs" : "Show Logs") {
+                Button(viewModel.showLogs ? "Hide Logs" : "Show Logs") {
                     withAnimation {
-                        showLogs.toggle()
+                        viewModel.toggleShowLogs()
                     }
                 }
             }
@@ -80,20 +76,23 @@ struct LaunchStatusInfoView: View {
 
     @ViewBuilder
     private var progress: some View {
-        if taskDone.isEmpty {
+        if viewModel.taskDone.isEmpty {
             VStack(alignment: .center) {
+                Text("Preparing...")
+                    .font(.headline)
+
                 ProgressView()
                     .progressViewStyle(.linear)
             }
         } else {
             ScrollView {
-                ForEach(Array(taskDone.enumerated()), id: \.0) {
+                ForEach(Array(viewModel.taskDone.enumerated()), id: \.0) {
                     index, task in
                     VStack {
                         HStack {
                             Image(
-                                systemName: status == .failed
-                                    && index == taskDone.count - 1
+                                systemName: viewModel.isLaunchFailed
+                                    && index == viewModel.lastTaskIndex
                                     ? "xmark.circle" : task.icon
                             )
                             .resizable()
@@ -107,7 +106,9 @@ struct LaunchStatusInfoView: View {
                             Spacer()
                         }
 
-                        if status == nil && index == taskDone.count - 1 {
+                        if viewModel.isLaunchRunning
+                            && index == viewModel.lastTaskIndex
+                        {
                             ProgressView()
                                 .progressViewStyle(.linear)
                         }
@@ -125,7 +126,7 @@ struct LaunchStatusInfoView: View {
 
             ScrollViewReader { proxy in
                 ScrollView([.horizontal, .vertical]) {
-                    ForEach(Array(logs.enumerated()), id: \.0) {
+                    ForEach(viewModel.enumeratedLogs, id: \.0) {
                         _, log in
                         VStack(alignment: .leading) {
                             Text(log)
@@ -133,22 +134,11 @@ struct LaunchStatusInfoView: View {
                         }
                     }
                 }
-                .onChange(of: logs.count) { _, newValue in
+                .onChange(of: viewModel.logs.count) { _, newValue in
                     proxy.scrollTo(newValue - 1)
                 }
             }
             .defaultScrollAnchor(.bottom)
-        }
-    }
-
-    private func addTask(_ task: LaunchSubTask) {
-        switch task {
-        case .success:
-            status = .success
-        case .failed:
-            status = .failed
-        case let .step(item):
-            taskDone.append(item)
         }
     }
 
@@ -164,9 +154,7 @@ struct LaunchStatusInfoView: View {
             else { return }
 
             DispatchQueue.main.async {
-                logs.append(
-                    output.trimmingCharacters(in: .whitespacesAndNewlines)
-                )
+                viewModel.sendLog(output)
             }
         }
 
@@ -174,9 +162,11 @@ struct LaunchStatusInfoView: View {
 
         if let profileId {
             let context = ModelContext(modelContext.container)
-            let fetched = try? context.fetch(FetchDescriptor<GameProfile>(predicate: #Predicate { item in
-                item.id == profileId
-            }))
+            let fetched = try? context.fetch(
+                FetchDescriptor<GameProfile>(
+                    predicate: #Predicate { item in
+                        item.id == profileId
+                    }))
 
             if let fetched, let fetchedProfile = fetched.first {
                 profile = fetchedProfile
@@ -190,6 +180,82 @@ struct LaunchStatusInfoView: View {
             profile: profile,
             pipe: pipe
         )
+    }
+
+    func addTask(_ task: LaunchSubTask) {
+        viewModel.addTask(task)
+    }
+}
+
+// MARK: - View Model
+
+extension LaunchStatusInfoView {
+    enum LaunchStatus: Equatable {
+        case success
+        case failed
+    }
+
+    @Observable
+    class LaunchStatusViewModel {
+        private(set) var taskDone: [LaunchSubTaskItem] = []
+        private(set) var status: LaunchStatus?
+        private(set) var logs: [String] = []
+        private(set) var showLogs: Bool = false
+        private let bufferSize = 128
+        private let collectTime: RunLoop.SchedulerTimeType.Stride = .milliseconds(500)
+
+        let logPublisher = PassthroughSubject<String, Never>()
+        private var cancellable: AnyCancellable?
+
+        init() {
+            cancellable =
+                logPublisher
+                    .buffer(
+                        size: bufferSize, prefetch: .byRequest, whenFull: .dropOldest
+                    ) // TODO: consider raising errors?
+                    .map { value in
+                        value.trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
+                    .collect(.byTime(RunLoop.main, collectTime))
+                    .sink(receiveValue: { [weak self] values in
+                        self?.logs.append(contentsOf: values)
+                    })
+        }
+
+        var lastTaskIndex: Int {
+            logs.count - 1
+        }
+
+        var isLaunchFailed: Bool {
+            status == .failed
+        }
+
+        var isLaunchRunning: Bool {
+            status == nil
+        }
+
+        var enumeratedLogs: [(Int, String)] {
+            Array(logs.enumerated())
+        }
+
+        func toggleShowLogs() {
+            showLogs.toggle()
+        }
+
+        func addTask(_ task: LaunchSubTask) {
+            switch task {
+            case .success:
+                status = .success
+            case .failed:
+                status = .failed
+            case let .step(item):
+                taskDone.append(item)
+            }
+        }
+
+        func sendLog(_ log: String) {
+            logPublisher.send(log)
+        }
     }
 }
 
