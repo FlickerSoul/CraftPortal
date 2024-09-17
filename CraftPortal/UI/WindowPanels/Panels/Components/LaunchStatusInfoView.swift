@@ -15,7 +15,7 @@ struct LaunchStatusInfoView: View {
     @EnvironmentObject private var globalSettings: GlobalSettings
     @EnvironmentObject private var appState: AppState
 
-    private let viewModel: LaunchStatusViewModel
+    @State private var viewModel: LaunchStatusViewModel
 
     private let inWindow: Bool
     private let profileId: UUID?
