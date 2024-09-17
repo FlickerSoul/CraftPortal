@@ -53,7 +53,7 @@ extension CraftPortalSchemaV1 {
 
         init(
             dynamicMemory: UInt? = nil,
-            showLogs: Bool = false,
+            showLogs: Bool = true,
             resolution: Resolution? = nil,
             processPriority: ProcessPriority = .normal,
             advanced: AdvancedSettings = .init()
