@@ -1219,7 +1219,14 @@
       }
     },
     "Preparing..." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "准备中…"
+          }
+        }
+      }
     },
     "Resolution" : {
       "localizations" : {
@@ -1238,7 +1245,14 @@
       }
     },
     "Scroll to bottom" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动到底"
+          }
+        }
+      }
     },
     "Select a game directory to add to the list of game directories." : {
       "localizations" : {
