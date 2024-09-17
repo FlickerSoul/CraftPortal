@@ -1237,6 +1237,9 @@
         }
       }
     },
+    "Scroll to bottom" : {
+
+    },
     "Select a game directory to add to the list of game directories." : {
       "localizations" : {
         "zh-Hans" : {

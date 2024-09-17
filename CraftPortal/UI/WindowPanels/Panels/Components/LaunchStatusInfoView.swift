@@ -121,8 +121,16 @@ struct LaunchStatusInfoView: View {
     @ViewBuilder
     private var log: some View {
         VStack(alignment: .leading) {
-            Text("Logs")
-                .font(.title)
+            HStack {
+                Text("Logs")
+                    .font(.title)
+
+                Spacer()
+
+                Toggle(isOn: $viewModel.scrollToBottom) {
+                    Text("Scroll to bottom")
+                }
+            }
 
             ScrollViewReader { proxy in
                 ScrollView([.horizontal, .vertical]) {
@@ -134,8 +142,12 @@ struct LaunchStatusInfoView: View {
                         }
                     }
                 }
-                .onChange(of: viewModel.logs.count) { _, newValue in
-                    proxy.scrollTo(newValue - 1)
+                .onReceive(viewModel.logUpdatePublisher) { _ in
+                    if viewModel.scrollToBottom {
+                        withAnimation {
+                            proxy.scrollTo(viewModel.lastLogIndex, anchor: .leading)
+                        }
+                    }
                 }
             }
             .defaultScrollAnchor(.bottom)
@@ -201,28 +213,40 @@ extension LaunchStatusInfoView {
         private(set) var status: LaunchStatus?
         private(set) var logs: [String] = []
         private(set) var showLogs: Bool = false
+        var scrollToBottom: Bool = true
         private let bufferSize = 128
-        private let collectTime: RunLoop.SchedulerTimeType.Stride = .milliseconds(500)
+        private let collectTime: RunLoop.SchedulerTimeType.Stride =
+            .milliseconds(500)
 
         let logPublisher = PassthroughSubject<String, Never>()
+        let logUpdatePublisher: AnyPublisher<[String], Never>
         private var cancellable: AnyCancellable?
 
         init() {
-            cancellable =
+            logUpdatePublisher =
                 logPublisher
                     .buffer(
-                        size: bufferSize, prefetch: .byRequest, whenFull: .dropOldest
+                        size: bufferSize, prefetch: .byRequest,
+                        whenFull: .dropOldest
                     ) // TODO: consider raising errors?
                     .map { value in
                         value.trimmingCharacters(in: .whitespacesAndNewlines)
                     }
                     .collect(.byTime(RunLoop.main, collectTime))
+                    .eraseToAnyPublisher()
+
+            cancellable =
+                logUpdatePublisher
                     .sink(receiveValue: { [weak self] values in
                         self?.logs.append(contentsOf: values)
                     })
         }
 
         var lastTaskIndex: Int {
+            taskDone.count - 1
+        }
+
+        var lastLogIndex: Int {
             logs.count - 1
         }
 
