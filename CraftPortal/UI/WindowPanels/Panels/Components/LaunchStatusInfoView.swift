@@ -188,14 +188,10 @@ struct LaunchStatusInfoView: View {
         await appState.launchManager.launch(
             globalSettings: globalSettings,
             appState: appState,
-            taskNotifier: addTask,
+            taskNotifier: viewModel.addTask,
             profile: profile,
             pipe: pipe
         )
-    }
-
-    func addTask(_ task: LaunchSubTask) {
-        viewModel.addTask(task)
     }
 }
 
