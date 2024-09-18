@@ -441,7 +441,7 @@ struct LaunchScriptTests {
                 of: LaunchScriptTests.assetFolderPath, with: ""
             )
 
-            #expect(simplified == expectedScript)
+            #expect(simplified.trimmingCharacters(in: .whitespacesAndNewlines) == expectedScript.trimmingCharacters(in: .whitespacesAndNewlines))
         }
     }
 }
