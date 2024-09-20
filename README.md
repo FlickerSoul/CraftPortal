@@ -10,6 +10,7 @@ This is a WIP Minecraft launcher for MacOS in SwiftUI. It is a simple launcher t
 - [X] Per game settings
 - [X] Player login
 - [ ] Game download
+- [ ] Old version support (currently the parser doesn't work for versions older than 1.12.2)
 - [X] Game integraty check
 - [ ] Game integraty repair
 - [X] JVM version check
